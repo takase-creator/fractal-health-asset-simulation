@@ -1,0 +1,2865 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>健康リスク × 将来資産シミュレーター | FRACTAL WORKOUT × SCSK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#070707; --white:#fff; --gray-50:#f7f8f7; --gray-100:#ecefed;
+  --gray-300:#cbd3d2; --smoke:#59696b; --smoke-dark:#314145;
+  --gold:#9a8866; --gold-2:#ddc989; --red:#b65b61; --orange:#9a8866;
+  --green:#68766c; --navy:#314145; --navy2:#59696b; --navy3:#070707;
+  --line:rgba(7,7,7,.14); --text:#171a1c; --muted:#687173;
+  --bg:#f7f8f7; --card:#fff;
+  --shadow:0 26px 60px rgba(30,40,42,.16);
+  --r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+  background:linear-gradient(180deg,#fff 0,#fff 54%,var(--gray-50) 54%,var(--gray-50) 100%);
+  color:var(--text);min-height:100vh;line-height:1.75;letter-spacing:0;overflow-x:hidden;}
+button,input,select{font:inherit;}
+img{display:block;max-width:100%;height:auto;}
+.page{width:min(1280px,calc(100% - 40px));margin:0 auto;padding:24px 0 72px;}
+
+/* brand */
+.brand-header{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  min-height:74px;margin-bottom:22px;border-bottom:1px solid rgba(7,7,7,.08);}
+.brand-logo{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--black);}
+.brand-logo__mark{width:64px;height:64px;object-fit:contain;background:#070707;}
+.brand-logo__text{font-family:"EB Garamond",serif;font-size:24px;font-weight:500;
+  letter-spacing:.22em;line-height:1;color:var(--black);}
+.brand-logo__text span{display:block;margin-top:7px;font-family:"Noto Sans JP",sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:.26em;color:var(--gold);}
+.brand-meta{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;}
+.brand-meta span+span{padding-left:14px;border-left:1px solid var(--line);}
+.scsk-badge{font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;
+  background:#00439C;padding:5px 12px;border-radius:3px;white-space:nowrap;}
+
+/* hero */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(390px,.96fr);
+  min-height:430px;margin-bottom:18px;background:var(--gray-50);border:1px solid var(--line);
+  box-shadow:var(--shadow);overflow:hidden;}
+.hero::before{position:absolute;inset:0 auto 0 0;width:8px;background:var(--gold);content:"";}
+.hero-copy{position:relative;z-index:2;padding:56px 48px 48px 56px;}
+.section-label,.hero-tag{margin:0 0 18px;color:var(--gold);font-family:"EB Garamond",serif;
+  font-size:15px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;}
+.hero h1{margin:0;font-family:"Shippori Mincho",serif;font-size:clamp(34px,4.4vw,56px);
+  font-weight:500;line-height:1.22;text-wrap:balance;}
+.hero-h1-nowrap{display:inline-block;white-space:nowrap;}
+.hero p{max-width:45em;margin:24px 0 0;color:#343b3d;font-size:15px;line-height:2;}
+.hero-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:34px;}
+.hero-point{min-height:78px;padding:14px 16px;background:var(--white);border:1px solid var(--line);}
+.hero-point span{display:block;color:var(--gold);font-family:"EB Garamond",serif;font-size:13px;
+  font-weight:600;letter-spacing:.16em;}
+.hero-point strong{display:block;margin-top:5px;font-size:14px;line-height:1.5;}
+.hero-visual{position:relative;min-height:430px;background:var(--smoke-dark);}
+.hero-visual img{width:100%;height:100%;min-height:430px;object-fit:cover;}
+.hero-visual::after{position:absolute;inset:0;background:linear-gradient(90deg,rgba(247,248,247,.92) 0%,rgba(247,248,247,.28) 30%,rgba(7,7,7,.12) 100%);content:"";}
+.hero-badge{position:absolute;right:22px;bottom:22px;z-index:2;min-width:218px;padding:18px 20px;
+  background:rgba(49,65,69,.94);border:1px solid rgba(221,201,137,.62);color:var(--white);
+  box-shadow:0 18px 34px rgba(10,18,20,.22);}
+.hero-badge .big{color:var(--gold-2);font-family:"EB Garamond",serif;font-size:32px;
+  font-weight:600;line-height:1;}
+.hero-badge .sub{margin-top:7px;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1.6;}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.step{display:flex;align-items:flex-start;gap:16px;min-height:112px;padding:22px 22px;
+  background:var(--white);border:1px solid var(--line);}
+.step-num{flex:0 0 auto;color:var(--gold);font-family:"EB Garamond",serif;font-size:38px;
+  font-weight:500;line-height:.9;}
+.step-text strong{display:block;margin-top:2px;color:var(--black);font-family:"Shippori Mincho",serif;
+  font-size:18px;font-weight:500;line-height:1.45;}
+.step-text span{display:block;margin-top:5px;color:var(--muted);font-size:12px;font-weight:700;}
+
+/* mobile tabs */
+.mobile-tabs{display:none;background:var(--white);border:1px solid var(--line);padding:4px;gap:4px;margin-bottom:12px;}
+.mtab{flex:1;border:none;background:transparent;color:var(--muted);
+  padding:10px 4px;font-size:12px;font-weight:800;
+  cursor:pointer;transition:.18s;}
+.mtab.on{background:var(--smoke-dark);color:#fff;}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(350px,392px) minmax(0,1fr);gap:18px;align-items:start;}
+.panel{background:var(--card);border:1px solid var(--line);box-shadow:0 18px 44px rgba(30,40,42,.08);overflow:hidden;}
+.ph{position:relative;background:var(--smoke-dark);color:#fff;padding:16px 20px;font-size:13px;
+  font-weight:800;letter-spacing:.06em;text-align:left;}
+.ph::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
+.pb{padding:20px;}
+
+/* form */
+.sec-title{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:600;color:var(--black);margin:20px 0 10px;}
+.sec-title:first-child{margin-top:0;}
+.subnote{font-size:12px;color:var(--muted);margin:-2px 0 10px;line-height:1.7;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;font-weight:800;color:#32383a;letter-spacing:.04em;}
+input,select{width:100%;min-height:44px;border:1px solid rgba(7,7,7,.18);background:#fff;
+  border-radius:0;padding:10px 11px;font-size:14px;color:var(--text);outline:none;-webkit-appearance:none;
+  transition:border-color .18s,box-shadow .18s,background .18s;}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 19px,calc(100% - 11px) 19px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.12);}
+input.err{border-color:var(--red);background:#fff9f9;}
+.ferr{font-size:10px;color:var(--red);font-weight:700;display:none;}
+.ferr.show{display:block;}
+.asset-box{background:var(--gray-50);border:1px solid var(--line);padding:16px;margin-bottom:4px;}
+.asset-box .asset-hint{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:0;padding:8px 12px;
+  font-size:12px;font-weight:800;cursor:pointer;user-select:none;min-height:38px;display:inline-flex;align-items:center;
+  transition:background .15s,border-color .15s,color .15s;}
+.chip.on{background:var(--smoke-dark);color:#fff;border-color:var(--smoke-dark);}
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.chk{border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:8px;
+  font-size:12px;min-height:42px;overflow:hidden;padding:0 10px;}
+.chk label{display:flex;align-items:center;gap:7px;
+  padding:9px 0;width:100%;cursor:pointer;user-select:none;}
+.chk.checked{background:#f5f0e8;border-color:var(--gold);}
+.chk.checked label{color:var(--black);}
+.chk input[type=checkbox]{display:none;}
+.chk .check-icon{flex:0 0 18px;width:18px;height:18px;
+  border:1.5px solid #ccc4b0;background:#fff;position:relative;
+  transition:background .18s,border-color .18s;flex-shrink:0;}
+.chk.checked .check-icon{background:var(--gold);border-color:var(--gold);}
+.chk.checked .check-icon::after{
+  content:'';position:absolute;left:5px;top:1px;
+  width:5px;height:10px;
+  border:2px solid #fff;border-top:none;border-left:none;
+  transform:rotate(45deg);}
+.cta-btn,.reserve-cta{position:relative;margin-top:16px;width:100%;border:none;background:linear-gradient(180deg,#9a8866 0%,#77694f 100%);
+  color:#fff;padding:15px 18px;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 16px 26px rgba(80,68,45,.22);
+  min-height:52px;transition:transform .15s,box-shadow .15s;}
+.cta-btn:hover,.reserve-cta:hover{transform:translateY(-2px);box-shadow:0 20px 32px rgba(80,68,45,.26);}
+.cta-btn:active,.reserve-cta:active{opacity:.9;transform:scale(.99);}
+.privacy-note{font-size:10px;color:var(--muted);text-align:center;margin-top:8px;}
+
+/* advanced inputs toggle */
+.adv-toggle{width:100%;margin-top:18px;padding:14px 16px;background:#fff;
+  border:1.5px dashed var(--gold);color:var(--smoke-dark);cursor:pointer;
+  font-size:14px;font-weight:800;text-align:left;display:flex;align-items:center;
+  gap:10px;flex-wrap:wrap;transition:background .18s,border-color .18s;}
+.adv-toggle:hover{background:#fbfaf7;border-color:#77694f;}
+.adv-toggle-icon{flex:0 0 auto;width:24px;height:24px;display:inline-flex;
+  align-items:center;justify-content:center;background:var(--gold);color:#fff;
+  font-size:16px;font-weight:900;line-height:1;}
+.adv-toggle-sub{flex-basis:100%;font-size:11px;font-weight:400;color:var(--muted);
+  margin-left:34px;margin-top:-4px;}
+.adv-toggle.open{border-style:solid;background:#fbfaf7;}
+
+/* checkup alert gimmick */
+.checkup-alert{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:16px 18px;
+  background:linear-gradient(135deg,#c62828,#8e1c1c);color:#fff;border-radius:6px;
+  box-shadow:0 10px 30px rgba(198,40,40,.35);animation:caPulse 2.2s ease-in-out infinite;}
+.ca-icon{font-size:32px;line-height:1;flex-shrink:0;}
+.ca-title{font-size:15px;font-weight:900;letter-spacing:.02em;margin-bottom:4px;}
+.ca-detail{font-size:12px;color:rgba(255,255,255,.9);line-height:1.7;}
+@keyframes caPulse{0%,100%{box-shadow:0 10px 30px rgba(198,40,40,.35);}50%{box-shadow:0 12px 42px rgba(198,40,40,.62);}}
+@media(max-width:480px){.checkup-alert{padding:13px 14px;gap:10px;}.ca-icon{font-size:26px;}.ca-title{font-size:13px;}}
+
+/* risk bars */
+.risk-row{padding:12px 0;border-bottom:1px solid rgba(7,7,7,.08);}
+.risk-row:last-child{border-bottom:none;}
+.risk-row-main{display:flex;align-items:center;gap:10px;}
+.risk-name{min-width:148px;font-weight:800;font-size:13px;line-height:1.45;}
+.bar{flex:1;height:10px;background:var(--gray-100);overflow:hidden;border-radius:5px;}
+.bar>span{display:block;height:100%;transition:width .5s;border-radius:5px;}
+.risk-lv{min-width:38px;font-size:13px;font-weight:900;text-align:center;color:#fff;
+  padding:4px 10px;border-radius:20px;line-height:1.3;}
+.risk-improved{margin-top:6px;margin-left:158px;font-size:12px;color:var(--green);font-weight:800;}
+.risk-improved.same{color:var(--muted);font-weight:400;}
+@media(max-width:768px){.risk-improved{margin-left:128px;}}
+@media(max-width:400px){.risk-improved{margin-left:0;}}
+.prec-row{display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:11px 12px;background:var(--gray-50);border:1px solid var(--line);}
+
+.trend-box{margin-top:14px;border:1px solid rgba(154,136,102,.35);background:#fbfaf7;padding:14px 16px;}
+.trend-title{font-size:13px;font-weight:900;color:var(--black);
+  display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.ev-tag{font-size:9px;padding:3px 7px;background:var(--smoke-dark);color:#fff;font-weight:900;white-space:nowrap;}
+.trend-row{display:flex;justify-content:space-between;align-items:flex-start;
+  gap:12px;padding:7px 0;border-bottom:1px solid rgba(7,7,7,.08);font-size:11px;}
+.trend-row:last-child{border-bottom:none;}
+.tlab{color:var(--text);flex:1;font-weight:600;}
+.tval{font-weight:800;color:var(--red);text-align:right;white-space:nowrap;}
+.tval.ok{color:var(--green);}
+.trend-src{font-size:9px;color:var(--muted);margin-top:9px;padding-top:9px;
+  border-top:1px solid rgba(7,7,7,.08);line-height:1.65;}
+
+/* asset graph */
+.graph-wrap{margin-top:16px;border:1px solid var(--line);padding:18px;background:#fff;}
+.graph-title{font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);margin-bottom:3px;}
+.graph-sub{font-size:11px;color:var(--muted);margin-bottom:10px;}
+canvas{width:100%!important;height:auto!important;display:block;}
+.g-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:10px;color:var(--muted);}
+.g-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:3px;}
+
+/* loss summary */
+.loss-summary{margin-top:20px;}
+.loss-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.1em;margin-bottom:12px;text-transform:uppercase;}
+.loss-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+.loss-card{background:#fff;border:1px solid var(--line);padding:14px 12px;text-align:center;border-radius:4px;}
+.loss-card .lc-label{font-size:10px;color:var(--muted);font-weight:400;line-height:1.6;}
+.loss-card .lc-val{font-size:18px;font-weight:300;color:var(--red);margin-top:6px;}
+.loss-total{background:rgba(49,65,69,.07);padding:16px;text-align:center;border-radius:4px;}
+.loss-total .lt-label{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.06em;}
+.loss-total .lt-val{color:var(--red);font-size:30px;font-weight:300;line-height:1.2;margin-top:5px;}
+.loss-total .lt-sub{font-size:10px;color:var(--muted);margin-top:5px;font-weight:300;}
+
+/* weekly invest box */
+.wi-box{margin-top:16px;background:linear-gradient(135deg,#1a2830 0%,#243038 100%);
+  border:1px solid rgba(221,201,137,.22);border-radius:10px;padding:22px 20px;text-align:center;}
+.wi-headline{font-size:11px;letter-spacing:.12em;color:#ddc989;font-weight:500;margin-bottom:16px;text-transform:uppercase;}
+.wi-calc{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.wi-cell{text-align:center;min-width:88px;}
+.wi-num{font-size:18px;font-weight:600;color:#ff9090;line-height:1.2;}
+.wi-sub{font-size:9px;color:#7a9298;margin-top:3px;line-height:1.4;}
+.wi-op{font-size:22px;color:#5a7278;font-weight:300;padding:0 2px;align-self:flex-start;margin-top:4px;}
+.wi-result-cell{background:rgba(221,201,137,.1);border:1px solid rgba(221,201,137,.3);
+  border-radius:8px;padding:10px 18px;min-width:120px;}
+.wi-result-num{font-size:30px;font-weight:300;color:#ddc989;line-height:1.1;}
+.wi-result-sub{font-size:9px;color:#9ab0b4;margin-top:3px;}
+.wi-msg{font-size:12px;color:#9ab0b4;line-height:1.8;}
+.wi-diff-hl{color:#ddc989;font-weight:500;}
+@media(max-width:480px){.wi-calc{gap:5px;}.wi-result-num{font-size:24px;}}
+
+/* MetS判定バナー */
+.mets-banner{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;
+  border-radius:5px;margin-top:14px;border-left:4px solid #e8a000;
+  background:#fff8e8;border:1px solid #e8c05a;border-left-width:4px;}
+.mets-icon{font-size:17px;line-height:1.3;flex-shrink:0;}
+.mets-title{font-size:13px;font-weight:700;color:#7a5000;margin-bottom:3px;}
+.mets-desc{font-size:11px;color:#9a7030;line-height:1.6;}
+.mets-banner.mets-red{background:#fff2f2;border-color:#e85a5a;border-left-color:#c44040;}
+.mets-banner.mets-red .mets-title{color:#8a2020;}
+.mets-banner.mets-red .mets-desc{color:#a04040;}
+
+/* life medical */
+.med-box{margin-top:16px;border:1px solid rgba(104,118,108,.28);background:#f8faf8;padding:16px;}
+.med-title{font-size:13px;font-weight:900;color:var(--smoke-dark);margin-bottom:10px;}
+.med-table{width:100%;border-collapse:collapse;font-size:11px;}
+.med-table th,.med-table td{padding:8px 8px;border-bottom:1px solid rgba(7,7,7,.1);text-align:left;}
+.med-table th{color:var(--smoke-dark);font-size:10px;background:#edf1ed;}
+.med-table .hi{color:var(--red);font-weight:800;}
+.med-note{font-size:9px;color:var(--muted);margin-top:8px;line-height:1.6;}
+
+.age80-box{margin-top:16px;background:linear-gradient(135deg,#1c2426,var(--smoke-dark));
+  padding:22px 18px;color:#fff;display:grid;
+  grid-template-columns:1fr 1fr;gap:1px;
+  border:1px solid rgba(221,201,137,.18);}
+.a80-item{text-align:center;padding:0 16px;}
+.a80-item+.a80-item{border-left:1px solid rgba(255,255,255,.12);}
+.a80-label{font-size:10px;color:rgba(255,255,255,.62);font-weight:300;letter-spacing:.05em;}
+.a80-val{color:#ffe066;font-size:26px;font-weight:300;margin-top:6px;line-height:1.1;}
+.a80-val.loss{color:#ff6b6b;}
+.a80-diff{font-size:11px;color:rgba(255,255,255,.62);margin-top:5px;font-weight:300;}
+.reserve-cta{background:linear-gradient(180deg,#657577 0%,#34474b 100%);box-shadow:0 16px 26px rgba(37,55,58,.2);}
+
+/* 結果まとめカード（画像保存用） */
+.share-card{margin-top:22px;background:linear-gradient(160deg,#12181a 0%,#1c2426 60%,#232b1f 100%);
+  border:1px solid rgba(221,201,137,.28);border-radius:10px;padding:26px 24px;color:#fff;}
+.sc-card-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,.14);}
+.sc-card-logo{width:38px;height:38px;object-fit:contain;background:#070707;flex-shrink:0;}
+.sc-card-brand{font-family:"EB Garamond",serif;font-size:15px;letter-spacing:.14em;color:#fff;line-height:1.3;}
+.sc-card-brand span{display:block;margin-top:3px;font-family:"Noto Sans JP",sans-serif;
+  font-size:10px;letter-spacing:.08em;color:#ddc989;font-weight:700;}
+.sc-card-risk{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sc-card-risk-label{font-size:11px;color:rgba(255,255,255,.68);font-weight:700;}
+.sc-card-risk-badge{font-size:16px;font-weight:900;color:#ddc989;
+  background:rgba(221,201,137,.14);border:1px solid rgba(221,201,137,.4);
+  padding:5px 14px;border-radius:20px;}
+.sc-card-assets{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.sc-card-asset-item{background:rgba(255,255,255,.05);border-radius:6px;padding:12px;text-align:center;}
+.sc-card-asset-label{font-size:9.5px;color:rgba(255,255,255,.62);line-height:1.5;}
+.sc-card-asset-val{font-size:20px;font-weight:300;margin-top:6px;}
+.sc-card-asset-val.good{color:#ffe066;}
+.sc-card-asset-val.bad{color:#ff8080;}
+.sc-card-highlight{background:linear-gradient(135deg,rgba(104,118,108,.28),rgba(104,118,108,.12));
+  border:1px solid rgba(160,200,160,.32);border-radius:8px;padding:18px 16px;text-align:center;}
+.sc-card-highlight-label{font-size:12px;color:rgba(255,255,255,.82);line-height:1.6;}
+.sc-card-highlight-num{font-size:30px;font-weight:600;color:#a8e0a0;margin:8px 0;line-height:1.1;}
+.sc-card-highlight-sub{font-size:12px;color:rgba(255,255,255,.82);}
+.sc-card-foot{margin-top:16px;font-size:9px;color:rgba(255,255,255,.5);text-align:center;line-height:1.6;}
+.share-actions{margin-top:12px;}
+.share-btn{background:linear-gradient(180deg,#68766c 0%,#455049 100%);box-shadow:0 10px 22px rgba(50,60,52,.28);}
+@media(max-width:480px){
+  .share-card{padding:20px 16px;}
+  .sc-card-assets{gap:8px;}
+  .sc-card-asset-val{font-size:16px;}
+  .sc-card-highlight-num{font-size:24px;}
+}
+
+/* improvement simulation */
+.improve-box{margin-top:16px;border:1px solid rgba(104,118,108,.35);background:#f8faf8;padding:18px 20px;}
+.improve-title{font-family:"Shippori Mincho",serif;font-size:17px;font-weight:600;color:var(--black);margin-bottom:4px;}
+.improve-sub{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.improve-toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.improve-chk{border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:9px;
+  font-size:12px;min-height:44px;padding:0 12px;cursor:pointer;user-select:none;transition:background .18s,border-color .18s;}
+.improve-chk.checked{background:#eef3ee;border-color:var(--green);}
+.improve-chk.done{opacity:.55;cursor:default;}
+.improve-chk input[type=checkbox]{display:none;}
+.improve-chk .check-icon{flex:0 0 18px;width:18px;height:18px;
+  border:1.5px solid #b9c4ba;background:#fff;position:relative;flex-shrink:0;transition:background .18s,border-color .18s;}
+.improve-chk.checked .check-icon{background:var(--green);border-color:var(--green);}
+.improve-chk.checked .check-icon::after{
+  content:'';position:absolute;left:5px;top:1px;width:5px;height:10px;
+  border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg);}
+.improve-chk .ic-label{font-weight:700;color:var(--text);}
+.improve-chk.done .ic-label{font-weight:600;}
+.improve-chk .ic-note{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:1px;}
+.improve-slider-row{grid-column:1/-1;border:1px solid var(--line);background:#fff;padding:12px 14px;}
+.improve-slider-row.done{opacity:.55;}
+.isr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.isr-label{font-weight:700;font-size:12px;color:var(--text);}
+.isr-val{font-weight:900;font-size:14px;color:var(--green);}
+.improve-slider-row input[type=range]{width:100%;accent-color:var(--green);}
+.isr-note{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6;}
+.improve-result{margin-top:14px;background:linear-gradient(135deg,#1c2620,#2a362f);
+  padding:18px 16px;color:#fff;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;
+  border:1px solid rgba(140,190,150,.22);}
+.ir-item{text-align:center;padding:0 14px;}
+.ir-item+.ir-item{border-left:1px solid rgba(255,255,255,.12);}
+.ir-label{font-size:10px;color:rgba(255,255,255,.62);font-weight:300;letter-spacing:.05em;}
+.ir-val{color:#a8e0a0;font-size:24px;font-weight:300;margin-top:6px;line-height:1.1;}
+.ir-val.small{font-size:18px;}
+@media(max-width:480px){.improve-toggles{grid-template-columns:1fr;}.ir-item{padding:0 8px;}
+  .improve-result{grid-template-columns:1fr;}.ir-item+.ir-item{border-left:none;border-top:1px solid rgba(255,255,255,.12);padding-top:10px;margin-top:10px;}}
+
+/* 運動頻度の1歩ずつインパクト表 */
+.freq-ladder-box{margin-top:16px;border:1px solid var(--line);background:#fff;padding:18px 20px;}
+.fl-title{font-family:"Shippori Mincho",serif;font-size:17px;font-weight:600;color:var(--black);margin-bottom:4px;}
+.fl-sub{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.fl-rows{display:flex;flex-direction:column;gap:6px;}
+.fl-row{display:grid;grid-template-columns:1.4fr .8fr .9fr;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:5px;border:1px solid var(--line);background:var(--gray-50);}
+.fl-row.current{border-color:var(--gold);background:#fbfaf7;}
+.fl-row.better{background:#f3f7f3;border-color:rgba(104,118,108,.35);}
+.fl-row.worse{background:#fbf2f2;border-color:rgba(182,91,97,.35);}
+.fl-label{font-size:12.5px;font-weight:800;color:var(--text);}
+.fl-row.current .fl-label{color:var(--gold);}
+.fl-total{display:inline-block;margin-left:8px;font-size:10px;font-weight:700;color:var(--muted);
+  background:rgba(7,7,7,.06);padding:2px 7px;border-radius:10px;}
+.fl-dup{margin-top:3px;font-size:10px;color:var(--muted);font-weight:400;}
+.fl-risk{font-size:11px;color:var(--muted);text-align:center;}
+.fl-money{font-size:15px;font-weight:900;text-align:right;white-space:nowrap;}
+.fl-row.better .fl-money{color:var(--green);}
+.fl-row.worse .fl-money{color:var(--red);}
+.fl-row.current .fl-money{color:var(--muted);font-weight:700;}
+.fl-src{font-size:9px;color:var(--muted);margin-top:12px;line-height:1.7;}
+@media(max-width:480px){
+  .fl-row{grid-template-columns:1fr;gap:3px;text-align:left;padding:10px 12px;}
+  .fl-risk{text-align:left;}
+  .fl-money{text-align:left;font-size:16px;}
+}
+
+/* disclaimer */
+.disclaimer{margin-top:18px;background:var(--white);border:1px solid var(--line);padding:18px 20px;
+  font-size:10px;color:var(--muted);line-height:1.75;}
+.disclaimer strong{color:var(--text);}
+.disc-toggle{cursor:pointer;color:var(--gold);font-weight:800;
+  display:inline-block;margin-top:4px;font-size:10px;}
+.disc-detail{display:none;margin-top:6px;}
+.disc-detail.open{display:block;}
+
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr;}
+  .steps{grid-template-columns:repeat(3,1fr);}
+  .hero{grid-template-columns:1fr;}
+  .hero-visual{min-height:320px;}
+  .hero-visual img{min-height:320px;}
+}
+@media(max-width:768px){
+  .page{width:min(100% - 20px,1280px);padding:10px 0 48px;}
+  .brand-header{align-items:flex-start;min-height:auto;padding:10px 0 16px;}
+  .brand-logo__mark{width:54px;height:54px;}
+  .brand-logo__text{font-size:18px;}
+  .brand-meta{display:none;}
+  .hero{min-height:auto;margin-bottom:12px;}
+  .hero-copy{padding:34px 26px 30px 30px;}
+  .hero::before{width:5px;}
+  .hero h1{font-size:31px;line-height:1.32;}
+  .hero p{font-size:13px;line-height:1.9;}
+  .hero-points{grid-template-columns:1fr;gap:8px;margin-top:24px;}
+  .hero-point{min-height:auto;}
+  .hero-badge{right:14px;bottom:14px;min-width:180px;padding:14px 16px;}
+  .hero-visual{min-height:240px;}
+  .hero-visual img{min-height:240px;}
+  .steps{grid-template-columns:1fr;gap:8px;}
+  .step{min-height:auto;padding:16px 18px;}
+  .step-num{font-size:32px;}
+  .mobile-tabs{display:flex;}
+  .layout{grid-template-columns:1fr;gap:0;}
+  .panel{display:none;margin-top:10px;}
+  .panel.active-panel{display:block;}
+  .fg2{grid-template-columns:1fr 1fr;}
+  .fg3{grid-template-columns:1fr 1fr;}
+  .loss-grid{grid-template-columns:1fr;}
+  .age80-box{grid-template-columns:1fr 1fr;}
+  input,select{font-size:16px;}
+  .risk-name{min-width:118px;}
+}
+@media(max-width:400px){
+  .hero h1{font-size:27px;}
+  .fg2,.fg3{grid-template-columns:1fr;}
+  .chk-grid{grid-template-columns:1fr;}
+  .age80-box{grid-template-columns:1fr;}
+  .trend-row{display:block;}
+  .tval{text-align:left;margin-top:3px;white-space:normal;}
+}
+
+/* ── CONSENT MODAL ── */
+.consent-overlay,.form-overlay{position:fixed;inset:0;background:rgba(7,7,7,.72);z-index:9000;
+  display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity .25s;}
+.consent-overlay.open,.form-overlay.open{opacity:1;pointer-events:all;}
+.consent-modal{background:#fff;max-width:480px;width:100%;box-shadow:0 32px 64px rgba(7,7,7,.28);
+  position:relative;margin:auto;}
+.consent-head{background:var(--smoke-dark);color:#fff;padding:20px 24px;position:relative;}
+.consent-head::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
+.consent-head h3{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:600;margin-bottom:4px;}
+.consent-head p{font-size:11px;color:rgba(255,255,255,.76);}
+.consent-body{padding:24px;}
+.consent-body p{font-size:13px;line-height:1.85;color:#3a4446;margin-bottom:16px;}
+.consent-points{background:var(--gray-50);border:1px solid var(--line);padding:14px;
+  margin-bottom:16px;list-style:none;}
+.consent-points li{font-size:12px;color:var(--text);padding:4px 0 4px 18px;
+  position:relative;line-height:1.6;}
+.consent-points li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900;}
+.consent-check-row{display:flex;align-items:flex-start;gap:10px;
+  border:1px solid rgba(154,136,102,.4);background:#fbfaf7;padding:12px;margin-bottom:20px;}
+.consent-check-row{cursor:pointer;}
+.consent-check-row input[type=checkbox]{display:none;}
+.check-icon{flex:0 0 22px;width:22px;height:22px;border:1.5px solid var(--gold);
+  background:#fff;position:relative;margin-top:2px;transition:background .18s;}
+.consent-check-row input[type=checkbox]:checked + .check-icon{background:var(--gold);}
+.consent-check-row input[type=checkbox]:checked + .check-icon::after{
+  content:'';position:absolute;left:6px;top:2px;
+  width:6px;height:11px;
+  border:2px solid #fff;border-top:none;border-left:none;
+  transform:rotate(45deg);}
+.check-label{font-size:12px;line-height:1.7;color:var(--text);font-weight:700;}
+.consent-btn{width:100%;background:linear-gradient(180deg,#9a8866 0%,#77694f 100%);
+  color:#fff;border:none;padding:14px;font-size:15px;font-weight:900;cursor:pointer;
+  opacity:.45;pointer-events:none;transition:opacity .18s,transform .15s;}
+.consent-btn.enabled{opacity:1;pointer-events:all;}
+.consent-btn.enabled:hover{transform:translateY(-2px);}
+.consent-cancel{display:block;text-align:center;margin-top:10px;
+  font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;border:none;
+  background:none;width:100%;}
+
+/* ── CONSULT FORM MODAL ── */
+.form-overlay{align-items:flex-start;}
+.form-modal{background:#fff;max-width:580px;width:100%;box-shadow:0 32px 64px rgba(7,7,7,.28);
+  margin:auto;position:relative;}
+.form-modal-head{background:var(--smoke-dark);color:#fff;padding:20px 24px 22px;position:relative;}
+.form-modal-head::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
+.form-modal-head h3{font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;margin-bottom:5px;}
+.form-modal-head p{font-size:12px;color:rgba(255,255,255,.78);}
+.form-modal-close{position:absolute;top:14px;right:14px;background:none;border:none;
+  color:rgba(255,255,255,.7);font-size:24px;cursor:pointer;line-height:1;padding:4px 8px;}
+.form-modal-close:hover{color:#fff;}
+.form-modal-body{padding:24px;}
+.form-disclaimer{background:#fbfaf7;border:1px solid rgba(154,136,102,.35);
+  padding:14px;margin-bottom:22px;font-size:11px;color:#4a5658;line-height:1.85;}
+.form-disclaimer strong{color:var(--smoke-dark);display:block;margin-bottom:3px;}
+.form-sec{margin-bottom:22px;}
+.form-sec-title{font-size:10px;font-weight:900;color:var(--gold);letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+.form-sec .field{margin-bottom:10px;}
+.req{color:var(--red);font-size:10px;font-weight:900;margin-left:3px;}
+.opt-tag{color:var(--muted);font-size:10px;font-weight:700;margin-left:3px;}
+textarea{width:100%;min-height:80px;border:1px solid rgba(7,7,7,.18);background:#fff;
+  padding:10px 11px;font-size:14px;color:var(--text);resize:vertical;outline:none;
+  font-family:inherit;border-radius:0;transition:border-color .18s;}
+textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.12);}
+.fg-full{grid-column:1/-1;}
+.form-submit{width:100%;background:linear-gradient(180deg,#9a8866 0%,#77694f 100%);
+  color:#fff;border:none;padding:16px;font-size:16px;font-weight:900;cursor:pointer;
+  margin-top:8px;box-shadow:0 10px 22px rgba(80,68,45,.22);transition:transform .15s,opacity .15s;}
+.form-submit:hover{transform:translateY(-2px);}
+.form-submit:disabled{opacity:.5;pointer-events:none;}
+.form-success{display:none;text-align:center;padding:48px 24px;}
+.form-success.show{display:block;}
+.form-success .fs-icon{font-size:52px;margin-bottom:18px;}
+.form-success h4{font-family:"Shippori Mincho",serif;font-size:22px;font-weight:600;margin-bottom:10px;}
+.form-success p{font-size:13px;color:var(--muted);line-height:1.85;}
+
+/* ── TOP CTA STRIP ── */
+.top-cta-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:linear-gradient(90deg,#5a6475 0%,#485260 100%);
+  border:1px solid rgba(221,201,137,.18);padding:14px 20px;margin-bottom:18px;}
+.top-cta-strip p{color:rgba(255,255,255,.88);font-family:"Noto Sans JP",sans-serif;
+  font-size:13px;font-weight:400;line-height:1.6;flex:1;margin:0;}
+.top-cta-strip p span{display:block;color:rgba(221,201,137,.82);font-size:11px;font-weight:400;margin-top:3px;}
+.cta-inline{flex:0 0 auto;background:linear-gradient(180deg,#9a8866 0%,#77694f 100%);
+  color:#fff;border:none;padding:11px 20px;font-family:"Noto Sans JP",sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;
+  white-space:nowrap;box-shadow:0 8px 16px rgba(80,68,45,.22);transition:transform .15s;}
+.cta-inline:hover{transform:translateY(-2px);}
+
+/* ── MID CTA ── */
+.mid-cta{background:linear-gradient(135deg,#485260,#5a6475);
+  border:1px solid rgba(221,201,137,.18);padding:22px 24px;margin-bottom:18px;
+  display:flex;align-items:center;gap:20px;}
+.mid-cta-text{flex:1;color:#fff;}
+.mid-cta-text strong{display:block;font-family:"Shippori Mincho",serif;font-size:17px;
+  font-weight:500;margin-bottom:5px;}
+.mid-cta-text span{font-family:"Noto Sans JP",sans-serif;font-size:12px;font-weight:400;
+  color:rgba(255,255,255,.76);line-height:1.7;}
+@media(max-width:768px){
+  .top-cta-strip{flex-direction:column;align-items:stretch;gap:10px;}
+  .top-cta-strip p{text-align:center;}
+  .mid-cta{flex-direction:column;gap:14px;}
+  .mid-cta .cta-inline{width:100%;text-align:center;padding:13px;}
+}
+
+/* ── SERVICE CTA GRID ── */
+.service-cta-section{margin-top:16px;}
+.service-cta-label{font-size:10px;font-weight:700;color:var(--muted);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.service-cta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.service-card{background:var(--smoke-dark);border:1px solid rgba(221,201,137,.18);
+  padding:18px 16px;display:flex;flex-direction:column;gap:6px;transition:border-color .18s;}
+.service-card:hover{border-color:rgba(221,201,137,.5);}
+.sc-badge{font-size:9px;font-weight:800;letter-spacing:.12em;color:var(--gold-2);
+  text-transform:uppercase;padding:3px 7px;border:1px solid rgba(221,201,137,.35);
+  display:inline-block;width:fit-content;}
+.sc-title{font-family:"Shippori Mincho",serif;font-size:15px;font-weight:500;
+  color:#fff;line-height:1.45;margin-top:4px;}
+.sc-desc{font-size:11px;color:rgba(255,255,255,.65);line-height:1.7;flex:1;margin-top:2px;}
+.sc-btn{margin-top:10px;background:transparent;border:1px solid rgba(221,201,137,.45);
+  color:var(--gold-2);padding:10px 12px;font-family:"Noto Sans JP",sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;
+  transition:background .18s,color .18s,border-color .18s;text-align:center;}
+.sc-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.service-note{font-size:10px;color:var(--muted);text-align:center;margin-top:8px;}
+@media(max-width:768px){
+  .service-cta-grid{grid-template-columns:1fr;}
+}
+
+/* ── PDF出力ボタン ── */
+.pdf-btn{width:100%;margin-top:16px;padding:14px 18px;background:#fff;
+  border:1.5px solid var(--smoke-dark);color:var(--smoke-dark);cursor:pointer;
+  font-size:14px;font-weight:800;letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .18s,color .18s;}
+.pdf-btn:hover{background:var(--smoke-dark);color:#fff;}
+.pdf-btn-icon{font-size:17px;line-height:1;}
+.pdf-note{font-size:10px;color:var(--muted);text-align:center;margin-top:6px;}
+.print-disclaimer{display:none;}
+.print-title{display:none;}
+
+/* ── 印刷（PDF保存）用スタイル：A4横向き1枚 ── */
+@page{size:A4 landscape;margin:8mm 9mm;}
+@media print{
+  html,body{background:#fff!important;font-size:9px;
+    height:auto!important;min-height:0!important;overflow:visible!important;}
+  *{box-shadow:none!important;text-shadow:none!important;}
+  /* 非表示要素 */
+  .brand-meta,.hero,.steps,.mobile-tabs,#p0,
+  .service-cta-section,.sticky-cta,.pdf-btn,.pdf-note,
+  .consent-overlay,.form-overlay,.reserve-cta,
+  .disc-toggle,.disc-detail,.g-legend{display:none!important;}
+  .page{width:100%;padding:0;}
+  /* ヘッダー */
+  .brand-header{min-height:auto;margin:0 0 1.5mm;padding:0 0 1.5mm;gap:10px;}
+  .brand-logo__mark{width:9mm;height:9mm;}
+  .brand-logo__text{font-size:13px;}
+  .brand-logo__text span{font-size:7.5px;margin-top:2px;}
+  /* 結果パネル：3カラムグリッド */
+  .layout{display:block;}
+  .panel{display:block!important;border:none!important;box-shadow:none!important;overflow:visible;}
+  #p1 .ph{display:none!important;}
+  .print-title{display:block;grid-column:1/-1;margin:0 0 0.5mm;
+    font-family:"Shippori Mincho",serif;font-size:15px;font-weight:600;color:var(--black);
+    padding-bottom:1.5mm;border-bottom:2px solid var(--gold);}
+  #p1 .pb{padding:1mm 0 0;display:grid;grid-template-columns:27fr 43fr 30fr;gap:4mm;align-items:stretch;}
+  .pr-a,.pr-b,.pr-c{min-width:0;break-inside:avoid;display:flex;flex-direction:column;}
+  /* 左列：リスク評価 */
+  #p1 .sec-title{font-size:13px;margin:0 0 1.5mm;}
+  #p1 .subnote{font-size:8.5px;margin:0 0 1.5mm;}
+  .risk-row{padding:1.8mm 0;gap:7px;}
+  .risk-name{min-width:96px;font-size:9.5px;}
+  .bar{height:7px;}
+  .bar>span{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .risk-lv{font-size:9.5px;min-width:18px;}
+  .prec-row{margin-top:2mm;padding:2.2mm 3mm;}
+  .prec-row>div:first-child{font-size:9.5px!important;}
+  #precText{font-size:15px!important;}
+  .trend-box{margin-top:2.5mm;padding:2.5mm;flex:1;}
+  .trend-title{font-size:10px;margin-bottom:2mm;}
+  .ev-tag{font-size:7px;padding:1.5px 5px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .trend-row{padding:1.3mm 0;font-size:8.5px;}
+  .trend-src{font-size:7px;margin-top:2mm;padding-top:2mm;}
+  /* 中央列：グラフ（縦長で再描画）＋80歳資産 */
+  .graph-wrap{margin-top:0;padding:2.5mm;flex:1;display:flex;flex-direction:column;}
+  .graph-wrap canvas{flex:1;object-fit:contain;}
+  .graph-title{font-size:14px;}
+  .graph-sub{font-size:8.5px;margin-bottom:2mm;}
+  .age80-box{margin-top:2.5mm;padding:3.5mm 3mm;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .a80-item{padding:0 3mm;}
+  .a80-label{font-size:8.5px;}
+  .a80-val{font-size:20px;margin-top:1.2mm;}
+  .a80-diff{font-size:9px;margin-top:1.5mm;}
+  /* 右列：損失内訳＋週間投資＋医療費 */
+  .loss-summary{margin-top:0;}
+  .loss-title{font-size:8.5px;margin-bottom:2mm;}
+  .loss-grid{grid-template-columns:1fr 1fr 1fr;gap:2mm;margin-bottom:2mm;}
+  .loss-card{padding:2.2mm 1.5mm;}
+  .loss-card .lc-label{font-size:7px;}
+  .loss-card .lc-val{font-size:11.5px;margin-top:1.2mm;}
+  .loss-total{padding:2.5mm;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .loss-total .lt-label{font-size:8.5px;}
+  .loss-total .lt-val{font-size:19px;}
+  .loss-total .lt-sub{font-size:7px;margin-top:1.2mm;}
+  .wi-box{margin-top:2.5mm;padding:3mm 2.5mm;border-radius:2mm;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .wi-headline{font-size:8px;margin-bottom:2.2mm;}
+  .wi-calc{gap:6px;margin-bottom:2.2mm;}
+  .wi-cell{min-width:0;}
+  .wi-num{font-size:11.5px;}
+  .wi-sub{font-size:7px;}
+  .wi-op{font-size:13px;margin-top:1.5px;}
+  .wi-result-cell{padding:2.2mm 4mm;min-width:0;border-radius:1.5mm;}
+  .wi-result-num{font-size:17px;}
+  .wi-result-sub{font-size:7px;}
+  .wi-msg{font-size:8px;line-height:1.6;}
+  .med-box{margin-top:2.5mm;padding:2.5mm;flex:1;}
+  .med-title{font-size:10px;margin-bottom:2mm;}
+  .med-table th,.med-table td{padding:1.3mm 2mm;font-size:8.5px;}
+  .med-table th{font-size:8px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .med-note{font-size:6.5px;margin-top:1.5mm;}
+  /* フッター免責：ページ外の免責ブロックは非表示、グリッド内の1行だけ表示 */
+  .disclaimer{display:none!important;}
+  .print-disclaimer{display:block;grid-column:1/-1;margin:1mm 0 0;
+    font-size:7px;color:#888;line-height:1.5;
+    padding-top:1.5mm;border-top:1px solid #ddd;}
+}
+
+/* ── STICKY MOBILE CTA ── */
+.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:800;
+  background:linear-gradient(180deg,#9a8866 0%,#77694f 100%);
+  color:#fff;border:none;padding:15px;font-size:15px;font-weight:900;
+  cursor:pointer;box-shadow:0 -4px 18px rgba(80,68,45,.24);text-align:center;
+  letter-spacing:.04em;border-top:1px solid rgba(221,201,137,.3);}
+@media(max-width:768px){
+  .sticky-cta{display:block;}
+  .page{padding-bottom:72px!important;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════
+     CONSENT MODAL（シミュレーション前同意）
+══════════════════════════════════════ -->
+<div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div class="consent-modal">
+    <div class="consent-head">
+      <h3 id="consentTitle">シミュレーション実行の前に</h3>
+      <p>データの取り扱いについてご確認ください</p>
+    </div>
+    <div class="consent-body">
+      <p>本シミュレーションは、入力いただいた健診データ・資産情報をもとに、健康リスクと将来資産への影響を試算するツールです。</p>
+      <ul class="consent-points">
+        <li>入力データはお使いのブラウザ内のみで処理されます</li>
+        <li>入力内容はサーバーへ送信・保存されません</li>
+        <li>氏名・住所等の個人を特定する情報の入力は不要です</li>
+        <li>結果は参考試算値であり、医療診断・投資助言ではありません</li>
+      </ul>
+      <label class="consent-check-row" for="consentCheck">
+        <input type="checkbox" id="consentCheck">
+        <span class="check-icon"></span>
+        <span class="check-label">上記の内容を理解し、データがブラウザ内のみで処理されることに同意してシミュレーションを実行します</span>
+      </label>
+      <button class="consent-btn" id="consentOkBtn" disabled>シミュレーションを実行する</button>
+      <button class="consent-cancel" id="consentCancelBtn">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CONSULT FORM MODAL（相談フォーム）
+══════════════════════════════════════ -->
+<div class="form-overlay" id="formOverlay" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+  <div class="form-modal">
+    <div class="form-modal-head">
+      <h3 id="formTitle">FRACTAL WORKOUTに相談する</h3>
+      <p>無料カウンセリング ｜ オンライン・対面どちらでも対応</p>
+      <button class="form-modal-close" id="formCloseBtn" aria-label="閉じる">×</button>
+    </div>
+    <div class="form-modal-body">
+
+      <!-- 成功メッセージ -->
+      <div class="form-success" id="formSuccess">
+        <div class="fs-icon">✅</div>
+        <h4>送信が完了しました</h4>
+        <p>ご相談内容を受け付けました。<br>担当スタッフより2営業日以内にご連絡いたします。</p>
+      </div>
+
+      <!-- フォーム本体 -->
+      <form id="consultForm" novalidate>
+
+        <div class="form-disclaimer">
+          <strong>ご注意</strong>
+          本カウンセリングは、運動・コンディショニングに関するご相談をお伺いするものです。医療行為、診断、治療、処方を行うものではありません。既往歴や医師からの運動制限がある場合は、事前にその内容をご共有ください。
+        </div>
+
+        <!-- 必須項目 -->
+        <div class="form-sec">
+          <div class="form-sec-title">必須項目</div>
+          <div class="fg2">
+            <div class="field">
+              <label for="f-name">氏名<span class="req">必須</span></label>
+              <input type="text" id="f-name" name="name" placeholder="山田 太郎" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-email">メールアドレス<span class="req">必須</span></label>
+              <input type="email" id="f-email" name="email" placeholder="example@email.com" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="f-tel">電話番号<span class="req">必須</span></label>
+              <input type="tel" id="f-tel" name="tel" placeholder="090-0000-0000" required autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="f-contact">希望する連絡方法<span class="req">必須</span></label>
+              <select id="f-contact" name="contact_method" required>
+                <option value="">選択してください</option>
+                <option value="email">メール</option>
+                <option value="tel">電話</option>
+                <option value="either">どちらでも可</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-purpose">相談希望内容<span class="req">必須</span></label>
+            <select id="f-purpose" name="purpose" required>
+              <option value="">選択してください</option>
+              <option value="shoulder_back">肩こり、腰痛、姿勢改善について相談したい</option>
+              <option value="exercise_lack">運動不足を改善したい</option>
+              <option value="lifestyle_disease">生活習慣病予防、体力低下について相談したい</option>
+              <option value="doctor_recommend">医師から運動を勧められている</option>
+              <option value="pilates_pt">ピラティス、パーソナルトレーニングを体験したい</option>
+              <option value="corporate">法人、健康経営、保健事業について相談したい</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-datetime">希望日時<span class="req">必須</span></label>
+            <input type="text" id="f-datetime" name="preferred_datetime" placeholder="例：平日午前、または第1・3土曜日午後など">
+          </div>
+        </div>
+
+        <!-- 任意項目 -->
+        <div class="form-sec">
+          <div class="form-sec-title">任意項目（より適切なご提案のために）</div>
+          <div class="field" style="margin-bottom:10px;">
+            <label for="f-symptom">現在の身体の悩み<span class="opt-tag">任意</span></label>
+            <textarea id="f-symptom" name="symptom" placeholder="例：慢性的な腰痛、デスクワークでの肩こり など"></textarea>
+          </div>
+          <div class="fg2">
+            <div class="field">
+              <label for="f-exp">運動経験<span class="opt-tag">任意</span></label>
+              <select id="f-exp" name="exercise_exp">
+                <option value="">選択してください</option>
+                <option value="none">ほとんどない</option>
+                <option value="light">軽い運動程度（ウォーキング等）</option>
+                <option value="gym">ジム・スポーツクラブ経験あり</option>
+                <option value="pt">パーソナルトレーニング経験あり</option>
+                <option value="athlete">競技スポーツ経験あり</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-freq">通える頻度<span class="opt-tag">任意</span></label>
+              <select id="f-freq" name="frequency">
+                <option value="">選択してください</option>
+                <option value="weekly_1">週1回程度</option>
+                <option value="weekly_2">週2回程度</option>
+                <option value="weekly_3">週3回以上</option>
+                <option value="monthly">月数回</option>
+                <option value="undecided">未定</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-goal">目的<span class="opt-tag">任意</span></label>
+            <select id="f-goal" name="goal">
+              <option value="">選択してください</option>
+              <option value="health">健康維持・増進</option>
+              <option value="diet">ダイエット・体型改善</option>
+              <option value="rehab">痛み・不調の改善・リハビリ</option>
+              <option value="performance">パフォーマンス向上</option>
+              <option value="checkup">健診値の改善</option>
+              <option value="habit">運動習慣の形成</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-medical">既往歴または医師からの運動制限の有無<span class="opt-tag">任意</span></label>
+            <select id="f-medical" name="medical_history">
+              <option value="">選択してください</option>
+              <option value="none">特になし</option>
+              <option value="has_restriction">医師から運動制限を受けている</option>
+              <option value="has_history">既往歴あり（詳細は備考欄へ）</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-note">入会前に確認したいこと<span class="opt-tag">任意</span></label>
+            <textarea id="f-note" name="note" placeholder="料金・スケジュール・施設設備などご自由にどうぞ"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit" id="formSubmitBtn">送信する — 無料カウンセリングを申し込む</button>
+        <p class="privacy-note" style="margin-top:8px;">送信内容はSSL暗号化により保護されます。スパムメールは送信しません。</p>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<header class="brand-header">
+  <a class="brand-logo" href="#layout" aria-label="FRACTAL WORKOUT 健康資産シミュレーションへ">
+    <img class="brand-logo__mark" src="./assets/images/fractal-workout-logo.webp" alt="FRACTAL WORKOUT">
+    <div class="brand-logo__text">FRACTAL WORKOUT</div>
+  </a>
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-copy">
+    <div class="hero-tag">SCSK健康経営プログラム</div>
+    <h1>あなたの健康が、<br><span class="hero-h1-nowrap">会社と老後を守る。</span></h1>
+    <p>健診データと資産情報から、現在の健康リスクと80歳までの資産推移を試算。SCSKが提供する予防医療サポートで、今の身体が未来の資産に与える影響を数字で把握できます。</p>
+    <div class="hero-points">
+      <div class="hero-point"><span>01</span><strong>無料・匿名で利用</strong></div>
+      <div class="hero-point"><span>02</span><strong>健診データは空欄でも可</strong></div>
+      <div class="hero-point"><span>03</span><strong>80歳までの差額を表示</strong></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img src="./assets/images/interior-logo-wall.jpg" alt="FRACTAL WORKOUT 原宿のエントランス">
+    <div class="hero-badge">
+      <div class="big">80</div>
+      <div class="sub">歳までの健康資産を<br>その場でシミュレーション</div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps">
+  <div class="step"><div class="step-num">01</div><div class="step-text"><strong>基本情報・資産入力</strong><span>性別・年齢・年収・総資産</span></div></div>
+  <div class="step"><div class="step-num">02</div><div class="step-text"><strong>健診データ入力</strong><span>分かる項目だけで試算可能</span></div></div>
+  <div class="step"><div class="step-num">03</div><div class="step-text"><strong>健康資産を確認</strong><span>80歳までの推移と損失額</span></div></div>
+</section>
+
+
+<!-- MOBILE TABS -->
+<div class="mobile-tabs" id="mtabs">
+  <button class="mtab on" data-p="0">① 入力</button>
+  <button class="mtab" data-p="1">② 結果</button>
+</div>
+
+<div class="layout" id="layout">
+
+<!-- PANEL 1: INPUT -->
+<div class="panel active-panel" id="p0">
+  <div class="ph">STEP 1–2 ｜ 情報入力</div>
+  <div class="pb">
+
+    <div class="sec-title">基本情報</div>
+    <div class="fg2">
+      <div class="field">
+        <label for="gender">性別</label>
+        <select id="gender"><option value="male">男性</option><option value="female">女性</option></select>
+      </div>
+      <div class="field">
+        <label for="age">年齢</label>
+        <select id="age"></select>
+      </div>
+      <div class="field">
+        <label for="habit">運動習慣</label>
+        <select id="habit">
+          <option value="none">ほぼない</option>
+          <option value="30x1">①30分の運動を週1回</option>
+          <option value="30x2">②30分の運動を週2回</option>
+          <option value="30x3">③30分の運動を週3回</option>
+          <option value="60x1">④60分の運動を週1回</option>
+          <option value="60x2">⑤60分の運動を週2回</option>
+          <option value="60x3">⑥60分の運動を週3回</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="smoking">喫煙習慣</label>
+        <select id="smoking">
+          <option value="never">非喫煙</option>
+          <option value="past">過去喫煙（禁煙済み）</option>
+          <option value="current">現在喫煙中</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field cig-count-field" id="cigCountField" style="display:none">
+      <label for="cigCount">1日の本数（本）</label>
+      <input id="cigCount" type="number" inputmode="numeric" min="1" max="60" placeholder="未入力の場合は1日20本として試算します">
+      <span class="subnote" style="margin:6px 0 0;">本数に応じて疾患リスクへの影響を連続的に調整します（1本でも影響は大きく、20本でほぼ頭打ちになります）</span>
+    </div>
+
+    <div class="sec-title">資産情報</div>
+    <div class="asset-box">
+      <div class="fg2">
+        <div class="field">
+          <label for="income">現在の年収（万円）</label>
+          <input id="income" type="number" inputmode="decimal" placeholder="例：500">
+        </div>
+        <div class="field">
+          <label for="assets">現在の総資産（万円）</label>
+          <input id="assets" type="number" inputmode="decimal" placeholder="例：300">
+        </div>
+      </div>
+      <div class="asset-hint">
+        ※年収が未入力の場合は年齢・性別の日本平均値（国税庁2024年）を自動適用します。<br>
+        ※総資産は貯蓄＋投資の合計額を入力してください。
+      </div>
+    </div>
+
+    <!-- 詳細入力トグル -->
+    <button type="button" class="adv-toggle" id="advToggle">
+      <span class="adv-toggle-icon">＋</span>
+      もう少し詳しくシミュレーション
+      <span class="adv-toggle-sub">健診データ・症状を入力すると精度が上がります</span>
+    </button>
+
+    <div id="advancedInputs" style="display:none">
+    <div class="sec-title">健診データ（任意・空欄OK）</div>
+    <div class="subnote">入力した項目が多いほど精度が上がります。全項目空欄でも判定できます。</div>
+    <div class="fg2">
+      <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" inputmode="decimal" placeholder="170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
+      <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" inputmode="decimal" placeholder="68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
+      <div class="field"><label for="waist">腹囲 (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
+      <div class="field"><label for="sbp">収縮期血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
+      <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" inputmode="decimal" placeholder="105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
+      <div class="field"><label for="hba1c">HbA1c (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
+      <div class="field"><label for="ldl">LDLコレステロール (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
+    </div>
+
+    <!-- MetS自動判定バナー -->
+    <div class="mets-banner" id="metsBanner" style="display:none">
+      <div class="mets-icon">⚠</div>
+      <div class="mets-body">
+        <div class="mets-title" id="metsBannerTitle">メタボリックシンドローム疑い</div>
+        <div class="mets-desc" id="metsBannerDesc">入力値に基づく判定です。確定診断は医療機関で受けてください。</div>
+      </div>
+    </div>
+
+    <div class="sec-title" style="margin-top:14px;">気になる症状</div>
+    <div class="chk-grid" id="symptoms"></div>
+    </div><!-- /advancedInputs -->
+
+    <button class="cta-btn" id="runBtn">健康資産をシミュレーションする</button>
+    <p class="privacy-note">入力内容はこのページ内で試算に使用され、個人情報の入力は不要です。</p>
+  </div>
+</div>
+
+<!-- PANEL 2: RESULTS -->
+<div class="panel" id="p1">
+  <div class="ph">STEP 3 ｜ あなたの健康資産シミュレーション</div>
+  <div class="pb">
+
+    <!-- 印刷専用タイトル -->
+    <div class="print-title">健康リスク × 将来資産シミュレーション ｜ 結果レポート</div>
+
+    <div class="pr-a">
+    <!-- 健診基準値アラート -->
+    <div class="checkup-alert" id="checkupAlert" style="display:none">
+      <div class="ca-icon">⚠</div>
+      <div class="ca-body">
+        <div class="ca-title" id="caTitle">注意：健診基準値を超える項目があります</div>
+        <div class="ca-detail" id="caDetail"></div>
+      </div>
+    </div>
+
+    <!-- Risk bars -->
+    <div class="sec-title">6つの疾患リスク評価</div>
+    <div class="subnote" id="precDetail">入力データをもとに判定しています</div>
+    <div id="riskRows"></div>
+    <div class="prec-row">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;">判定精度</div>
+      <div id="precText" style="font-size:18px;font-weight:900;color:var(--navy);">--</div>
+    </div>
+
+    <!-- Trend risk -->
+    <div class="trend-box">
+      <div class="trend-title">現在の値が継続した場合のリスク増加 <span class="ev-tag">査読論文準拠</span></div>
+      <div id="trendRows"></div>
+      <div class="trend-src" id="trendSrc"></div>
+    </div>
+    </div><!-- /pr-a -->
+
+    <div class="pr-b">
+    <!-- Asset graph -->
+    <div class="graph-wrap">
+      <div class="graph-title">健康資産の推移（現在〜80歳）</div>
+      <div class="graph-sub">青：健康管理を継続した場合　赤：現状のまま放置した場合</div>
+      <canvas id="chart"></canvas>
+      <div class="g-legend">
+        <div><span class="g-dot" style="background:#59696b"></span>健康管理継続</div>
+        <div><span class="g-dot" style="background:#b65b61"></span>現状放置</div>
+        <div id="legendImproved" style="display:none"><span class="g-dot" style="background:#68766c"></span>生活習慣を改善した場合</div>
+        <div><span class="g-dot" style="background:#cbd3d2;width:14px;height:2px;border-radius:0;margin-top:4px;"></span>60歳（定年・再雇用）</div>
+        <div><span class="g-dot" style="background:#9a8866;width:14px;height:3px;border-radius:0;margin-top:3px;"></span>65歳（年金移行）</div>
+      </div>
+    </div>
+
+    <!-- 80歳時点の資産 -->
+    <div class="age80-box" id="age80box">
+      <div class="a80-item">
+        <div class="a80-label">健康維持した場合の80歳資産</div>
+        <div class="a80-val" id="a80good">--</div>
+      </div>
+      <div class="a80-item">
+        <div class="a80-label">現状放置した場合の80歳資産</div>
+        <div class="a80-val loss" id="a80bad">--</div>
+        <div class="a80-diff" id="a80diff"></div>
+      </div>
+    </div>
+
+    <!-- 改善シミュレーション -->
+    <div class="improve-box" id="improveBox">
+      <div class="improve-title">今から生活習慣を改善したら、どれだけ変わるか</div>
+      <div class="improve-sub" id="improveSub">気になる項目にチェックを入れると、改善後の資産推移をグラフに緑の線で追加表示します。</div>
+      <div class="improve-toggles" id="improveToggles">
+        <label class="improve-chk" for="impQuitSmoke" id="impQuitSmokeWrap">
+          <input type="checkbox" id="impQuitSmoke">
+          <span class="check-icon"></span>
+          <span><span class="ic-label">禁煙する</span><span class="ic-note" id="impQuitSmokeNote"></span></span>
+        </label>
+        <label class="improve-chk" for="impExercise" id="impExerciseWrap">
+          <input type="checkbox" id="impExercise">
+          <span class="check-icon"></span>
+          <span><span class="ic-label">運動習慣をつける（週3回以上）</span><span class="ic-note" id="impExerciseNote"></span></span>
+        </label>
+        <div class="improve-slider-row" id="impWeightRow">
+          <div class="isr-head">
+            <div class="isr-label">体重を減らす</div>
+            <div class="isr-val" id="impWeightVal">0kg</div>
+          </div>
+          <input type="range" id="impWeightLoss" min="0" max="15" step="1" value="0">
+          <div class="isr-note" id="impWeightNote">身長・体重を入力すると、減量後の疾患リスクをシミュレーションできます。</div>
+        </div>
+      </div>
+      <div class="improve-result" id="improveResult" style="display:none">
+        <div class="ir-item">
+          <div class="ir-label">総合疾患リスクスコア</div>
+          <div class="ir-val small" id="impRiskScore">--</div>
+        </div>
+        <div class="ir-item">
+          <div class="ir-label">改善した場合の80歳資産</div>
+          <div class="ir-val" id="impGood">--</div>
+        </div>
+        <div class="ir-item">
+          <div class="ir-label">現状放置との差（取り戻せる金額）</div>
+          <div class="ir-val" id="impDiff">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 運動頻度の1歩ずつインパクト表 -->
+    <div class="freq-ladder-box" id="freqLadderBox">
+      <div class="fl-title">運動の頻度を1歩変えるだけで、こんなに変わる</div>
+      <div class="fl-sub">今の運動習慣を基準に、週の運動回数を1歩ずつ増減させた場合の試算です（1回＝30分の運動と想定）。</div>
+      <div class="fl-rows" id="flRows"></div>
+      <div class="fl-src">出典：Coleman et al. <em>Br J Sports Med</em> 2022（米国成人416,420人の全国コホート）有酸素運動が週1時間で死亡リスク15%減（HR 0.85）、週3時間で27%減（HR 0.73、以降は頭打ち）。</div>
+    </div>
+
+    <!-- 運動時間×頻度の組み合わせ比較表 -->
+    <div class="freq-ladder-box" id="durationComboBox">
+      <div class="fl-title">1回30分／60分 × 週1〜3回、どれが効くか</div>
+      <div class="fl-sub">1回の運動時間と週の頻度を掛け合わせた6パターンで比較した試算です。</div>
+      <div class="fl-rows" id="durationComboRows"></div>
+      <div class="fl-src">出典：Khurshid et al. <em>JAMA</em> 2023;330(3):247-252（加速度計データ89,573人）運動を週内のどこに配分しても、合計時間が同じであれば心血管疾患リスクの低下効果はほぼ同等（"週末にまとめ派"研究）。この結果を踏まえ、本試算は1回の時間×回数＝週の合計時間のみで効果を算出しています。</div>
+    </div>
+    </div><!-- /pr-b -->
+
+    <div class="pr-c">
+    <!-- Loss summary -->
+    <div class="loss-summary">
+      <div class="loss-title">健康リスク放置による推定損失内訳（〜80歳）</div>
+      <div class="loss-grid">
+        <div class="loss-card">
+          <div class="lc-label">生産性低下による<br>評価・昇進への影響</div>
+          <div class="lc-val" id="lossPT">--</div>
+        </div>
+        <div class="loss-card">
+          <div class="lc-label">疾患別<br>累積医療費（〜80歳）</div>
+          <div class="lc-val" id="lossMed">--</div>
+        </div>
+        <div class="loss-card">
+          <div class="lc-label">投資複利<br>機会損失（3%換算）</div>
+          <div class="lc-val" id="lossComp">--</div>
+        </div>
+      </div>
+      <div class="loss-total">
+        <div class="lt-label">合計 逸失健康資産（推定）</div>
+        <div class="lt-val" id="lossTotal">--</div>
+        <div class="lt-sub">※試算値。実際は個人の状況により異なります。</div>
+      </div>
+    </div>
+
+    <!-- 週あたり健康投資試算 -->
+    <div class="wi-box" id="wiBox" style="display:none">
+      <div class="wi-headline">健康資産を守るために必要な「週あたり投資目安」</div>
+      <div class="wi-calc">
+        <div class="wi-cell">
+          <div class="wi-num" id="wiDiff">--</div>
+          <div class="wi-sub">健康維持との差額</div>
+        </div>
+        <div class="wi-op">÷</div>
+        <div class="wi-cell">
+          <div class="wi-num"><span id="wiWeeks">--</span>週</div>
+          <div class="wi-sub"><span id="wiYears">--</span>年 × 52週</div>
+        </div>
+        <div class="wi-op">=</div>
+        <div class="wi-result-cell">
+          <div class="wi-result-num" id="wiBudget">--</div>
+          <div class="wi-result-sub">1週間あたりの健康投資目安</div>
+        </div>
+      </div>
+      <div class="wi-msg">週1回の運動・健康管理にこの金額を充て続けるだけで、<br><span id="wiDiffMsg" class="wi-diff-hl">--</span>の健康資産損失を防げる計算になります。</div>
+    </div>
+
+    <!-- Lifetime medical costs -->
+    <div class="med-box">
+      <div class="med-title">推定生涯医療費（厚労省データ準拠）</div>
+      <table class="med-table" id="medTable">
+        <thead><tr><th>年齢帯</th><th>健康維持の場合</th><th>現状放置の場合</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="med-note">
+        ※厚生労働省「生涯医療費」2010年度推計（男性2,300万円・女性2,500万円）を2022年度国民医療費の物価水準（×1.25）で補正した独自試算値です。<br>
+        ※現状放置の場合は健康リスクスコアに応じて×1.0〜×1.7の係数を適用しています（医学的診断ではありません）。
+      </div>
+    </div>
+    </div><!-- /pr-c -->
+
+    <!-- 印刷専用フッター免責 -->
+    <p class="print-disclaimer">※本シミュレーションはFRACTAL WORKOUTが独自に開発した試算ツールです。医学的診断・投資助言ではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。｜出力日：<span id="printDate"></span></p>
+
+    <!-- PDF出力 -->
+    <button type="button" class="pdf-btn" id="pdfBtn">
+      <span class="pdf-btn-icon">🖨</span> この結果をPDFで保存・印刷する
+    </button>
+    <p class="pdf-note">印刷画面で「送信先：PDFに保存」を選ぶとPDFとしてダウンロードできます。</p>
+
+    <!-- 3サービス CTA -->
+    <div class="service-cta-section">
+      <div class="service-cta-label">シミュレーション結果をもとに、最適なプランを選ぶ</div>
+      <div class="service-cta-grid">
+
+        <div class="service-card">
+          <span class="sc-badge">場所を選ばない</span>
+          <div class="sc-title">オンライン<br>パーソナルトレーニング</div>
+          <div class="sc-desc">自宅・出張先どこからでも。プロトレーナーと1対1でトレーニング継続をサポート。</div>
+          <button class="sc-btn" data-cta-pos="bottom" data-service="online">詳細・無料相談する</button>
+        </div>
+
+        <div class="service-card">
+          <span class="sc-badge">原宿通い ｜ 男性・女性</span>
+          <div class="sc-title">医療費控除対象<br>パーソナルトレーニング</div>
+          <div class="sc-desc">健康保険適用外ながら医療費控除の対象となるプラン。予防医療・健康経営に。</div>
+          <button class="sc-btn" data-cta-pos="bottom" data-service="harajuku-pt">詳細・無料相談する</button>
+        </div>
+
+        <div class="service-card">
+          <span class="sc-badge">原宿通い ｜ 女性向け</span>
+          <div class="sc-title">ピラティス<br>（女性専門コース）</div>
+          <div class="sc-desc">体幹・姿勢・コンディショニングを重視した女性専門のピラティスプログラム。</div>
+          <button class="sc-btn" data-cta-pos="bottom" data-service="pilates">詳細・無料相談する</button>
+        </div>
+
+      </div>
+      <p class="service-note">初回カウンセリングは無料・予約不要。オンライン対応可。</p>
+    </div>
+
+    <!-- 結果まとめカード（画像保存用） -->
+    <div class="share-card" id="shareCard">
+      <div class="sc-card-head">
+        <img src="./assets/images/fractal-workout-logo.webp" alt="FRACTAL WORKOUT" class="sc-card-logo">
+        <div class="sc-card-brand">FRACTAL WORKOUT<span>健康資産シミュレーション結果</span></div>
+      </div>
+      <div class="sc-card-risk">
+        <span class="sc-card-risk-label">総合疾患リスクスコア</span>
+        <span class="sc-card-risk-badge" id="scRiskBadge">--</span>
+      </div>
+      <div class="sc-card-assets">
+        <div class="sc-card-asset-item">
+          <div class="sc-card-asset-label">健康維持した場合の80歳資産</div>
+          <div class="sc-card-asset-val good" id="scGood">--</div>
+        </div>
+        <div class="sc-card-asset-item">
+          <div class="sc-card-asset-label">現状放置した場合の80歳資産</div>
+          <div class="sc-card-asset-val bad" id="scBad">--</div>
+        </div>
+      </div>
+      <div class="sc-card-highlight" id="scExerciseBox">
+        <div class="sc-card-highlight-label">30分の運動 1回で、将来の資産の目減りを</div>
+        <div class="sc-card-highlight-num" id="scExerciseVal">--</div>
+        <div class="sc-card-highlight-sub">防げる計算になります</div>
+      </div>
+      <div class="sc-card-foot">FRACTAL WORKOUT × SCSK ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません</div>
+    </div>
+    <div class="share-actions">
+      <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
+        <span class="pdf-btn-icon">📷</span> この結果を画像で保存する
+      </button>
+      <p class="pdf-note" id="shareImgNote">スマホでもそのまま画像として保存・共有できます。</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <strong>免責事項・エビデンスについて：</strong>
+  本シミュレーションは医療行為ではなく、医学的診断・投資助言を行うものではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。
+  <span class="disc-toggle" id="discToggle">▼ 出典・詳細を見る</span>
+  <div class="disc-detail" id="discDetail">
+    <br>
+    <strong>【経済データ】</strong><br>
+    <strong>年収：</strong>国税庁「令和6年分 民間給与実態統計調査」年齢階層別平均給与<br>
+    <strong>年金：</strong>厚労省「令和5年度 厚生年金保険・国民年金事業の概況」男性16.7万円/月・女性10.9万円/月<br>
+    <strong>退職後生活費：</strong>総務省「家計調査」令和4年 65歳以上無職世帯 消費支出（男性世帯27万/月・女性単身15.5万/月）<br>
+    <strong>貯蓄率：</strong>総務省「家計調査」2022〜2023年 年齢階級別勤労者世帯データ<br>
+    <strong>投資利回り：</strong>金融庁「長期・積立・分散投資」標準想定利回り年率3%<br>
+    <br>
+    <strong>【糖代謝・血糖】</strong><br>
+    <strong>HbA1c×5年糖尿病発症：</strong>PMC4390315（日本人コホート n=52,781 追跡5年）HbA1c区分別5年発症率<br>
+    <strong>空腹時血糖×CVD：</strong>Sarwar et al. Lancet 2010（102研究 n=698,782）血糖1mmol/L上昇→CVD死亡HR 1.17<br>
+    <strong>BMI×2型糖尿病：</strong>Abdullah et al. OBES REV 2010（n=269万）BMI 25-30→T2DM RR 2.99、BMI≥30→RR 7.19<br>
+    <strong>糖尿病×全死因死亡：</strong>Emerging Risk Factors Collaboration, JAMA 2011（102コホート n=698,782）HR 1.80<br>
+    <br>
+    <strong>【血圧・心血管】</strong><br>
+    <strong>SBP×CVDイベント：</strong>PMC11150151（n=920,533 追跡2.75年）SBP区分別HR<br>
+    <strong>血圧×脳卒中・心筋梗塞：</strong>Lewington et al. Lancet 2002（61研究 n=100万）SBP 20mmHg低下→虚血性心疾患死亡50%減<br>
+    <strong>高血圧×認知症：</strong>PMC6791454 メタ分析（14研究 n=47,438）中年期高血圧→認知症リスク RR 1.55<br>
+    <strong>代謝症候群×CVD：</strong>Mottillo et al. JACC 2010（87研究 n=951,083）CVDリスク RR 2.35、死亡RR 1.58<br>
+    <br>
+    <strong>【脂質・動脈硬化】</strong><br>
+    <strong>LDL×CVD死亡：</strong>PMC9316578（14研究 n=1,055,309）LDL高値持続HR 1.21〜1.34<br>
+    <strong>LDL低下効果：</strong>Cholesterol Treatment Trialists, Lancet 2010（26試験 n=169,138）LDL 1mmol/L低下→主要CVDイベント22%減<br>
+    <strong>中性脂肪×CVD：</strong>PMC4231478（61研究 n=726,030）TG高値CVD死亡RR 1.15〜1.25<br>
+    <strong>HDL低値×CVD：</strong>di Angelantonio et al. Lancet 2009（68研究 n=302,430）HDL 1SD低下→CVD HR 1.22<br>
+    <br>
+    <strong>【肝機能・NAFLD】</strong><br>
+    <strong>NAFLD線維化進行：</strong>PubMed 24768810（メタ分析）NAFL年率0.07ステージ / NASH年率0.14ステージ<br>
+    <strong>NAFLD×CVDリスク：</strong>Targher et al. Nat Rev Cardiol 2021（メタ分析）NAFLD→CVDリスク RR 1.64<br>
+    <strong>ALT高値×2型糖尿病：</strong>PMC3322089（11研究 n=74,309）ALT高値→T2DM発症 OR 1.45〜1.97<br>
+    <br>
+    <strong>【腎機能・CKD】</strong><br>
+    <strong>eGFR×ESRD・死亡：</strong>PubMed 21289598（CKD Prognosis Consortium 46コホート n=1,209,265）eGFR区分別ESRD・死亡リスク<br>
+    <strong>CKD×CVDリスク：</strong>Go et al. NEJM 2004（n=1,120,295）eGFR低下→CVD入院リスク段階的上昇 HR 最大3.4<br>
+    <strong>CKD×透析医療費：</strong>日本腎臓学会 CKD診療ガイド2024 血液透析患者1人あたり年間約500万円<br>
+    <br>
+    <strong>【筋骨格・生活習慣】</strong><br>
+    <strong>喫煙×CVD：</strong>Hackshaw et al. BMJ 2018（141コホート n=560万）冠動脈疾患 HR 1日1本で1.48〜1.57、1日20本で2.04〜2.84。1本でも20本相当の超過リスクの31〜46%に達する非線形な用量反応関係<br>
+    <strong>睡眠不足×CVD：</strong>PMC10565718（18コホート）不眠・短時間睡眠→CVD RR 1.09〜1.45<br>
+    <strong>運動不足×CVD：</strong>PMC3315253（21研究 n=65万）高活動群vs低活動群 CVD RR 0.76（男）0.73（女）<br>
+    <strong>運動継続効果：</strong>Wahid et al. PMC10423495（n=3,000万+）週150分中強度運動→CVD死亡 RR 0.71<br>
+    <strong>慢性腰痛×プレゼンティーイズム：</strong>Stewart et al. JOEM 2003（n=28,902）腰痛による年間労働生産性損失 $61.2B<br>
+    <strong>プレゼンティーイズム：</strong>経済産業省「健康経営ガイドブック」生産性損失率を参考に独自試算<br>
+    <br>
+    <strong>【生涯医療費・経済影響】</strong><br>
+    <strong>生涯医療費：</strong>厚労省「生涯医療費」2010年度推計（男性2,300万円・女性2,500万円）を2022年度水準（×1.25）で補正<br>
+    <strong>疾患別医療費：</strong>厚労省「令和4年度 国民医療費の概況」患者数・総医療費から1人当たりを算出<br>
+    <strong>肥満×医療費：</strong>Cawley & Meyerhoefer, J Health Econ 2012 肥満による年間超過医療費 $2,741/人（米国）
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<!-- STICKY MOBILE CTA -->
+<button class="sticky-cta" id="stickyCta" data-cta-pos="sticky">FRACTAL WORKOUTに相談する →</button>
+
+<!-- 画像保存機能用 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════
+// 1. 定数・テーブル定義
+// ═══════════════════════════════════════════════════
+
+// 国税庁 令和6年分 民間給与実態統計調査 年齢別平均年収(万円)
+const INCOME_TABLE = {
+  male:   {25:446,30:517,35:566,40:612,45:653,50:693,55:735,60:545,65:430},
+  female: {25:360,30:383,35:393,40:399,45:403,50:408,55:410,60:340,65:300}
+};
+
+// 厚生労働省「令和5年度 厚生年金保険・国民年金事業の概況」
+// 老齢厚生年金 平均月額 → 年額
+const PENSION = {male:16.7*12, female:10.9*12}; // 万円/年
+
+// 総務省 家計調査 2022-23 年代別貯蓄率（可処分所得比）
+const SAVING_RATE = {
+  u30:0.20, u40:0.18, u50:0.13, u60:0.13, u65:0.10, pension:0.05
+};
+
+// 総務省「家計調査」令和4年 65歳以上無職世帯の消費支出（万円/年）
+// 男性（2人世帯想定）: 約27万/月 × 12 = 324万円
+// 女性（単身世帯想定）: 約15.5万/月 × 12 = 186万円
+const RETIREMENT_SPENDING = { male: 324, female: 186 };
+
+// ═══════════════════════════════════════════════════
+// 2. UI初期化
+// ═══════════════════════════════════════════════════
+const ageEl = document.getElementById('age');
+for(let a=20;a<=79;a++){
+  const o=document.createElement('option');
+  o.value=a; o.textContent=`${a}歳`;
+  if(a===40)o.selected=true;
+  ageEl.appendChild(o);
+}
+
+const SYMPTOMS=[
+  ['ft','疲れやすい'],['hd','頭痛・めまい'],['ns','肩こり・首こり'],['bp','腰痛'],
+  ['kn','膝・関節の痛み'],['sw','むくみ'],['pf','息切れ・動悸'],['af','食後の眠気'],
+  ['sl','睡眠の質が悪い'],['dr','飲酒頻度が高い'],['st','ストレスが多い'],['fc','集中力の低下'],
+  ['no','特にない']
+];
+SYMPTOMS.forEach(([k,l])=>{
+  const div=document.createElement('div');
+  div.className='chk';
+  const uid='chk-'+k;
+  const cb=document.createElement('input');
+  cb.type='checkbox';
+  cb.id=uid;
+  cb.dataset.s=k;
+  cb.addEventListener('change',()=>{
+    div.classList.toggle('checked',cb.checked);
+    // 「特にない」を選んだら他を全解除
+    if(k==='no'&&cb.checked){
+      document.querySelectorAll('#symptoms input[type=checkbox]').forEach(c=>{
+        if(c.dataset.s!=='no'){c.checked=false;c.closest('.chk').classList.remove('checked');}
+      });
+    } else if(k!=='no'&&cb.checked){
+      const noEl=document.querySelector('#symptoms input[data-s="no"]');
+      if(noEl){noEl.checked=false;noEl.closest('.chk').classList.remove('checked');}
+    }
+  });
+  const lb=document.createElement('label');
+  lb.setAttribute('for',uid);
+  const icon=document.createElement('span');
+  icon.className='check-icon';
+  const txt=document.createElement('span');
+  txt.textContent=l;
+  lb.appendChild(icon);
+  lb.appendChild(txt);
+  div.appendChild(cb);
+  div.appendChild(lb);
+  document.getElementById('symptoms').appendChild(div);
+});
+
+
+// ═══════════════════════════════════════════════════
+// 3. バリデーション
+// ═══════════════════════════════════════════════════
+const RULES={
+  height:{min:100,max:250},weight:{min:20,max:300},waist:{min:40,max:200},
+  sbp:{min:60,max:260},glucose:{min:40,max:600},
+  hba1c:{min:3,max:15},ldl:{min:30,max:400}
+};
+
+function n(id){const v=document.getElementById(id)?.value;return(v===''||v==null)?null:Number(v);}
+
+function validateField(id){
+  const r=RULES[id];if(!r)return true;
+  const v=n(id),el=document.getElementById(id),err=document.getElementById('e-'+id);
+  if(v===null){el.classList.remove('err');if(err)err.classList.remove('show');return true;}
+  if(v<r.min||v>r.max){el.classList.add('err');if(err)err.classList.add('show');return false;}
+  el.classList.remove('err');if(err)err.classList.remove('show');return true;
+}
+Object.keys(RULES).forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('blur',()=>validateField(id));
+});
+function validateAll(){let ok=true;Object.keys(RULES).forEach(id=>{if(!validateField(id))ok=false;});return ok;}
+
+function syms(){return Array.from(document.querySelectorAll('[data-s]:checked')).map(e=>e.dataset.s);}
+
+// ═══════════════════════════════════════════════════
+// 3.5 運動頻度（週の回数）の用量反応モデル
+// ═══════════════════════════════════════════════════
+// Coleman CJ, McDonough DJ, Pope ZC, Pope CA.
+// "Dose-response association of aerobic and muscle-strengthening physical activity with mortality:
+//  a national cohort study of 416,420 US adults." Br J Sports Med. 2022.
+// 有酸素運動：週1時間でHR 0.85（死亡リスク15%減）、週3時間でHR 0.73（27%減、以降頭打ち）。
+// 1回=30分の運動と仮定し、週の運動「時間」に換算してHRを補間する。
+function exerciseHrByHours(hoursPerWeek){
+  const h=Math.max(0,hoursPerWeek);
+  if(h<=1) return 1.00+(0.85-1.00)*h;
+  if(h<=3) return 0.85+(0.73-0.85)*((h-1)/2);
+  return 0.73;
+}
+// habitのhp満点(14)を基準に、エビデンス曲線の形状だけを借りて「残存リスク量」を算出する関数。
+// 0時間で14相当、週3時間（頭打ち）で0相当となるよう正規化。
+function exerciseBenefitRemainingByHours(hoursPerWeek){
+  const hr=exerciseHrByHours(hoursPerWeek);
+  const benefitFraction=(1.00-hr)/(1.00-0.73);
+  return 14*(1-benefitFraction);
+}
+// 運動習慣の選択肢（ほぼない/①〜⑥）を、実際の週の運動時間（時間/週）に直接対応させる。
+// 「1回30分」「1回60分」×週1〜3回という実際の時間から算出した値なので近似ではない。
+const HABIT_HOURS={
+  none:0,
+  '30x1':0.5,'30x2':1.0,'30x3':1.5,
+  '60x1':1.0,'60x2':2.0,'60x3':3.0
+};
+
+// ═══════════════════════════════════════════════════
+// 3.6 喫煙本数の用量反応モデル
+// ═══════════════════════════════════════════════════
+// Hackshaw AK, Morris JK, Grant A, Field DJ, Lee L, Zhang Q.
+// "Low cigarette consumption and risk of coronary heart disease and stroke:
+//  meta-analysis of 141 cohort studies in 55 study reports." BMJ. 2018;360:j5855.
+// 1日1本の喫煙で冠動脈疾患リスクが男性RR1.48・女性RR1.57、1日20本でRR2.04・2.84。
+// つまり1本だけでも、20本吸った場合の超過リスクの46%（男性）・31%（女性）に達する
+// ＝本数を増やしても被害は直線的には増えず、ごく少量でも影響の大半が生じる非線形な関係。
+// 本数〜超過リスク割合はlog(本数)に対してほぼ線形（対数用量反応）として1〜20本の間を補間する。
+function smokingExcessFraction(cigsPerDay, gender){
+  const c=Math.max(0,cigsPerDay);
+  if(c<=0) return 0;
+  const f1=gender==='female'?0.31:0.46; // 1本/日の時点で20本相当の超過リスクに対して占める割合
+  if(c<=1) return f1*c;
+  if(c>=20) return 1.0;
+  return f1+(1-f1)*(Math.log(c)/Math.log(20));
+}
+
+// ═══════════════════════════════════════════════════
+// 4. リスクスコア計算
+// ═══════════════════════════════════════════════════
+function computeRisk(overrides){
+  overrides=overrides||{};
+  const gender=document.getElementById('gender').value;
+  const age=Number(document.getElementById('age').value);
+  const habit=overrides.habit||document.getElementById('habit').value;
+  const h=n('height');
+  const wRaw=n('weight');
+  // 減量目標(kg)：安全のため現体重の70%を下限にクランプ
+  const w=(wRaw&&overrides.weightLossKg)?Math.max(wRaw-overrides.weightLossKg,wRaw*0.7):wRaw;
+  const bmi=(h&&w)?w/Math.pow(h/100,2):null;
+  const waist=n('waist'),sbp=n('sbp');
+  const glucose=n('glucose'),hba1c=n('hba1c');
+  const ldl=n('ldl');
+  const smoking=overrides.smoking||document.getElementById('smoking').value;
+  const sm=syms();const symN=sm.includes('no')?0:sm.length;
+  const exerciseHours = overrides.exerciseHoursPerWeek!=null ? Math.max(0,overrides.exerciseHoursPerWeek)
+    : overrides.sessionsPerWeek!=null ? Math.max(0,overrides.sessionsPerWeek)*0.5
+    : (HABIT_HOURS[habit]??0);
+  const hp=exerciseBenefitRemainingByHours(exerciseHours);
+  // 現在喫煙中の場合のみ、1日の本数（未入力時は20本＝従来通りの想定）で用量反応を連続的に反映
+  const cigsPerDay=overrides.cigsPerDay??n('cigCount');
+  const smokeFrac=smoking==='current'?smokingExcessFraction(cigsPerDay==null?20:cigsPerDay,gender):0;
+  const smkB=smoking==='current'?15*smokeFrac:smoking==='past'?7:0; // 血圧・心血管への喫煙加算
+  const smkL=smoking==='current'?10*smokeFrac:smoking==='past'?4:0; // 脂質・動脈硬化への喫煙加算
+  const ab=Math.max(0,(age-30)*0.9);const sa=gender==='male'?3:0;
+  // BMI加算：通常は従来通りbmi>=25で満点（現在のリスク判定・警告基準は変えない）。
+  // ただし減量シミュレーション（体重スライダー）使用時だけは22〜35を連続的に滑らかに補間し、
+  // 「体重を少し減らしても数値が動かない」崖を無くして減量効果を連続的に反映する。
+  const bmiRamp=overrides.weightLossKg
+    ? (bmi?Math.max(0,Math.min(1,(bmi-22)/13)):0)
+    : (bmi&&bmi>=25?1:0);
+
+  // 糖代謝
+  let G=ab+sa+hp;
+  G+=12*bmiRamp;
+  if(waist&&((gender==='male'&&waist>=85)||(gender==='female'&&waist>=90)))G+=10;
+  if(glucose&&glucose>=100)G+=glucose>=126?25:14;
+  if(hba1c&&hba1c>=5.6)G+=hba1c>=6.5?26:hba1c>=6.2?20:hba1c>=6.0?16:hba1c>=5.8?10:6;
+  if(sm.includes('ft'))G+=5;
+  if(sm.includes('af'))G+=4; // 食後の眠気→インスリン抵抗性
+
+  // 血圧
+  let B=ab+hp+2+smkB;
+  if(sbp&&sbp>=130)B+=sbp>=160?26:sbp>=150?20:sbp>=140?15:8;
+  B+=8*bmiRamp;
+  if(waist&&((gender==='male'&&waist>=85)||(gender==='female'&&waist>=90)))B+=8;
+  if(sm.includes('hd'))B+=4;if(sm.includes('st'))B+=5;
+  if(sm.includes('pf'))B+=6; // 息切れ・動悸
+
+  // 脂質
+  let L=ab+hp+1+smkL;
+  if(ldl&&ldl>=120)L+=ldl>=160?22:ldl>=140?14:8;
+  L+=8*bmiRamp;
+  if(waist&&((gender==='male'&&waist>=85)||(gender==='female'&&waist>=90)))L+=8;
+
+  // 肝機能（入力値なし時は年齢・習慣ベースで推定）
+  let V=Math.max(0,ab-5)+hp;
+  if(sm.includes('dr'))V+=10;
+  V+=10*bmiRamp;
+
+  // 腎機能（入力値なし時は年齢・血圧・血糖ベースで推定）
+  let K=ab+1;
+  if(sbp&&sbp>=130)K+=8;
+  if(glucose&&glucose>=100)K+=7;
+  if(hba1c&&hba1c>=5.6)K+=7;
+
+  // 筋骨格
+  let M=10+symN*8+hp;
+  if(sm.includes('ns'))M+=12;if(sm.includes('bp'))M+=14;
+  if(sm.includes('kn'))M+=14; // 膝・関節の痛み
+  if(sm.includes('sw'))M+=6;  // むくみ
+  if(sm.includes('pf'))M+=8;  // 息切れ・動悸
+  if(sm.includes('fc'))M+=8;if(sm.includes('sl'))M+=8;
+
+  const risks={
+    glucose:Math.min(100,Math.round(G)),
+    bp:Math.min(100,Math.round(B)),
+    lipid:Math.min(100,Math.round(L)),
+    liver:Math.min(100,Math.round(V)),
+    kidney:Math.min(100,Math.round(K)),
+    musculo:Math.min(100,Math.round(M))
+  };
+
+  const entered=Object.keys(RULES).filter(id=>n(id)!==null).length;
+  const precision=entered>=5?'詳細':entered>=3?'標準':'簡易';
+
+  // 総合医療リスクスコア
+  const medScore=Math.round((risks.glucose+risks.bp+risks.lipid+risks.liver+risks.kidney+risks.musculo*0.8)/5.8);
+
+  return{gender,age,habit,exerciseHours,smoking,cigsPerDay:smoking==='current'?(cigsPerDay==null?20:cigsPerDay):null,
+    bmi,risks,entered,precision,medScore,hba1c,sbp,ldl,sm,waist,glucose};
+}
+
+// ═══════════════════════════════════════════════════
+// 5. 経年リスク増加（論文準拠）
+// ═══════════════════════════════════════════════════
+function computeTrend(s){
+  const rows=[],srcs=[];
+
+  // ① HbA1c → 5年糖尿病発症率（PMC4390315 日本人n=52,781）
+  if(s.hba1c!==null){
+    const h=s.hba1c;
+    let r5,label;
+    if(h>=6.4){r5=67.8;label=`HbA1c ${h}%（糖尿病域）`;}
+    else if(h>=6.2){r5=51.6;label=`HbA1c ${h}%（高値境界域）`;}
+    else if(h>=6.0){r5=27.5;label=`HbA1c ${h}%（境界域上位）`;}
+    else if(h>=5.8){r5=13.8;label=`HbA1c ${h}%（境界域）`;}
+    else if(h>=5.6){r5=8.9;label=`HbA1c ${h}%（境界域下位）`;}
+    else{r5=3.6;label=`HbA1c ${h}%（正常域）`;}
+    const ok=h<5.6;
+    rows.push({label,val:`5年以内の糖尿病発症確率 ${r5}%`,ok});
+    srcs.push(`① HbA1c：PMC4390315（日本人コホート n=52,781 追跡5年）5年発症率 ${r5}%`);
+  }
+
+  // ② 収縮期血圧 → CVDイベントHR（PMC11150151 n=920,533 追跡2.75年）
+  if(s.sbp!==null){
+    const sb=s.sbp;
+    let hr,label;
+    if(sb>=160){hr=1.76;label=`収縮期血圧 ${sb}mmHg（II度高血圧）`;}
+    else if(sb>=150){hr=1.30;label=`収縮期血圧 ${sb}mmHg（I度高血圧上位）`;}
+    else if(sb>=140){hr=1.15;label=`収縮期血圧 ${sb}mmHg（I度高血圧）`;}
+    else if(sb>=130){hr=1.05;label=`収縮期血圧 ${sb}mmHg（高値血圧）`;}
+    else{hr=null;}
+    if(hr){
+      const pct=Math.round((hr-1)*100);
+      rows.push({label,val:`CVD発症リスク +${pct}%（正常血圧比）`,ok:false});
+      srcs.push(`② 血圧：PMC11150151（n=92万 追跡2.75年）SBP ${sb}mmHg → HR ${hr}`);
+    }
+  }
+
+  // ③ LDL高値 → CVD死亡（PMC9316578 n=105万）
+  if(s.ldl!==null){
+    const l=s.ldl;
+    let label,pct;
+    if(l>=160){label=`LDL ${l}mg/dL（高値）`;pct=34;}
+    else if(l>=140){label=`LDL ${l}mg/dL（境界域高値）`;pct=21;}
+    else if(l>=120){label=`LDL ${l}mg/dL（境界域）`;pct=10;}
+    else{label=null;}
+    if(label){
+      rows.push({label,val:`CVD死亡リスク +${pct}%（基準値比）`,ok:false});
+      srcs.push(`③ LDL：PMC9316578（n=1,055,309）LDL ${l}mg/dL → CVD死亡 +${pct}%`);
+    }
+  }
+
+  // ④ BMI（Abdullah et al. OBES REV 2010 n=269万）
+  if(s.bmi!==null&&s.bmi>=25){
+    const rr=s.bmi>=30?7.19:2.99;
+    rows.push({label:`BMI ${s.bmi.toFixed(1)}（${s.bmi>=30?'肥満':'過体重'}）`,
+      val:`2型糖尿病リスク ${rr}倍（正常体重比）`,ok:false});
+    srcs.push(`④ BMI：Abdullah et al. OBES REV 2010（n=269万）BMI${s.bmi>=30?'≥30':'25-30'} → T2DM RR ${rr}`);
+  }
+
+  // ⑤ 喫煙（Hackshaw et al. BMJ 2018 141コホート n=560万）※本数に応じた実際のリスクを表示
+  if(s.smoking==='current'){
+    const fMale=smokingExcessFraction(s.cigsPerDay,'male'), fFemale=smokingExcessFraction(s.cigsPerDay,'female');
+    const pctMale=Math.round(fMale*(2.04-1)*100), pctFemale=Math.round(fFemale*(2.84-1)*100);
+    rows.push({label:`喫煙習慣（現在・1日${s.cigsPerDay}本）`,val:`冠動脈疾患リスク +${pctMale}〜${pctFemale}%（非喫煙者比）`,ok:false});
+    srcs.push(`⑤ 喫煙：Hackshaw et al. BMJ 2018（141コホート n=560万）1日1本でCHD HR 男性1.48/女性1.57、1日20本でHR 男性2.04/女性2.84。1本でも20本吸った場合の超過リスクの46%（男性）・31%（女性）に達する非線形な関係。`);
+  } else if(s.smoking==='past'){
+    rows.push({label:'過去喫煙（禁煙済み）',val:'禁煙後もCVDリスクは数年かけて低下（完全正常化まで10〜15年）',ok:true});
+    srcs.push('⑤ 喫煙：BMJ 2018（141コホート n=560万）禁煙後リスク経年低下');
+  }
+
+  // ⑥ 睡眠（PMC10565718 18コホート）
+  if(s.sm.includes('sl')){
+    rows.push({label:'睡眠の質が悪い',val:'CVDリスク RR 1.09〜1.45（良質睡眠群比）',ok:false});
+    srcs.push('⑥ 睡眠：PMC10565718（18コホート）不眠・睡眠不足 → CVD RR 1.09-1.45');
+  }
+
+  // ⑦ 運動なし（PMC3315253 21研究 n=65万）
+  if(s.exerciseHours<=0){
+    rows.push({label:'運動習慣なし',val:'CVDリスクが活動的な人の約1.3倍',ok:false});
+    srcs.push('⑦ 運動不足：PMC3315253（21研究 n=65万）高活動群 CVD RR 0.76（男）0.73（女）');
+  }
+
+  // 運動による改善効果（週150分=2.5時間以上）
+  if(s.exerciseHours>=2.5){
+    rows.push({label:'現在の運動習慣',val:'週150分以上の運動でCVD死亡リスク約29%低減（RR 0.71）',ok:true});
+    srcs.push('✅ 運動効果：PMC10423495（n=3,000万+）週150分中強度運動 → CVD死亡 RR 0.71');
+  }
+
+  if(rows.length===0){
+    rows.push({label:'現在の入力値',val:'主要なリスクシグナルは検出されませんでした',ok:true});
+    srcs.push('入力値が正常範囲内、または未入力の項目があります。');
+  }
+
+  return{rows,srcs};
+}
+
+// ═══════════════════════════════════════════════════
+// 6. 発症確率 → 3フェーズ医療費（年間）
+// ═══════════════════════════════════════════════════
+// 疾患別1人当たり年間医療費（厚労省 令和4年度 国民医療費より算出）
+const PHASE_COST={
+  // [境界域, 発症後, 合併症期]（万円/年）
+  diabetes: [3, 22, 50],
+  hyp:      [3, 11, 30],
+  cvd:      [5, 61,100],
+  nafld:    [3, 18, 50],
+  ckd:      [3, 30,136],
+};
+
+// スコアから発症確率（5年ベースを年率換算）
+function getAnnualRisk(score, type){
+  // PMC4390315ベース（HbA1cデータ）の年率換算
+  // 糖代謝: スコア0-39→年率0.7%, 40-69→年率2.9%, 70-89→年率9.2%, 90-100→年率30%
+  // 他疾患は同様のステップ関数で近似
+  if(score>=90) return type==='diabetes'?0.44:0.30;
+  if(score>=70) return type==='diabetes'?0.092:0.10;
+  if(score>=40) return type==='diabetes'?0.029:0.04;
+  return type==='diabetes'?0.007:0.02;
+}
+
+// フェーズ判定（スコアと累積年数で動的に変化）。
+// 「5年以上経過すると1段階進行しうる」という上限つきの進行ルールはそのまま維持し、
+// 年数だけが際限なく費用を押し上げてしまわないようにするための判定にのみ使う。
+function phaseOf(score, yearsElapsed){
+  if(score>=90||(score>=70&&yearsElapsed>=5)) return 2; // 合併症期
+  if(score>=70||(score>=40&&yearsElapsed>=5)) return 1; // 発症後
+  if(score>=40) return 0; // 境界域
+  return -1; // リスクなし
+}
+
+// 閾値(edge)の手前bandポイントだけをlo→hiで滑らかに繋ぎ、それ以外は元通りフラットにするヘルパー。
+// 閾値からdistantな値まで一律に補間すると「まだ全然低リスクの人」まで数値が底上げされてしまうため、
+// 崖の直前だけをなだらかにする狭い遷移帯として使う。
+function narrowRamp(x, edge, band, lo, hi){
+  const t=Math.max(0,Math.min(1,(x-(edge-band))/band));
+  return lo+(hi-lo)*t;
+}
+
+// スコア（0〜100）を年間医療費に連続的に変換する。
+// 元々は40/70/90点で医療費が段階的に切り替わる階段状のモデルだったが、
+// 同じ段の中では数値がどれだけ改善しても金額が1円も動かないため、
+// 「どの段にいるか」はphaseOfの上限つきルールで判定しつつ、段の中身（スコア→費用）は
+// 次の段の値へ向けて連続的に補間する。ph<0（リスクなし域）は閾値の手前だけを狭く補間し、
+// 明らかに低リスクな人まで底上げされないようにする。
+function interpCost(score, yearsElapsed, costLevels){
+  const ph=phaseOf(score,yearsElapsed);
+  if(ph<0) return narrowRamp(score,40,8,0,costLevels[0]);
+  if(ph===0){
+    const t=Math.max(0,Math.min(1,(score-40)/30));
+    return costLevels[0]+(costLevels[1]-costLevels[0])*t;
+  }
+  if(ph===1){
+    const t=Math.max(0,Math.min(1,(score-70)/20));
+    return costLevels[1]+(costLevels[2]-costLevels[1])*t;
+  }
+  return costLevels[2];
+}
+
+// 複数疾患の乗法補正（JACC 2010メタ分析）。
+// 元は「70点以上が何個あるか」で1.0/1.4/2.0倍に切り替わる階段状だったが、
+// 60〜80点の間で各疾患の重症度を0〜1に連続化し、その合計値で滑らかに補間する。
+function multiDiseaseMultiplier(risks){
+  const sevSum=Object.values(risks).reduce((s,v)=>s+Math.max(0,Math.min(1,(v-60)/20)),0);
+  if(sevSum>=3) return 2.0;
+  if(sevSum>=2) return 1.4+(sevSum-2)*0.6;
+  return 1.0+(sevSum/2)*0.4;
+}
+
+// プレゼンティーイズム損失率（元は0.03/0.10/0.20の3段階）。
+// 40点・70点それぞれの手前だけを狭く滑らかにし、閾値から離れた低リスクの人には影響させない。
+function ptLossRateFor(medScore){
+  if(medScore<40) return narrowRamp(medScore,40,8,0.03,0.10);
+  if(medScore<70) return narrowRamp(medScore,70,8,0.10,0.20);
+  return 0.20;
+}
+
+// ═══════════════════════════════════════════════════
+// 7. 年収・年金モデル
+// ═══════════════════════════════════════════════════
+function getIncomeCurve(gender, currentAge, userIncome){
+  const tbl=INCOME_TABLE[gender];
+
+  // 国税庁データから年齢補間（〜59歳）
+  const brackets=[25,30,35,40,45,50,55];
+  function peakIncome(age){
+    if(age>=60) return tbl[55]; // 55〜59歳ピークを基準に計算
+    const b=brackets.filter(b=>b<=age).pop()||25;
+    const nb=brackets.find(b=>b>age)||55;
+    if(b===nb) return tbl[b];
+    const ratio=(age-b)/(nb-b);
+    return tbl[b]+(tbl[nb]-tbl[b])*ratio;
+  }
+
+  // ユーザー入力倍率（現在年齢の平均値との比）
+  const currentAvg=peakIncome(Math.min(currentAge,59));
+  const scale=userIncome?userIncome/currentAvg:1.0;
+
+  return function(age){
+    // ─── Phase 1: 現役（〜59歳）───
+    if(age<60){
+      return peakIncome(age)*scale;
+    }
+    // ─── Phase 2: 定年再雇用（60〜64歳）───
+    // 国税庁データ：55〜59歳ピーク→60〜64歳は約74%に低下
+    // ユーザー倍率を維持しつつ、平均的な定年後減収率を適用
+    if(age>=60&&age<65){
+      const peak=peakIncome(59)*scale;
+      // 60歳から線形に減収：60歳=80%、64歳=70%（国税庁 60-64歳平均/55-59歳平均比）
+      const ratio=0.80-(age-60)*0.02;
+      return peak*ratio;
+    }
+    // ─── Phase 3: 年金（65歳〜）───
+    // 厚労省「令和5年度 厚生年金保険・国民年金事業の概況」
+    // 男性：16.7万円/月×12 = 200.4万円/年
+    // 女性：10.9万円/月×12 = 130.8万円/年
+    return PENSION[gender];
+  };
+}
+
+function savingRateForAge(age){
+  if(age>=65) return SAVING_RATE.pension;   // 年金生活：貯蓄率5%
+  if(age>=60) return SAVING_RATE.u65;       // 定年再雇用：10%
+  if(age>=50) return SAVING_RATE.u60;       // 50代：13%
+  if(age>=40) return SAVING_RATE.u50;       // 40代：13%
+  if(age>=30) return SAVING_RATE.u40;       // 30代：18%
+  return SAVING_RATE.u30;                   // 20代：20%
+}
+
+// ═══════════════════════════════════════════════════
+// 8. 資産シミュレーション（現在〜80歳）
+// ═══════════════════════════════════════════════════
+const INVEST_RATE=0.03; // 金融庁長期投資標準想定利回り年率3%
+
+// 資産推移を1本分試算する共通ロジック（zeroRisk=trueなら疾患リスクゼロの理想値）
+function projectAsset(riskState,gender,startAge,userIncome,userAssets,zeroRisk){
+  const incomeFn=getIncomeCurve(gender,startAge,userIncome);
+  const mMult=multiDiseaseMultiplier(riskState.risks);
+  const ptLossRate=ptLossRateFor(riskState.medScore);
+
+  let asset=userAssets;
+  const arr=[];
+  let cumulativePT=0;
+  let cumulativeMed=0;
+
+  for(let age=startAge;age<=80;age++){
+    arr.push(Math.round(asset));
+    const inc=incomeFn(age);
+    const sr=savingRateForAge(age);
+
+    if(zeroRisk){
+      const saving = age>=65 ? inc - RETIREMENT_SPENDING[gender] : inc*sr;
+      asset=asset*(1+INVEST_RATE)+saving;
+      continue;
+    }
+
+    // 医療費（スコアに応じて連続的に算出）
+    const yrsElapsed=age-startAge;
+
+    const gMed=interpCost(riskState.risks.glucose,yrsElapsed,PHASE_COST.diabetes)*mMult;
+    const bMed=interpCost(riskState.risks.bp,yrsElapsed,[PHASE_COST.hyp[0],PHASE_COST.hyp[1],PHASE_COST.cvd[2]])*mMult;
+    const lMed=interpCost(riskState.risks.lipid,yrsElapsed,[PHASE_COST.hyp[0],PHASE_COST.hyp[1],PHASE_COST.cvd[2]])*0.7;
+    const vMed=interpCost(riskState.risks.liver,yrsElapsed,PHASE_COST.nafld)*mMult;
+    const kMed=interpCost(riskState.risks.kidney,yrsElapsed,PHASE_COST.ckd)*mMult;
+
+    const annualMed=gMed+bMed+lMed+vMed+kMed;
+    cumulativeMed+=annualMed;
+
+    // プレゼンティーイズム損失（65歳未満のみ）
+    const ptLoss=age<65?inc*ptLossRate:0;
+    cumulativePT+=ptLoss;
+
+    const saving = age>=65
+      ? (inc - RETIREMENT_SPENDING[gender]) - annualMed
+      : (inc-ptLoss)*sr - annualMed;
+    asset=asset*(1+INVEST_RATE)+saving;
+  }
+
+  return{arr,cumulativePT:Math.round(cumulativePT),cumulativeMed:Math.round(cumulativeMed),ptLossRate,mMult};
+}
+
+function simulate(state){
+  const gender=state.gender;
+  const startAge=state.age;
+  const userIncome=n('income')||null;
+  const userAssets=n('assets')||0;
+
+  const blueP=projectAsset(state,gender,startAge,userIncome,userAssets,true);
+  const redP=projectAsset(state,gender,startAge,userIncome,userAssets,false);
+
+  const ages=[];
+  for(let age=startAge;age<=80;age++) ages.push(age);
+
+  const blue80=blueP.arr[blueP.arr.length-1];
+  const red80=redP.arr[redP.arr.length-1];
+  const diff80=blue80-red80;
+
+  // 投資複利機会損失（差分が運用されなかった場合）
+  const years=80-startAge;
+  const compoundLoss=redP.cumulativePT*Math.pow(1+INVEST_RATE,years/2)-redP.cumulativePT;
+
+  return{
+    ages,blueArr:blueP.arr,redArr:redP.arr,
+    blue80,red80,diff80,
+    cumulativePT:redP.cumulativePT,
+    cumulativeMed:redP.cumulativeMed,
+    compoundLoss:Math.max(0,Math.round(compoundLoss)),
+    ptLossRate:redP.ptLossRate,medScore:state.medScore,mMult:redP.mMult
+  };
+}
+
+// 改善（禁煙・運動習慣・減量）を反映した場合の資産推移。altStateはcomputeRisk(overrides)の結果
+function projectImproved(altState){
+  const userIncome=n('income')||null;
+  const userAssets=n('assets')||0;
+  const altP=projectAsset(altState,altState.gender,altState.age,userIncome,userAssets,false);
+  return{arr:altP.arr,val80:altP.arr[altP.arr.length-1]};
+}
+
+// 運動頻度を「今より週何回」変えた場合の影響を1歩ずつ試算する（他の項目は現状のまま固定）
+function renderFreqLadder(s,sim){
+  const box=document.getElementById('freqLadderBox');
+  const rEl=document.getElementById('flRows');
+  const currentHours=s.exerciseHours;
+  const userIncome=n('income')||null;
+  const userAssets=n('assets')||0;
+
+  function valueAt(targetHours){
+    const altState=computeRisk({exerciseHoursPerWeek:targetHours});
+    const altP=projectAsset(altState,altState.gender,altState.age,userIncome,userAssets,false);
+    return {medScore:altState.medScore, val80:altP.arr[altP.arr.length-1]};
+  }
+
+  const steps=[];
+  if(currentHours>0){
+    steps.push({label:'今の運動量を半分に減らすと',hours:currentHours/2,kind:'worse'});
+  }
+  steps.push({label:'今のままの場合',hours:currentHours,kind:'current'});
+  steps.push({label:'今より週+1回（30分） 増やすと',hours:currentHours+0.5,kind:'better'});
+  steps.push({label:'今より週+2回（30分） 増やすと',hours:currentHours+1.0,kind:'better'});
+  steps.push({label:'今より週+3回（30分） 増やすと',hours:currentHours+1.5,kind:'better'});
+
+  rEl.innerHTML='';
+  steps.forEach(step=>{
+    const v=valueAt(step.hours);
+    const riskDelta=v.medScore-s.medScore;
+    const moneyDelta=v.val80-sim.red80;
+    const d=document.createElement('div');
+    d.className=`fl-row ${step.kind}`;
+    const riskTxt=riskDelta===0?'リスクスコア変化なし':`リスクスコア ${riskDelta>0?'+':''}${riskDelta}pt`;
+    const moneyTxt=step.kind==='current'?'現状の試算値':`${moneyDelta>=0?'+':'-'}${fmt(Math.abs(moneyDelta))}`;
+    d.innerHTML=`<div class="fl-label">${step.label}</div><div class="fl-risk">${riskTxt}</div><div class="fl-money">${moneyTxt}</div>`;
+    rEl.appendChild(d);
+  });
+  box.style.display='';
+}
+
+// 1回の運動時間（30分/60分）×週の頻度（1〜3回）を掛け合わせた6パターンを比較する
+const DURATION_FREQ_COMBOS=[
+  {label:'①30分の運動を週1回',duration:30,freq:1},
+  {label:'②30分の運動を週2回',duration:30,freq:2},
+  {label:'③30分の運動を週3回',duration:30,freq:3},
+  {label:'④60分の運動を週1回',duration:60,freq:1},
+  {label:'⑤60分の運動を週2回',duration:60,freq:2},
+  {label:'⑥60分の運動を週3回',duration:60,freq:3},
+];
+function renderDurationCombos(s,sim){
+  const box=document.getElementById('durationComboBox');
+  const rEl=document.getElementById('durationComboRows');
+  const userIncome=n('income')||null;
+  const userAssets=n('assets')||0;
+
+  rEl.innerHTML='';
+  const seenMinutes={};
+  DURATION_FREQ_COMBOS.forEach(combo=>{
+    const totalMinutes=combo.duration*combo.freq;
+    const hoursPerWeek=totalMinutes/60;
+    const altState=computeRisk({exerciseHoursPerWeek:hoursPerWeek});
+    const altP=projectAsset(altState,altState.gender,altState.age,userIncome,userAssets,false);
+    const val80=altP.arr[altP.arr.length-1];
+    const riskDelta=altState.medScore-s.medScore;
+    const moneyDelta=val80-sim.red80;
+
+    const d=document.createElement('div');
+    const kind=moneyDelta>0?'better':moneyDelta<0?'worse':'current';
+    d.className=`fl-row ${kind}`;
+    const riskTxt=riskDelta===0?'リスクスコア変化なし':`リスクスコア ${riskDelta>0?'+':''}${riskDelta}pt`;
+    const moneyTxt=moneyDelta===0?'現状と同程度':`${moneyDelta>=0?'+':'-'}${fmt(Math.abs(moneyDelta))}`;
+    const dupNote=seenMinutes[totalMinutes]?`<div class="fl-dup">※${seenMinutes[totalMinutes]}と週合計時間が同じ（${totalMinutes}分/週）</div>`:'';
+    seenMinutes[totalMinutes]=combo.label;
+    d.innerHTML=`<div class="fl-label">${combo.label}<span class="fl-total">週合計${totalMinutes}分</span>${dupNote}</div><div class="fl-risk">${riskTxt}</div><div class="fl-money">${moneyTxt}</div>`;
+    rEl.appendChild(d);
+  });
+  box.style.display='';
+}
+
+// ═══════════════════════════════════════════════════
+// 9. 生涯医療費テーブル
+// ═══════════════════════════════════════════════════
+// 厚労省2010年推計を2022年国民医療費水準（×1.25）で補正
+const LIFETIME_BASE={male:2300*1.25, female:2500*1.25}; // 万円
+
+function lifetimeMedTable(gender,medScore){
+  const base=LIFETIME_BASE[gender];
+  const mult=medScore<40?narrowRamp(medScore,40,8,1.0,1.3)
+    :medScore<70?1.3+(1.7-1.3)*((medScore-40)/30)
+    :1.7;
+  const riskBase=base*mult;
+
+  // 年齢別配分（厚労省データ準拠）
+  // 〜65歳:51%, 65-80歳:30%, 80歳〜:19% （70歳未満51%→65歳未満として近似）
+  const phases=[
+    {label:'〜65歳',ratio:0.51},
+    {label:'65〜80歳',ratio:0.30},
+    {label:'80歳以降',ratio:0.19},
+  ];
+
+  return phases.map(p=>({
+    label:p.label,
+    healthy:Math.round(base*p.ratio),
+    risk:Math.round(riskBase*p.ratio)
+  }));
+}
+
+// ═══════════════════════════════════════════════════
+// 10. Canvas グラフ描画（HiDPI対応）
+// ═══════════════════════════════════════════════════
+function drawChart(ages,blueArr,redArr,startAge,greenArr){
+  const cv=document.getElementById('chart');
+  const wrap=cv.parentElement;
+  const dW=Math.max(200,wrap.clientWidth-24);
+  const dH=Math.round(dW*(window._chartRatio||0.34));
+  const dpr=window.devicePixelRatio||1;
+  cv.width=dW*dpr; cv.height=dH*dpr;
+  cv.style.width=dW+'px'; cv.style.height=dH+'px';
+  const ctx=cv.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const W=dW,H=dH;
+  ctx.clearRect(0,0,W,H);
+
+  const pad={l:52,r:14,t:12,b:28};
+  const all=[...blueArr,...redArr,...(greenArr||[])];
+  const minV=Math.min(...all)*0.88;
+  const maxV=Math.max(...all)*1.06;
+  const n=ages.length;
+  const xFn=i=>pad.l+(W-pad.l-pad.r)*(i/(n-1));
+  const yFn=v=>H-pad.b-(H-pad.t-pad.b)*((v-minV)/(maxV-minV));
+
+  // Grid
+  ctx.strokeStyle='#e6e3dc';ctx.lineWidth=1;
+  const steps=4;
+  for(let i=0;i<=steps;i++){
+    const y=pad.t+(H-pad.t-pad.b)*(i/steps);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    const val=minV+(maxV-minV)*(1-i/steps);
+    ctx.fillStyle='#7a8284';
+    ctx.font=`${Math.max(10,Math.round(W/60)+1)}px sans-serif`;
+    ctx.fillText((val>=10000?Math.round(val/10000)+'億':Math.round(val/100)*100+'万'),2,y+4);
+  }
+
+  // 60歳マーカー（定年・再雇用開始）
+  const idx60=ages.indexOf(60);
+  if(idx60>=0){
+    const x60=xFn(idx60);
+    ctx.strokeStyle='#aabbcc';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(x60,pad.t);ctx.lineTo(x60,H-pad.b);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#7a8284';
+    ctx.font=`${Math.max(9,Math.round(W/72)+1)}px sans-serif`;
+    ctx.fillText('60歳',x60+2,pad.t+22);
+  }
+
+  // 65歳マーカー（年金移行）
+  const idx65=ages.indexOf(65);
+  if(idx65>=0){
+    const x65=xFn(idx65);
+    ctx.strokeStyle='#9a8866';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(x65,pad.t);ctx.lineTo(x65,H-pad.b);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#9a8866';
+    ctx.font=`bold ${Math.max(9,Math.round(W/72)+1)}px sans-serif`;
+    ctx.fillText('65歳',x65+3,pad.t+12);
+  }
+
+  // Fill area
+  ctx.beginPath();
+  blueArr.forEach((v,i)=>{const x=xFn(i),y=yFn(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  redArr.slice().reverse().forEach((v,i)=>{
+    const idx=n-1-i;ctx.lineTo(xFn(idx),yFn(v));
+  });
+  ctx.closePath();
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'rgba(89,105,107,.14)');
+  grad.addColorStop(1,'rgba(89,105,107,.03)');
+  ctx.fillStyle=grad;ctx.fill();
+
+  // Lines
+  function drawLine(arr,color,dash){
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;
+    if(dash)ctx.setLineDash(dash);else ctx.setLineDash([]);
+    ctx.beginPath();
+    arr.forEach((v,i)=>{const x=xFn(i),y=yFn(v);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.stroke();ctx.setLineDash([]);
+    arr.forEach((v,i)=>{
+      if(i%5===0||i===0||i===n-1){
+        ctx.fillStyle=color;ctx.beginPath();
+        ctx.arc(xFn(i),yFn(v),3.5,0,Math.PI*2);ctx.fill();
+      }
+    });
+  }
+  drawLine(redArr,'#b65b61');
+  if(greenArr)drawLine(greenArr,'#68766c',[5,3]);
+  drawLine(blueArr,'#59696b');
+
+  // X axis labels
+  ctx.fillStyle='#60738f';
+  const fs=Math.max(10,Math.round(W/55)+1);
+  ctx.font=`${fs}px sans-serif`;
+  ages.forEach((a,i)=>{
+    if(a===startAge||a%10===0||a===80){
+      ctx.fillText(`${a}歳`,xFn(i)-(a>=10?10:6),H-4);
+    }
+  });
+
+  // ── Age annotation callouts (40 / 50 / 60 / 70歳) ──
+  function fmtC(v){
+    if(v<0) return '-'+fmtC(-v);
+    if(v>=10000) return (v/10000).toFixed(1)+'億';
+    return Math.round(v).toLocaleString()+'万';  // 丸めなし（1万単位）
+  }
+
+  const annAges=[40,50,60,70];
+  annAges.forEach(tAge=>{
+    if(tAge<startAge) return;
+    const idx=ages.indexOf(tAge);
+    if(idx<0) return;
+
+    const x=xFn(idx);
+    const bVal=blueArr[idx];
+    const rVal=redArr[idx];
+    const gap=bVal-rVal;
+    const bY=yFn(bVal);
+    const rY=yFn(rVal);
+
+    // 縦のガイドライン（60歳は既存マーカーがあるためスキップ）
+    if(tAge!==60){
+      ctx.save();
+      ctx.strokeStyle='rgba(160,175,185,.38)';
+      ctx.lineWidth=1;ctx.setLineDash([2,3]);
+      ctx.beginPath();ctx.moveTo(x,pad.t+2);ctx.lineTo(x,H-pad.b-2);ctx.stroke();
+      ctx.setLineDash([]);ctx.restore();
+    }
+
+    // 交差点の強調ドット
+    ctx.fillStyle='#59696b';
+    ctx.beginPath();ctx.arc(x,bY,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#b65b61';
+    ctx.beginPath();ctx.arc(x,rY,5,0,Math.PI*2);ctx.fill();
+
+    // ギャップブラケット（2点間を線で繋ぐ）
+    if(gap>50){
+      const bx=x+8;
+      ctx.strokeStyle='rgba(200,100,100,.55)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(bx,bY);ctx.lineTo(bx,rY);ctx.stroke();
+      [bY,rY].forEach(ty=>{
+        ctx.beginPath();ctx.moveTo(bx-3,ty);ctx.lineTo(bx+4,ty);ctx.stroke();
+      });
+    }
+
+    // アノテーションボックス
+    const lines=[
+      {t:`${tAge}歳`,  c:'rgba(221,201,137,.95)'},
+      {t:`● ${fmtC(bVal)}`, c:'#8fc8c8'},
+      {t:`● ${fmtC(rVal)}`, c:'#e89898'},
+      ...(gap>50?[{t:`差 -${fmtC(gap)}`, c:'#ff9090'}]:[])
+    ];
+    const lh=13, bw=90, bh=lines.length*lh+8;
+
+    // 40・50歳はライン上に（中央揃え）、60・70歳はライン右に
+    const placeAbove=tAge<=50;
+    let bxP, byP;
+    if(placeAbove){
+      bxP=Math.max(pad.l, Math.min(x-bw/2, W-pad.r-bw));
+      byP=Math.max(pad.t+2, bY-bh-16);
+      // コネクタ（ボックス下端→青ドット）
+      ctx.strokeStyle='rgba(221,201,137,.28)';ctx.lineWidth=0.8;ctx.setLineDash([2,2]);
+      ctx.beginPath();ctx.moveTo(x,byP+bh+1);ctx.lineTo(x,bY-6);ctx.stroke();
+      ctx.setLineDash([]);
+    } else {
+      const flipL=(tAge>=70)||(x+bw+18>W-pad.r);
+      bxP=flipL?x-bw-10:x+14;
+      byP=Math.max(pad.t+2,Math.min(yFn(Math.max(bVal,rVal))-4, H-pad.b-bh));
+    }
+
+    ctx.fillStyle='rgba(18,26,28,.9)';
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(bxP,byP,bw,bh,4);ctx.fill();}
+    else{ctx.fillRect(bxP,byP,bw,bh);}
+    ctx.strokeStyle='rgba(221,201,137,.22)';ctx.lineWidth=0.5;
+    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(bxP,byP,bw,bh,4);ctx.stroke();}
+    else{ctx.strokeRect(bxP,byP,bw,bh);}
+
+    lines.forEach((ln,i)=>{
+      ctx.fillStyle=ln.c;
+      ctx.font=`300 ${Math.max(9,fs-1)}px sans-serif`;
+      ctx.fillText(ln.t, bxP+5, byP+13+i*lh);
+    });
+  });
+
+  // Callout at age 80
+  const lastX=xFn(n-1);
+  const bY=yFn(blueArr[n-1]);
+  const rY=yFn(redArr[n-1]);
+  const diffVal=blueArr[n-1]-redArr[n-1];
+  if(diffVal>0&&lastX>80){
+    ctx.fillStyle='rgba(49,65,69,.92)';
+    const lbl=`-${Math.round(diffVal/100)*100>0?Math.round(diffVal/100)*100:Math.round(diffVal)}万`;
+    const tw=ctx.measureText(lbl).width;
+    const bx=lastX-tw-10;
+    const by=(bY+rY)/2-10;
+    ctx.beginPath();ctx.roundRect(bx-4,by,tw+8,18,5);ctx.fill();
+    ctx.fillStyle='white';ctx.font=`bold ${fs}px sans-serif`;
+    ctx.fillText(lbl,bx,by+13);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// 11. メイン更新関数
+// ═══════════════════════════════════════════════════
+function fmt(v){
+  if(v>=10000) return (v/10000).toFixed(1)+'億円';
+  return v.toLocaleString()+'万円';
+}
+function lv(s){return s>=70?'高':s>=40?'中':'低';}
+function bc(s){return s>=70?'#b65b61':s>=40?'#9a8866':'#68766c';}
+function fmtYen(v){return v>=10000?`約${(Math.round(v/1000)/10).toFixed(1)}万円`:`約${Math.round(v).toLocaleString()}円`;}
+
+// 「運動習慣を週3回以上にする」場合のみを取り出し、30分の運動1回あたりの資産防衛額を試算
+function computeExerciseValue(s,sim){
+  if(s.exerciseHours>=3)return null;
+  const altState=computeRisk({exerciseHoursPerWeek:3});
+  const userIncome=n('income')||null;
+  const userAssets=n('assets')||0;
+  const altP=projectAsset(altState,altState.gender,altState.age,userIncome,userAssets,false);
+  const val80=altP.arr[altP.arr.length-1];
+  const diff=val80-sim.red80;
+  if(diff<=0)return null;
+  const yearsLeft=80-s.age;
+  const totalSessions=Math.max(1,Math.round(yearsLeft*52*3)); // 週3回×52週で試算
+  const perSessionYen=(diff*10000)/totalSessions;
+  return{diff,totalSessions,yearsLeft,perSessionYen};
+}
+
+const RISK_LABELS=[
+  ['糖代謝リスク','glucose'],['血圧・脳心血管リスク','bp'],['脂質・動脈硬化リスク','lipid'],
+  ['肝機能リスク','liver'],['腎機能リスク','kidney'],['筋骨格・慢性不調リスク','musculo']
+];
+
+// 特定健診の基準値超え項目をカウント（2項目以上で要注意アラート表示）
+function computeAlertFlags(s){
+  const flags=[];
+  if(s.bmi!==null&&s.bmi>=25) flags.push('BMI（過体重・肥満）');
+  const waistOver=s.waist!==null&&((s.gender==='male'&&s.waist>=85)||(s.gender==='female'&&s.waist>=90));
+  if(waistOver) flags.push('腹囲（内臓脂肪型肥満の疑い）');
+  if(s.sbp!==null&&s.sbp>=130) flags.push('血圧（収縮期130mmHg以上）');
+  if((s.glucose!==null&&s.glucose>=100)||(s.hba1c!==null&&s.hba1c>=5.6)) flags.push('血糖値（空腹時100以上またはHbA1c 5.6%以上）');
+  if(s.ldl!==null&&s.ldl>=120) flags.push('LDLコレステロール（120mg/dL以上）');
+  return flags;
+}
+
+function updateAll(){
+  if(!validateAll())return;
+  const s=computeRisk();
+  const trend=computeTrend(s);
+  const sim=simulate(s);
+
+  // 健診基準値アラート（2項目以上で表示）
+  const alertFlags=computeAlertFlags(s);
+  const alertBox=document.getElementById('checkupAlert');
+  if(alertFlags.length>=2){
+    document.getElementById('caTitle').textContent=`注意：健診基準値を超える項目が${alertFlags.length}つあります`;
+    document.getElementById('caDetail').textContent=alertFlags.join('　・　');
+    alertBox.style.display='flex';
+  } else {
+    alertBox.style.display='none';
+  }
+  if(_consentGiven) saveAnonRecord(s, sim);
+  const ltm=lifetimeMedTable(s.gender,s.medScore);
+
+  // 改善（禁煙・運動習慣・減量）トグルの表示制御 ── リスクバーより先に判定する
+  const quitEl=document.getElementById('impQuitSmoke');
+  const exEl=document.getElementById('impExercise');
+  const wlEl=document.getElementById('impWeightLoss');
+  const quitWrap=document.getElementById('impQuitSmokeWrap');
+  const exWrap=document.getElementById('impExerciseWrap');
+  const weightRow=document.getElementById('impWeightRow');
+  const quitNote=document.getElementById('impQuitSmokeNote');
+  const exNote=document.getElementById('impExerciseNote');
+  const weightNote=document.getElementById('impWeightNote');
+
+  const alreadyNonSmoker=s.smoking==='never';
+  quitWrap.classList.toggle('done',alreadyNonSmoker);
+  quitEl.disabled=alreadyNonSmoker;
+  if(alreadyNonSmoker){quitEl.checked=false;quitNote.textContent='すでに非喫煙です';}
+  else{quitNote.textContent='';}
+
+  const alreadyActive=s.exerciseHours>=3;
+  exWrap.classList.toggle('done',alreadyActive);
+  exEl.disabled=alreadyActive;
+  if(alreadyActive){exEl.checked=false;exNote.textContent='すでに十分な運動習慣があります';}
+  else{exNote.textContent='';}
+
+  const canSimulateWeight=s.bmi!==null;
+  weightRow.classList.toggle('done',!canSimulateWeight);
+  wlEl.disabled=!canSimulateWeight;
+  document.getElementById('impWeightVal').textContent=`-${wlEl.value}kg`;
+  if(!canSimulateWeight){
+    wlEl.value=0;
+    weightNote.textContent='身長・体重を入力すると、減量後の疾患リスクをシミュレーションできます。';
+  } else {
+    weightNote.textContent=`現在の体重${n('weight')}kg → ${(n('weight')-Number(wlEl.value))}kg（目安の試算値。腹囲の変化は考慮していません）`;
+  }
+
+  document.getElementById('improveBox').style.display=
+    (alreadyNonSmoker&&alreadyActive&&!canSimulateWeight)?'none':'';
+
+  const overrides={};
+  if(quitEl.checked&&!alreadyNonSmoker)overrides.smoking='never';
+  if(exEl.checked&&!alreadyActive)overrides.exerciseHoursPerWeek=3;
+  if(canSimulateWeight&&Number(wlEl.value)>0)overrides.weightLossKg=Number(wlEl.value);
+  const hasImprovement=Object.keys(overrides).length>0;
+  const altState=hasImprovement?computeRisk(overrides):null;
+
+  // Risk bars（改善後の疾患リスクスコアも並記）
+  const rEl=document.getElementById('riskRows');rEl.innerHTML='';
+  RISK_LABELS.forEach(([lb,k])=>{
+    const sc=s.risks[k];
+    const d=document.createElement('div');d.className='risk-row';
+    let extra='';
+    if(altState){
+      const asc=altState.risks[k];
+      extra = asc<sc
+        ? `<div class="risk-improved">→ 改善後：${lv(asc)}（${asc}） 　${sc-asc}ポイント低下</div>`
+        : `<div class="risk-improved same">→ 改善後も変化なし</div>`;
+    }
+    d.innerHTML=`<div class="risk-row-main">
+      <div class="risk-name">${lb}</div>
+      <div class="bar"><span style="width:${sc}%;background:${bc(sc)}"></span></div>
+      <div class="risk-lv" style="background:${bc(sc)}">${lv(sc)}</div>
+      </div>${extra}`;
+    rEl.appendChild(d);
+  });
+  document.getElementById('precText').textContent=s.precision;
+  document.getElementById('precDetail').textContent=`入力 ${s.entered}/${Object.keys(RULES).length}項目 ｜ 精度：${s.precision}`;
+
+  // Trend rows
+  const trEl=document.getElementById('trendRows');trEl.innerHTML='';
+  trend.rows.forEach(r=>{
+    const d=document.createElement('div');d.className='trend-row';
+    d.innerHTML=`<div class="tlab">${r.label}</div><div class="tval${r.ok?' ok':''}">${r.val}</div>`;
+    trEl.appendChild(d);
+  });
+  document.getElementById('trendSrc').textContent=trend.srcs.join('　／　');
+
+  // Age 80 callout
+  document.getElementById('a80good').textContent=fmt(sim.blue80);
+  document.getElementById('a80bad').textContent=fmt(sim.red80);
+  document.getElementById('a80diff').textContent=
+    `健康維持との差：-${fmt(sim.diff80)}`;
+
+  let greenArr=null;
+  const improveResult=document.getElementById('improveResult');
+  const legendImproved=document.getElementById('legendImproved');
+  if(hasImprovement){
+    const imp=projectImproved(altState);
+    greenArr=imp.arr;
+    document.getElementById('impRiskScore').textContent=`${s.medScore} → ${altState.medScore}`;
+    document.getElementById('impGood').textContent=fmt(imp.val80);
+    const impDiffVal=imp.val80-sim.red80;
+    document.getElementById('impDiff').textContent=
+      (impDiffVal>=0?'+':'-')+fmt(Math.abs(impDiffVal));
+    improveResult.style.display='';
+    legendImproved.style.display='';
+  } else {
+    improveResult.style.display='none';
+    legendImproved.style.display='none';
+  }
+
+  // 運動頻度を1歩ずつ変えた場合のインパクト表
+  renderFreqLadder(s,sim);
+  renderDurationCombos(s,sim);
+
+  // Chart
+  drawChart(sim.ages,sim.blueArr,sim.redArr,s.age,greenArr);
+
+  // Loss summary
+  document.getElementById('lossPT').textContent=`-${fmt(sim.cumulativePT)}`;
+  document.getElementById('lossMed').textContent=`-${fmt(sim.cumulativeMed)}`;
+  document.getElementById('lossComp').textContent=`-${fmt(sim.compoundLoss)}`;
+  const total=sim.cumulativePT+sim.cumulativeMed+sim.compoundLoss;
+  document.getElementById('lossTotal').textContent=`-${fmt(total)}`;
+
+  // Weekly investment calculation
+  const wiBox=document.getElementById('wiBox');
+  if(sim.diff80>0){
+    const yearsLeft=80-s.age;
+    const weeksLeft=yearsLeft*52;
+    const budgetYen=Math.round((sim.diff80*10000)/weeksLeft/100)*100; // 100円単位
+    document.getElementById('wiDiff').textContent=fmt(sim.diff80);
+    document.getElementById('wiWeeks').textContent=weeksLeft.toLocaleString();
+    document.getElementById('wiYears').textContent=yearsLeft;
+    document.getElementById('wiBudget').textContent=fmtYen(budgetYen);
+    document.getElementById('wiDiffMsg').textContent=fmt(sim.diff80);
+    wiBox.style.display='';
+  } else {
+    wiBox.style.display='none';
+  }
+
+  // 結果まとめカード（30分の運動の価値／画像保存用）
+  document.getElementById('scRiskBadge').textContent=`${s.medScore} （${lv(s.medScore)}）`;
+  document.getElementById('scGood').textContent=fmt(sim.blue80);
+  document.getElementById('scBad').textContent=fmt(sim.red80);
+  document.getElementById('scDate').textContent=new Date().toLocaleDateString('ja-JP');
+  const exVal=computeExerciseValue(s,sim);
+  const exBox=document.getElementById('scExerciseBox');
+  const exLabel=exBox.querySelector('.sc-card-highlight-label');
+  const exSub=exBox.querySelector('.sc-card-highlight-sub');
+  if(exVal){
+    exLabel.textContent='30分の運動 1回で、将来の資産の目減りを';
+    document.getElementById('scExerciseVal').textContent=fmtYen(exVal.perSessionYen);
+    exSub.textContent='防げる計算になります';
+  } else if(s.exerciseHours>=3){
+    exLabel.textContent='すでに週3回以上の運動習慣があります。';
+    document.getElementById('scExerciseVal').textContent='素晴らしいです！';
+    exSub.textContent='その習慣が将来の資産を守っています。';
+  } else {
+    // 現状の入力では医療費に影響するほどのリスクが顕在化していないケース
+    exLabel.textContent='現在は大きな健康リスクは見られません。';
+    document.getElementById('scExerciseVal').textContent='この状態をキープ';
+    exSub.textContent='運動習慣が、将来のリスク上昇を防ぐ一番のお守りです。';
+  }
+  exBox.style.display='';
+
+  // Lifetime medical table
+  const tbody=document.querySelector('#medTable tbody');tbody.innerHTML='';
+  let hTotal=0,rTotal=0;
+  ltm.forEach(row=>{
+    hTotal+=row.healthy;rTotal+=row.risk;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${row.label}</td><td>${row.healthy.toLocaleString()}万円</td>
+      <td class="hi">${row.risk.toLocaleString()}万円</td>`;
+    tbody.appendChild(tr);
+  });
+  const totRow=document.createElement('tr');
+  totRow.innerHTML=`<td><strong>生涯合計</strong></td>
+    <td><strong>${hTotal.toLocaleString()}万円</strong></td>
+    <td class="hi"><strong>${rTotal.toLocaleString()}万円</strong></td>`;
+  tbody.appendChild(totRow);
+}
+
+// ═══════════════════════════════════════════════════
+// 12. イベント・タブ・リサイズ
+// ═══════════════════════════════════════════════════
+const panels=[document.getElementById('p0'),document.getElementById('p1')];
+
+document.querySelectorAll('.mtab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const idx=Number(tab.dataset.p);
+    document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
+    tab.classList.add('on');
+    if(window.innerWidth<=768){
+      panels.forEach((p,i)=>p.classList.toggle('active-panel',i===idx));
+    }
+  });
+});
+
+// ── MetS自動判定バナー ──
+function updateMetsBanner(){
+  const gender=document.getElementById('gender').value;
+  const waist=n('waist'),sbp=n('sbp');
+  const glucose=n('glucose'),hba1c=n('hba1c');
+  const banner=document.getElementById('metsBanner');
+  if(!banner)return;
+
+  const waistOver=waist&&((gender==='male'&&waist>=85)||(gender==='female'&&waist>=90));
+  if(!waistOver){banner.style.display='none';return;}
+
+  const items=[];
+  if(sbp&&sbp>=130)items.push('血圧↑');
+  if((glucose&&glucose>=110)||(hba1c&&hba1c>=6.0))items.push('血糖↑');
+
+  const title=document.getElementById('metsBannerTitle');
+  const desc=document.getElementById('metsBannerDesc');
+  if(items.length>=2){
+    banner.className='mets-banner mets-red';
+    title.textContent='メタボリックシンドローム該当（推定）';
+    desc.textContent=`腹囲基準＋${items.join('・')} — 特定保健指導「積極的支援」対象になる可能性があります。`;
+  } else if(items.length===1){
+    banner.className='mets-banner';
+    title.textContent='メタボリックシンドローム予備群';
+    desc.textContent=`腹囲基準＋${items.join('・')} — 特定保健指導「動機付け支援」対象になる可能性があります。`;
+  } else {
+    banner.style.display='none';return;
+  }
+  banner.style.display='flex';
+}
+['waist','sbp','glucose','hba1c'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('input',updateMetsBanner);
+});
+document.getElementById('gender').addEventListener('change',updateMetsBanner);
+
+// 「現在喫煙中」を選んだ時だけ本数入力を表示する
+function updateCigCountVisibility(){
+  const show=document.getElementById('smoking').value==='current';
+  document.getElementById('cigCountField').style.display=show?'':'none';
+}
+document.getElementById('smoking').addEventListener('change',updateCigCountVisibility);
+updateCigCountVisibility();
+
+function resetPanels(){
+  if(window.innerWidth>768){panels.forEach(p=>p.classList.add('active-panel'));}
+  else{
+    const at=document.querySelector('.mtab.on');
+    const idx=at?Number(at.dataset.p):0;
+    panels.forEach((p,i)=>p.classList.toggle('active-panel',i===idx));
+  }
+}
+
+window.addEventListener('resize',()=>{
+  resetPanels();
+  try{updateAll();}catch(e){}
+});
+
+// 印刷時：グラフを縦長比率で再描画してA4横のスペースを活用
+function redrawChart(){
+  try{updateAll();}catch(e){}
+}
+window.addEventListener('beforeprint',()=>{
+  window._chartRatio=0.42;redrawChart();
+  const pd=document.getElementById('printDate');
+  if(pd)pd.textContent=new Date().toLocaleDateString('ja-JP');
+});
+window.addEventListener('afterprint',()=>{window._chartRatio=null;redrawChart();});
+
+// ═══════════════════════════════════════════════════
+// 13. 流入元・計測トラッキング
+// ═══════════════════════════════════════════════════
+const _urlParams   = new URLSearchParams(location.search);
+const _refSource   = _urlParams.get('utm_source')   || _urlParams.get('ref') || 'direct';
+const _refMedium   = _urlParams.get('utm_medium')   || '';
+const _refCampaign = _urlParams.get('utm_campaign') || '';
+const _isSCSK      = _refSource === 'scsk';
+const _refPage     = location.pathname + location.search;
+const _referrer    = document.referrer
+  ? (() => { try { return new URL(document.referrer).hostname; } catch(e) { return document.referrer; } })()
+  : 'direct';
+
+// セッションストレージに流入元を保存（フォーム送信時に付与）
+sessionStorage.setItem('fw_ref', _refSource);
+if(_isSCSK) sessionStorage.setItem('fw_scsk', '1');
+
+function fwTrack(event, props = {}) {
+  const entry = {
+    event,
+    ts: new Date().toISOString(),
+    ref: _refSource,
+    scsk: _isSCSK,
+    path: location.pathname,
+    ...props
+  };
+  // ローカルストレージに蓄積（直近100件）
+  try {
+    const logs = JSON.parse(localStorage.getItem('fw_events') || '[]');
+    logs.push(entry);
+    localStorage.setItem('fw_events', JSON.stringify(logs.slice(-100)));
+  } catch(e) {}
+  // GA4 / GTM が導入されている場合は自動送信
+  if(typeof gtag === 'function') {
+    gtag('event', event, { ...props, ref_source: _refSource, is_scsk: _isSCSK });
+  }
+  if(typeof dataLayer !== 'undefined') {
+    dataLayer.push({ event, ...props, ref_source: _refSource, is_scsk: _isSCSK });
+  }
+  console.log('[FW Track]', entry);
+}
+
+// ページビュー計測
+fwTrack('page_view', { ref_source: _refSource, ref_medium: _refMedium, ref_campaign: _refCampaign, referrer: _referrer });
+
+// ═══════════════════════════════════════════════════
+// 匿名データ累積システム
+// ・個人を特定する情報は一切保存しません
+// ・保存対象：年齢層/性別/BMI区分/リスクスコア/運動習慣/入力項目数/流入元
+// ・保存先：localStorage（このブラウザ端末内）
+// ・バックエンド連携時は ANON_ENDPOINT に送信先URLを設定してください
+// ═══════════════════════════════════════════════════
+// Google Apps Script デプロイ後のURLを貼り付けてください
+// 例: 'https://script.google.com/macros/s/XXXXXXXX/exec'
+const ANON_ENDPOINT = '';
+const ANON_STORE_KEY = 'fw_anon_records';
+const MAX_LOCAL_RECORDS = 500;
+
+function ageGroup(age) {
+  if (age < 30) return '20s';
+  if (age < 40) return '30s';
+  if (age < 50) return '40s';
+  if (age < 60) return '50s';
+  if (age < 70) return '60s';
+  return '70s+';
+}
+
+function bmiCategory(bmi) {
+  if (bmi === null) return null;
+  if (bmi < 18.5) return 'underweight';
+  if (bmi < 25)   return 'normal';
+  if (bmi < 30)   return 'overweight';
+  return 'obese';
+}
+
+function saveAnonRecord(state, sim) {
+  const record = {
+    ts:         new Date().toISOString(),
+    session_id: sessionStorage.getItem('fw_sid') || (()=>{
+                  const id = Math.random().toString(36).slice(2,10);
+                  sessionStorage.setItem('fw_sid', id); return id; })(),
+    // 年齢層・性別（個人特定不可）
+    age_group:  ageGroup(state.age),
+    gender:     state.gender,
+    // 身体データ区分（生値は保存しない）
+    bmi_cat:    bmiCategory(state.bmi),
+    habit:      state.habit,
+    entered:    state.entered,           // 入力済み健診項目数（0-14）
+    // リスクスコア（0-100）
+    risk_glucose: state.risks.glucose,
+    risk_bp:      state.risks.bp,
+    risk_lipid:   state.risks.lipid,
+    risk_liver:   state.risks.liver,
+    risk_kidney:  state.risks.kidney,
+    risk_musculo: state.risks.musculo,
+    med_score:    state.medScore,
+    // 差額（万円単位で丸め）
+    diff80_bracket: Math.round(sim.diff80 / 100) * 100,
+    // 流入元（UTM全情報）
+    ref_source:   _refSource,
+    ref_medium:   _refMedium,
+    ref_campaign: _refCampaign,
+    ref_page:     _refPage,
+    referrer:     _referrer,
+  };
+
+  // ── ローカル保存 ──────────────────────────────
+  try {
+    const records = JSON.parse(localStorage.getItem(ANON_STORE_KEY) || '[]');
+    records.push(record);
+    localStorage.setItem(ANON_STORE_KEY, JSON.stringify(records.slice(-MAX_LOCAL_RECORDS)));
+  } catch(e) {}
+
+  // ── Google スプレッドシートへ送信（ANON_ENDPOINT 設定時のみ）──
+  // GAS Web App は no-cors モードで送信（レスポンス読み取り不要）
+  if (ANON_ENDPOINT) {
+    fetch(ANON_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+      keepalive: true,
+      mode: 'no-cors'
+    }).catch(() => {});
+  }
+
+  fwTrack('simulation_run', {
+    age_group: record.age_group,
+    gender: record.gender,
+    med_score: record.med_score,
+    scsk_flow: _isSCSK
+  });
+}
+
+// ── 管理画面（URL末尾に ?fw_admin=1 で表示）─────────
+if (_urlParams.get('fw_admin') === '1') {
+  window.addEventListener('DOMContentLoaded', () => {
+    const records = JSON.parse(localStorage.getItem(ANON_STORE_KEY) || '[]');
+    const panel = document.createElement('div');
+    panel.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;' +
+      'background:#111;color:#eee;font:12px/1.6 monospace;padding:16px;z-index:99999;border-top:2px solid #9a8866;';
+    panel.innerHTML = `<strong style="color:#ddc989">FW 匿名データ（${records.length}件）</strong>` +
+      `　<button onclick="navigator.clipboard.writeText(JSON.stringify(JSON.parse(localStorage.getItem('${ANON_STORE_KEY}')||'[]'),null,2))" ` +
+      `style="background:#9a8866;color:#fff;border:none;padding:3px 10px;cursor:pointer;font-size:11px;margin-left:8px;">JSONコピー</button>` +
+      `　<button onclick="this.closest('div').remove()" style="background:#555;color:#fff;border:none;padding:3px 10px;cursor:pointer;font-size:11px;">閉じる</button><hr style="border-color:#333;margin:8px 0">` +
+      `<pre style="margin:0;white-space:pre-wrap;">${JSON.stringify(records.slice(-20), null, 2)}</pre>`;
+    document.body.appendChild(panel);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// 14. 同意モーダル
+// ═══════════════════════════════════════════════════
+let _consentGiven = sessionStorage.getItem('fw_consent') === '1';
+
+function showConsentModal() {
+  document.getElementById('consentOverlay').classList.add('open');
+  fwTrack('consent_modal_open');
+}
+function closeConsentModal() {
+  document.getElementById('consentOverlay').classList.remove('open');
+}
+
+document.getElementById('consentCheck').addEventListener('change', function() {
+  const btn = document.getElementById('consentOkBtn');
+  btn.classList.toggle('enabled', this.checked);
+  btn.disabled = !this.checked;
+});
+
+document.getElementById('consentOkBtn').addEventListener('click', () => {
+  _consentGiven = true;
+  sessionStorage.setItem('fw_consent', '1');
+  closeConsentModal();
+  fwTrack('consent_given');
+  runSimulation();
+});
+
+document.getElementById('consentCancelBtn').addEventListener('click', closeConsentModal);
+document.getElementById('consentOverlay').addEventListener('click', function(e) {
+  if(e.target === this) closeConsentModal();
+});
+
+// シミュレーション実行（何度でも再実行可能）
+function runSimulation() {
+  const btn = document.getElementById('runBtn');
+
+  // 入力エラーがあればエラー箇所へスクロールして知らせる
+  if(!validateAll()) {
+    const errEl = document.querySelector('input.err');
+    if(errEl) {
+      errEl.scrollIntoView({behavior:'smooth', block:'center'});
+      errEl.focus();
+    }
+    return;
+  }
+
+  // ボタンに実行中フィードバックを表示してから再計算
+  btn.disabled = true;
+  btn.textContent = '計算中...';
+  setTimeout(() => {
+    updateAll();
+    btn.disabled = false;
+    btn.textContent = 'もう一度シミュレーションする';
+    if(window.innerWidth <= 768) {
+      document.querySelectorAll('.mtab')[1].click();
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      // デスクトップ：結果パネルへスクロール
+      document.getElementById('p1').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }, 250);
+}
+
+// シミュレーションボタン：同意済みならそのまま実行、未同意なら同意モーダルを表示
+document.getElementById('runBtn').addEventListener('click', () => {
+  fwTrack('simulate_btn_click');
+  if(_consentGiven) {
+    runSimulation();
+  } else {
+    showConsentModal();
+  }
+});
+
+// 改善シミュレーション（禁煙・運動習慣）トグル：チェックのたびに即座に再計算
+['impQuitSmoke','impExercise'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('change',()=>{
+    document.getElementById(id+'Wrap').classList.toggle('checked',el.checked);
+    fwTrack('improve_toggle',{id,checked:el.checked});
+    updateAll();
+  });
+});
+
+// 減量スライダー：ドラッグ中も即座に反映（触って試せるように）
+document.getElementById('impWeightLoss').addEventListener('input',()=>{
+  updateAll();
+});
+document.getElementById('impWeightLoss').addEventListener('change',()=>{
+  fwTrack('improve_weight_slider',{kg:document.getElementById('impWeightLoss').value});
+});
+
+// ═══════════════════════════════════════════════════
+// 15. 相談フォームモーダル
+// ═══════════════════════════════════════════════════
+function openConsultForm(pos, service) {
+  fwTrack('cta_click', { cta_position: pos, service: service||'', ref_source: _refSource });
+  // サービス選択をフォームの相談希望内容にプリセット
+  const purposeMap = {
+    'online':     'other',
+    'harajuku-pt':'lifestyle_disease',
+    'pilates':    'shoulder_back'
+  };
+  const sel = document.getElementById('f-purpose');
+  if(service && purposeMap[service]) sel.value = purposeMap[service];
+  document.getElementById('formOverlay').classList.add('open');
+  document.getElementById('formSuccess').classList.remove('show');
+  document.getElementById('consultForm').style.display = '';
+  document.getElementById('formOverlay').scrollTop = 0;
+}
+function closeConsultForm() {
+  document.getElementById('formOverlay').classList.remove('open');
+}
+
+document.getElementById('formCloseBtn').addEventListener('click', closeConsultForm);
+document.getElementById('formOverlay').addEventListener('click', function(e) {
+  if(e.target === this) closeConsultForm();
+});
+
+// CTA ボタン（トップ・中段・下部・スマホ追従）をまとめてバインド
+document.querySelectorAll('[data-cta-pos]').forEach(btn => {
+  btn.addEventListener('click', () => openConsultForm(btn.dataset.ctaPos, btn.dataset.service || ''));
+});
+
+// フォーム到達計測
+document.getElementById('formOverlay').addEventListener('transitionend', function() {
+  if(this.classList.contains('open')) {
+    fwTrack('form_view');
+  }
+});
+
+// フォーム送信
+document.getElementById('consultForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('formSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  const data = Object.fromEntries(new FormData(this));
+  data.ref = sessionStorage.getItem('fw_ref') || 'direct';
+  data.is_scsk = sessionStorage.getItem('fw_scsk') === '1';
+  data.submitted_at = new Date().toISOString();
+
+  fwTrack('form_submit', { purpose: data.purpose, scsk_flow: data.is_scsk });
+
+  // ── フォーム送信先を設定してください ──────────────────────────
+  // 例: Formspree → const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_ID';
+  // 例: 自社API   → const FORM_ENDPOINT = '/api/counseling';
+  const FORM_ENDPOINT = '';
+  // ──────────────────────────────────────────────────────────────
+
+  try {
+    if(FORM_ENDPOINT) {
+      await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    }
+    // 送信成功（エンドポイント未設定時も成功扱い＆ローカル保存）
+    const submissions = JSON.parse(localStorage.getItem('fw_submissions') || '[]');
+    submissions.push(data);
+    localStorage.setItem('fw_submissions', JSON.stringify(submissions.slice(-20)));
+
+    this.style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+    fwTrack('form_complete', { purpose: data.purpose });
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = '送信する — 無料カウンセリングを申し込む';
+    alert('送信中にエラーが発生しました。お手数ですがしばらくしてから再度お試しください。');
+  }
+});
+
+// PDF保存・印刷
+document.getElementById('pdfBtn').addEventListener('click',()=>{
+  fwTrack('pdf_print_click');
+  window.print();
+});
+
+// 結果カードを画像として保存
+document.getElementById('shareImgBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('shareImgBtn');
+  const note=document.getElementById('shareImgNote');
+  fwTrack('share_image_click');
+  if(typeof html2canvas!=='function'){
+    note.textContent='画像保存機能の読み込みに失敗しました。通信環境をご確認のうえ再度お試しください。';
+    return;
+  }
+  const orig=btn.innerHTML;
+  btn.disabled=true;
+  btn.textContent='画像を作成中...';
+  try{
+    const canvas=await html2canvas(document.getElementById('shareCard'),{backgroundColor:null,scale:2});
+    const link=document.createElement('a');
+    link.download='fractal-workout-health-asset-simulation.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    fwTrack('share_image_success');
+  }catch(e){
+    note.textContent='画像の生成に失敗しました。しばらくしてから再度お試しください。';
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML=orig;
+  }
+});
+
+// 詳細入力トグル
+document.getElementById('advToggle').addEventListener('click',function(){
+  const adv=document.getElementById('advancedInputs');
+  const isOpen=adv.style.display!=='none';
+  adv.style.display=isOpen?'none':'';
+  this.classList.toggle('open',!isOpen);
+  this.querySelector('.adv-toggle-icon').textContent=isOpen?'＋':'−';
+  fwTrack(isOpen?'advanced_close':'advanced_open');
+});
+
+document.getElementById('discToggle').addEventListener('click',()=>{
+  const d=document.getElementById('discDetail');
+  d.classList.toggle('open');
+  document.getElementById('discToggle').textContent=
+    d.classList.contains('open')?'▲ 閉じる':'▼ 出典・詳細を見る';
+});
+
+// 初期化
+updateAll();
+resetPanels();
+</script>
+</body>
+</html>

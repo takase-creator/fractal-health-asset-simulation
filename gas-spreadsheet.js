@@ -13,7 +13,7 @@
  *
  * ── 流入元の付与方法 ─────────────────────────────────────────────
  * URLに UTM パラメータを付与するだけで自動記録されます。
- * 例）SCSK向け:  ?utm_source=scsk&utm_medium=email&utm_campaign=2026_health
+ * 例）Partner向け:  ?utm_source=partner&utm_medium=email&utm_campaign=2026_health
  *     エフクリ向け: ?utm_source=efcre&utm_medium=web
  *     直接配布:   パラメータなし → "direct" と記録
  * ────────────────────────────────────────────────────────────────

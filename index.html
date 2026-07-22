@@ -1860,7 +1860,7 @@ const _urlParams   = new URLSearchParams(location.search);
 const _refSource   = _urlParams.get('utm_source')   || _urlParams.get('ref') || 'direct';
 const _refMedium   = _urlParams.get('utm_medium')   || '';
 const _refCampaign = _urlParams.get('utm_campaign') || '';
-const _isSCSK      = _refSource === 'scsk';
+const _isPartner      = _refSource === 'partner';
 const _refPage     = location.pathname + location.search;
 const _referrer    = document.referrer
   ? (() => { try { return new URL(document.referrer).hostname; } catch(e) { return document.referrer; } })()
@@ -1868,14 +1868,14 @@ const _referrer    = document.referrer
 
 // セッションストレージに流入元を保存（フォーム送信時に付与）
 sessionStorage.setItem('fw_ref', _refSource);
-if(_isSCSK) sessionStorage.setItem('fw_scsk', '1');
+if(_isPartner) sessionStorage.setItem('fw_partner', '1');
 
 function fwTrack(event, props = {}) {
   const entry = {
     event,
     ts: new Date().toISOString(),
     ref: _refSource,
-    scsk: _isSCSK,
+    partner: _isPartner,
     path: location.pathname,
     ...props
   };
@@ -1887,10 +1887,10 @@ function fwTrack(event, props = {}) {
   } catch(e) {}
   // GA4 / GTM が導入されている場合は自動送信
   if(typeof gtag === 'function') {
-    gtag('event', event, { ...props, ref_source: _refSource, is_scsk: _isSCSK });
+    gtag('event', event, { ...props, ref_source: _refSource, is_partner: _isPartner });
   }
   if(typeof dataLayer !== 'undefined') {
-    dataLayer.push({ event, ...props, ref_source: _refSource, is_scsk: _isSCSK });
+    dataLayer.push({ event, ...props, ref_source: _refSource, is_partner: _isPartner });
   }
   console.log('[FW Track]', entry);
 }
@@ -1982,7 +1982,7 @@ function saveAnonRecord(state, sim) {
     age_group: record.age_group,
     gender: record.gender,
     med_score: record.med_score,
-    scsk_flow: _isSCSK
+    partner_flow: _isPartner
   });
 }
 
@@ -2098,10 +2098,10 @@ document.getElementById('consultForm').addEventListener('submit', async function
 
   const data = Object.fromEntries(new FormData(this));
   data.ref = sessionStorage.getItem('fw_ref') || 'direct';
-  data.is_scsk = sessionStorage.getItem('fw_scsk') === '1';
+  data.is_partner = sessionStorage.getItem('fw_partner') === '1';
   data.submitted_at = new Date().toISOString();
 
-  fwTrack('form_submit', { purpose: data.purpose, scsk_flow: data.is_scsk });
+  fwTrack('form_submit', { purpose: data.purpose, partner_flow: data.is_partner });
 
   // ── フォーム送信先を設定してください ──────────────────────────
   // 例: Formspree → const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_ID';

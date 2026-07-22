@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>健康リスク × 将来資産シミュレーター | FRACTAL WORKOUT × SCSK</title>
+<title>健康リスク × 将来資産シミュレーター | FRACTAL WORKOUT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -38,7 +38,7 @@ img{display:block;max-width:100%;height:auto;}
 .brand-meta{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;font-weight:700;
   letter-spacing:.12em;text-transform:uppercase;}
 .brand-meta span+span{padding-left:14px;border-left:1px solid var(--line);}
-.scsk-badge{font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;
+.partner-badge{font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;
   background:#00439C;padding:5px 12px;border-radius:3px;white-space:nowrap;}
 
 /* hero */
@@ -838,9 +838,9 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
 <!-- HERO -->
 <section class="hero">
   <div class="hero-copy">
-    <div class="hero-tag">SCSK健康経営プログラム</div>
+    <div class="hero-tag">健康経営プログラム</div>
     <h1>あなたの健康が、<br><span class="hero-h1-nowrap">会社と老後を守る。</span></h1>
-    <p>健診データと資産情報から、現在の健康リスクと80歳までの資産推移を試算。SCSKが提供する予防医療サポートで、今の身体が未来の資産に与える影響を数字で把握できます。</p>
+    <p>健診データと資産情報から、現在の健康リスクと80歳までの資産推移を試算。予防医療サポートで、今の身体が未来の資産に与える影響を数字で把握できます。</p>
     <div class="hero-points">
       <div class="hero-point"><span>01</span><strong>無料・匿名で利用</strong></div>
       <div class="hero-point"><span>02</span><strong>健診データは空欄でも可</strong></div>
@@ -1216,7 +1216,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
         <div class="sc-card-highlight-num" id="scExerciseVal">--</div>
         <div class="sc-card-highlight-sub">防げる計算になります</div>
       </div>
-      <div class="sc-card-foot">FRACTAL WORKOUT × SCSK ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません</div>
+      <div class="sc-card-foot">FRACTAL WORKOUT ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません</div>
     </div>
     <div class="share-actions">
       <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
@@ -2492,7 +2492,7 @@ const _urlParams   = new URLSearchParams(location.search);
 const _refSource   = _urlParams.get('utm_source')   || _urlParams.get('ref') || 'direct';
 const _refMedium   = _urlParams.get('utm_medium')   || '';
 const _refCampaign = _urlParams.get('utm_campaign') || '';
-const _isSCSK      = _refSource === 'scsk';
+const _isPartner      = _refSource === 'partner';
 const _refPage     = location.pathname + location.search;
 const _referrer    = document.referrer
   ? (() => { try { return new URL(document.referrer).hostname; } catch(e) { return document.referrer; } })()
@@ -2500,14 +2500,14 @@ const _referrer    = document.referrer
 
 // セッションストレージに流入元を保存（フォーム送信時に付与）
 sessionStorage.setItem('fw_ref', _refSource);
-if(_isSCSK) sessionStorage.setItem('fw_scsk', '1');
+if(_isPartner) sessionStorage.setItem('fw_partner', '1');
 
 function fwTrack(event, props = {}) {
   const entry = {
     event,
     ts: new Date().toISOString(),
     ref: _refSource,
-    scsk: _isSCSK,
+    partner: _isPartner,
     path: location.pathname,
     ...props
   };
@@ -2519,10 +2519,10 @@ function fwTrack(event, props = {}) {
   } catch(e) {}
   // GA4 / GTM が導入されている場合は自動送信
   if(typeof gtag === 'function') {
-    gtag('event', event, { ...props, ref_source: _refSource, is_scsk: _isSCSK });
+    gtag('event', event, { ...props, ref_source: _refSource, is_partner: _isPartner });
   }
   if(typeof dataLayer !== 'undefined') {
-    dataLayer.push({ event, ...props, ref_source: _refSource, is_scsk: _isSCSK });
+    dataLayer.push({ event, ...props, ref_source: _refSource, is_partner: _isPartner });
   }
   console.log('[FW Track]', entry);
 }
@@ -2614,7 +2614,7 @@ function saveAnonRecord(state, sim) {
     age_group: record.age_group,
     gender: record.gender,
     med_score: record.med_score,
-    scsk_flow: _isSCSK
+    partner_flow: _isPartner
   });
 }
 
@@ -2773,10 +2773,10 @@ document.getElementById('consultForm').addEventListener('submit', async function
 
   const data = Object.fromEntries(new FormData(this));
   data.ref = sessionStorage.getItem('fw_ref') || 'direct';
-  data.is_scsk = sessionStorage.getItem('fw_scsk') === '1';
+  data.is_partner = sessionStorage.getItem('fw_partner') === '1';
   data.submitted_at = new Date().toISOString();
 
-  fwTrack('form_submit', { purpose: data.purpose, scsk_flow: data.is_scsk });
+  fwTrack('form_submit', { purpose: data.purpose, partner_flow: data.is_partner });
 
   // ── フォーム送信先を設定してください ──────────────────────────
   // 例: Formspree → const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_ID';

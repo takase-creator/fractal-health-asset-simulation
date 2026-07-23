@@ -510,6 +510,19 @@ canvas{width:100%!important;height:auto!important;display:block;}
 }
 
 /* ── CONSENT MODAL ── */
+/* 公開期間終了オーバーレイ */
+.expiry-overlay{display:none;position:fixed;inset:0;z-index:99999;padding:24px;overflow-y:auto;
+  background:linear-gradient(160deg,#0c2523 0%,var(--smoke-dark) 60%,#123a38 100%);
+  align-items:center;justify-content:center;}
+.expiry-overlay.show{display:flex;}
+.expiry-card{max-width:460px;width:100%;text-align:center;color:#fff;}
+.expiry-logo{height:56px;width:auto;margin:0 auto 24px;display:block;}
+.expiry-icon{font-size:44px;margin-bottom:14px;}
+.expiry-card h2{font-family:"Shippori Mincho",serif;font-size:24px;font-weight:600;margin-bottom:16px;color:#fff;}
+.expiry-card p{font-size:14px;line-height:1.9;color:rgba(255,255,255,.82);margin-bottom:16px;}
+.expiry-card .expiry-sub{font-size:13px;color:rgba(255,255,255,.68);border-top:1px solid rgba(255,255,255,.16);padding-top:18px;margin-top:4px;}
+.expiry-card .expiry-sub strong{color:var(--teal-light);}
+
 .consent-overlay,.form-overlay{position:fixed;inset:0;background:rgba(18,58,56,.72);z-index:9000;
   display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;
   opacity:0;pointer-events:none;transition:opacity .25s;}
@@ -757,6 +770,18 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 </style>
 </head>
 <body>
+
+<!-- 公開期間終了オーバーレイ（有効期限を過ぎたら表示） -->
+<div class="expiry-overlay" id="expiryOverlay">
+  <div class="expiry-card">
+    <img src="./assets/images/bp-logo.png" alt="BODY PALETTE" class="expiry-logo">
+    <div class="expiry-icon">🗓</div>
+    <h2>公開期間は終了しました</h2>
+    <p>本シミュレーションの公開期間は終了いたしました。<br>ご利用いただきありがとうございました。</p>
+    <p class="expiry-sub">健診結果で気になる数値があった方は、<br><strong>二次健診の受診</strong>と、専門家の知見のもとでの<strong>継続的な健康習慣</strong>をお勧めします。</p>
+  </div>
+</div>
+
 <div class="page">
 
 <!-- ══════════════════════════════════════
@@ -1473,6 +1498,16 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
 <script>
 'use strict';
+
+// ═══════════════════════════════════════════════════
+// 0. 公開期間の締切（有効期限）チェック
+// ═══════════════════════════════════════════════════
+// 2026年9月10日（JST）をもって公開終了。9/11 00:00 JST 以降は終了画面を表示。
+const PUBLISH_END = new Date('2026-09-11T00:00:00+09:00');
+if (new Date() >= PUBLISH_END) {
+  document.getElementById('expiryOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
 
 // ═══════════════════════════════════════════════════
 // 1. 定数・テーブル定義

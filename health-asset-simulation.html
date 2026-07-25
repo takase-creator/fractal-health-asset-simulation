@@ -105,13 +105,34 @@ img{display:block;max-width:100%;height:auto;}
   cursor:pointer;transition:.18s;}
 .mtab.on{background:var(--smoke-dark);color:#fff;}
 
-/* layout */
-.layout{display:grid;grid-template-columns:minmax(350px,392px) minmax(0,1fr);gap:18px;align-items:start;}
-.panel{background:var(--card);border:1px solid var(--line);box-shadow:0 18px 44px rgba(15,80,76,.08);overflow:hidden;}
-.ph{position:relative;background:var(--smoke-dark);color:#fff;padding:16px 20px;font-size:13px;
-  font-weight:800;letter-spacing:.06em;text-align:left;}
+/* layout（5ステップ・1カラム連続フロー） */
+.layout{display:block;max-width:820px;margin:0 auto;scroll-behavior:smooth;}
+.panel{background:var(--card);border:1px solid var(--line);box-shadow:0 18px 44px rgba(15,80,76,.08);overflow:hidden;margin-bottom:18px;scroll-margin-top:70px;}
+.ph{position:relative;background:var(--smoke-dark);color:#fff;padding:16px 20px;font-size:15px;
+  font-weight:800;letter-spacing:.04em;text-align:left;}
 .ph::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
+.ph-step{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.1em;color:#0b1416;
+  background:var(--gold-2);padding:3px 9px;border-radius:12px;margin-right:12px;vertical-align:middle;}
 .pb{padding:20px;}
+
+/* STEP2見出し（入力パネル内）・STEP4/5見出し（結果内） */
+.step2-head{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:22px 0 10px;padding-top:16px;
+  border-top:1px solid var(--line);font-family:"Shippori Mincho",serif;font-size:18px;font-weight:600;color:var(--black);}
+.step2-opt{font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-left:10px;}
+.step-sec-head{scroll-margin-top:70px;display:flex;align-items:center;margin:26px 0 12px;
+  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);}
+
+/* 5ステップ・ナビ（追従） */
+.step-nav{position:sticky;top:0;z-index:700;display:flex;gap:4px;max-width:820px;margin:0 auto 16px;
+  background:rgba(246,250,249,.94);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;padding:6px;}
+.step-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;
+  text-decoration:none;color:var(--muted);border-radius:7px;transition:.18s;min-width:0;}
+.step-nav-item .sn-num{width:22px;height:22px;border-radius:50%;background:var(--gray-100);color:var(--smoke);
+  font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;transition:.18s;}
+.step-nav-item .sn-label{font-size:10.5px;font-weight:800;letter-spacing:.02em;white-space:nowrap;}
+.step-nav-item.on{color:var(--teal-deep);}
+.step-nav-item.on .sn-num{background:var(--teal);color:#fff;}
+.step-nav-item:hover .sn-num{background:var(--teal-light);color:#0b1416;}
 
 /* form */
 .sec-title{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:600;color:var(--black);margin:20px 0 10px;}
@@ -493,10 +514,7 @@ canvas{width:100%!important;height:auto!important;display:block;}
   .steps{grid-template-columns:1fr;gap:8px;}
   .step{min-height:auto;padding:16px 18px;}
   .step-num{font-size:32px;}
-  .mobile-tabs{display:flex;}
-  .layout{grid-template-columns:1fr;gap:0;}
-  .panel{display:none;margin-top:10px;}
-  .panel.active-panel{display:block;}
+  /* 5ステップ・1カラム化に伴い、旧タブによるパネル非表示は無効化（常時表示） */
   .fg2{grid-template-columns:1fr 1fr;}
   .fg3{grid-template-columns:1fr 1fr;}
   /* 損失内訳の3カードはモバイルでも一列を維持（文字を小さめに） */
@@ -988,24 +1006,20 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 </section>
 
 <!-- STEPS -->
-<section class="steps">
-  <div class="step"><div class="step-num">01</div><div class="step-text"><strong>基本情報・資産入力</strong><span>性別・年齢・年収・総資産</span></div></div>
-  <div class="step"><div class="step-num">02</div><div class="step-text"><strong>健診データ入力</strong><span>分かる項目だけで試算可能</span></div></div>
-  <div class="step"><div class="step-num">03</div><div class="step-text"><strong>健康資産を確認</strong><span>80歳までの推移と損失額</span></div></div>
-</section>
-
-
-<!-- MOBILE TABS -->
-<div class="mobile-tabs" id="mtabs">
-  <button class="mtab on" data-p="0">① 入力</button>
-  <button class="mtab" data-p="1">② 結果</button>
-</div>
+<!-- 5ステップ・ナビ（追従・タップで各ステップへジャンプ） -->
+<nav class="step-nav" id="stepNav">
+  <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">1</span><span class="sn-label">情報入力</span></a>
+  <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">2</span><span class="sn-label">健診結果</span></a>
+  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">3</span><span class="sn-label">結果</span></a>
+  <a class="step-nav-item" href="#step4" data-step="4"><span class="sn-num">4</span><span class="sn-label">対策</span></a>
+  <a class="step-nav-item" href="#step5" data-step="5"><span class="sn-num">5</span><span class="sn-label">相談</span></a>
+</nav>
 
 <div class="layout" id="layout">
 
 <!-- PANEL 1: INPUT -->
-<div class="panel active-panel" id="p0">
-  <div class="ph">STEP 1–2 ｜ 情報入力</div>
+<div class="panel" id="p0">
+  <div class="ph" id="step1"><span class="ph-step">STEP 1</span>簡易情報入力</div>
   <div class="pb">
 
     <div class="sec-title">基本情報</div>
@@ -1064,11 +1078,12 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       </div>
     </div>
 
-    <!-- 詳細入力トグル -->
+    <!-- STEP2 健康診断結果入力（任意） -->
+    <div class="step2-head" id="step2"><span class="ph-step">STEP 2</span>健康診断結果入力<span class="step2-opt">任意・分かる項目だけでOK</span></div>
     <button type="button" class="adv-toggle" id="advToggle">
       <span class="adv-toggle-icon">＋</span>
-      もう少し詳しくシミュレーション
-      <span class="adv-toggle-sub">健診データ・症状を入力すると精度が上がります</span>
+      健診結果（標準12項目）を入力する
+      <span class="adv-toggle-sub">数値を入れると疾患リスク・数値推移まで精密に試算できます</span>
     </button>
 
     <div id="advancedInputs" style="display:none">
@@ -1128,7 +1143,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
 <!-- PANEL 2: RESULTS -->
 <div class="panel" id="p1">
-  <div class="ph">STEP 3 ｜ あなたの健康資産シミュレーション</div>
+  <div class="ph" id="step3"><span class="ph-step">STEP 3</span>あなたの健康資産シミュレーション結果</div>
   <div class="pb">
 
     <!-- 印刷専用タイトル -->
@@ -1276,6 +1291,8 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </div>
     </div><!-- /pr-c -->
 
+    <div class="step-sec-head" id="step4"><span class="ph-step">STEP 4</span>今すぐできる対策</div>
+
     <!-- ★二次健診 受診勧奨 CTA（結果の一番の着地点） -->
     <div class="exam-cta" id="examCta">
       <span class="exam-cta-tag">今なら間に合います</span>
@@ -1353,6 +1370,8 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <!-- 印刷専用フッター免責 -->
     <p class="print-disclaimer">※本シミュレーションはBODY PALETTEが独自に開発した試算ツールです。医学的診断・投資助言ではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。気になる数値がある場合は必ず二次健診を受診してください。｜出力日：<span id="printDate"></span></p>
+
+    <div class="step-sec-head" id="step5"><span class="ph-step">STEP 5</span>継続と相談で、資産を守る</div>
 
     <!-- 3サービス CTA -->
     <div class="service-cta-section">
@@ -2691,16 +2710,23 @@ function updateAll(){
 // ═══════════════════════════════════════════════════
 const panels=[document.getElementById('p0'),document.getElementById('p1')];
 
-document.querySelectorAll('.mtab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    const idx=Number(tab.dataset.p);
-    document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
-    tab.classList.add('on');
-    if(window.innerWidth<=768){
-      panels.forEach((p,i)=>p.classList.toggle('active-panel',i===idx));
-    }
-  });
-});
+// ── 5ステップ・ナビ：クリックでジャンプ＋スクロール連動で現在地をハイライト ──
+(function(){
+  const navItems=Array.from(document.querySelectorAll('.step-nav-item'));
+  const targets=navItems.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function setActive(step){
+    navItems.forEach(a=>a.classList.toggle('on', a.dataset.step===String(step)));
+  }
+  // スクロール位置に応じて現在のステップを判定
+  function onScroll(){
+    const y=window.scrollY + 90;
+    let cur=1;
+    targets.forEach((el,i)=>{ if(el.getBoundingClientRect().top+window.scrollY<=y) cur=i+1; });
+    setActive(cur);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
 
 // ── MetS自動判定バナー ──
 function updateMetsBanner(){
@@ -2755,12 +2781,8 @@ document.getElementById('cigCount').addEventListener('input',()=>{
 updateCigCountVisibility();
 
 function resetPanels(){
-  if(window.innerWidth>768){panels.forEach(p=>p.classList.add('active-panel'));}
-  else{
-    const at=document.querySelector('.mtab.on');
-    const idx=at?Number(at.dataset.p):0;
-    panels.forEach((p,i)=>p.classList.toggle('active-panel',i===idx));
-  }
+  // 5ステップ・1カラム化により全パネル常時表示（タブ切替は廃止）
+  panels.forEach(p=>p.classList.add('active-panel'));
 }
 
 window.addEventListener('resize',()=>{
@@ -2981,13 +3003,8 @@ function runSimulation() {
     updateAll();
     btn.disabled = false;
     btn.textContent = 'もう一度シミュレーションする';
-    if(window.innerWidth <= 768) {
-      document.querySelectorAll('.mtab')[1].click();
-      window.scrollTo({top:0, behavior:'smooth'});
-    } else {
-      // デスクトップ：結果パネルへスクロール
-      document.getElementById('p1').scrollIntoView({behavior:'smooth', block:'start'});
-    }
+    // STEP3（結果）へスクロール
+    document.getElementById('step3').scrollIntoView({behavior:'smooth', block:'start'});
   }, 250);
 }
 
@@ -3051,16 +3068,12 @@ document.querySelectorAll('[data-cta-pos]').forEach(btn => {
   btn.addEventListener('click', () => openConsultForm(btn.dataset.ctaPos, btn.dataset.service || ''));
 });
 
-// 下部固定CTA（二次健診受診勧奨）：スマホでは結果タブへ切り替えてから受診勧奨ブロックへスクロール
+// 下部固定CTA（二次健診受診勧奨）：STEP4（対策）へスクロール
 document.getElementById('stickyCta').addEventListener('click', function(e){
   e.preventDefault();
   fwTrack('exam_cta_sticky_click');
-  if(window.innerWidth <= 768){
-    const resTab = document.querySelectorAll('.mtab')[1];
-    if(resTab) resTab.click();
-  }
   setTimeout(()=>{
-    document.getElementById('examCta').scrollIntoView({behavior:'smooth', block:'start'});
+    document.getElementById('step4').scrollIntoView({behavior:'smooth', block:'start'});
   }, 60);
 });
 

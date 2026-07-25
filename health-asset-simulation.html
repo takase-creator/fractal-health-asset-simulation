@@ -347,10 +347,10 @@ canvas{width:100%!important;height:auto!important;display:block;}
 .a80-main-num.good{color:#7fe0d8;font-size:clamp(22px,4.5vw,30px);}
 .a80-main-sub{font-size:12px;color:rgba(255,255,255,.66);}
 .a80-compare{display:flex;align-items:stretch;justify-content:center;gap:0;}
-.a80-mini{flex:1;text-align:center;padding:0 10px;}
+.a80-mini{flex:1;text-align:center;padding:0 10px;display:flex;align-items:baseline;justify-content:center;gap:8px;}
 .a80-mini+.a80-mini{border-left:1px solid rgba(255,255,255,.12);}
-.a80-mini-lbl{display:block;font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px;}
-.a80-mini-val{font-size:20px;font-weight:300;line-height:1.1;}
+.a80-mini-lbl{font-size:12px;color:rgba(255,255,255,.62);white-space:nowrap;}
+.a80-mini-val{font-size:17px;font-weight:400;line-height:1.1;white-space:nowrap;}
 .a80-mini-val.good{color:#ffe27a;}
 .a80-mini-val.bad{color:#ff7d92;}
 .reserve-cta{background:linear-gradient(180deg,#158f8a 0%,#0c2a29 100%);box-shadow:0 16px 26px rgba(12,58,56,.2);}
@@ -383,6 +383,10 @@ canvas{width:100%!important;height:auto!important;display:block;}
 .sc-card-foot{margin-top:16px;font-size:9px;color:rgba(255,255,255,.5);text-align:center;line-height:1.6;}
 .share-actions{margin-top:12px;}
 .share-btn{background:linear-gradient(180deg,#158f8a 0%,#455049 100%);box-shadow:0 10px 22px rgba(50,60,52,.28);}
+/* 保存ボタンを横一行に */
+.save-btn-row{display:flex;gap:10px;}
+.save-btn-row .pdf-btn{flex:1;margin-top:0;}
+@media(max-width:768px){ #pdfBtn{display:none;} } /* モバイルは画像保存の1ボタンに集約 */
 @media(max-width:480px){
   .share-card{padding:20px 16px;}
   .sc-card-assets{gap:8px;}
@@ -495,7 +499,11 @@ canvas{width:100%!important;height:auto!important;display:block;}
   .panel.active-panel{display:block;}
   .fg2{grid-template-columns:1fr 1fr;}
   .fg3{grid-template-columns:1fr 1fr;}
-  .loss-grid{grid-template-columns:1fr;}
+  /* 損失内訳の3カードはモバイルでも一列を維持（文字を小さめに） */
+  .loss-grid{grid-template-columns:1fr 1fr 1fr;gap:5px;}
+  .loss-card{padding:10px 5px;}
+  .loss-card .lc-label{font-size:8.5px;line-height:1.45;}
+  .loss-card .lc-val{font-size:13px;margin-top:4px;}
   .age80-box{grid-template-columns:1fr 1fr;}
   input,select{font-size:16px;}
   .risk-name{min-width:118px;}
@@ -633,9 +641,18 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 .service-cta-label{font-size:10px;font-weight:700;color:var(--muted);
   letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
 .service-cta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.service-card{background:var(--smoke-dark);border:1px solid rgba(111,208,204,.18);
+.service-card{position:relative;overflow:hidden;background:var(--smoke-dark);
+  background-size:cover;background-position:center;border:1px solid rgba(111,208,204,.18);
   padding:18px 16px;display:flex;flex-direction:column;gap:6px;transition:border-color .18s;}
+/* 背景写真を透け感のある濃色オーバーレイ越しに薄く見せる */
+.service-card::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(165deg,rgba(18,58,56,.78) 0%,rgba(12,37,35,.9) 100%);z-index:0;}
+.service-card>*{position:relative;z-index:1;}
+.service-card:nth-child(1){background-image:url('./assets/images/interior-gym-day.jpg');}
+.service-card:nth-child(2){background-image:url('./assets/images/interior-private-room.jpg');}
+.service-card:nth-child(3){background-image:url('./assets/images/interior-reception.jpg');}
 .service-card:hover{border-color:rgba(111,208,204,.5);}
+.service-card:hover::before{background:linear-gradient(165deg,rgba(18,58,56,.68) 0%,rgba(12,37,35,.84) 100%);}
 .sc-badge{font-size:9px;font-weight:800;letter-spacing:.12em;color:var(--gold-2);
   text-transform:uppercase;padding:3px 7px;border:1px solid rgba(111,208,204,.35);
   display:inline-block;width:fit-content;}
@@ -967,10 +984,6 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
   <div class="hero-visual">
     <!-- ▼扉絵差し替え：assets/images/hero-cover.jpg を新しい写真で上書きするだけでOK（HTML編集不要） -->
     <img src="./assets/images/hero-cover.jpg" alt="健康シミュレーション">
-    <div class="hero-badge">
-      <div class="big">80</div>
-      <div class="sub">歳までの健康資産を<br>その場でシミュレーション</div>
-    </div>
   </div>
 </section>
 
@@ -1327,20 +1340,19 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       <div class="sc-card-foot">BODY PALETTE ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません。まずは二次健診の受診を。</div>
     </div>
     <div class="share-actions">
-      <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
-        <span class="pdf-btn-icon">📷</span> この結果を画像で保存する
-      </button>
-      <p class="pdf-note" id="shareImgNote">スマホでもそのまま画像として保存・共有できます。</p>
+      <div class="save-btn-row">
+        <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
+          <span class="pdf-btn-icon">📷</span> 画像で保存する
+        </button>
+        <button type="button" class="pdf-btn" id="pdfBtn">
+          <span class="pdf-btn-icon">🖨</span> PDFで保存・印刷
+        </button>
+      </div>
+      <p class="pdf-note" id="shareImgNote">スマホはそのまま画像として保存・共有できます（PCはPDF印刷も可）。</p>
     </div>
 
     <!-- 印刷専用フッター免責 -->
     <p class="print-disclaimer">※本シミュレーションはBODY PALETTEが独自に開発した試算ツールです。医学的診断・投資助言ではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。気になる数値がある場合は必ず二次健診を受診してください。｜出力日：<span id="printDate"></span></p>
-
-    <!-- PDF出力 -->
-    <button type="button" class="pdf-btn" id="pdfBtn">
-      <span class="pdf-btn-icon">🖨</span> この結果をPDFで保存・印刷する
-    </button>
-    <p class="pdf-note">印刷画面で「送信先：PDFに保存」を選ぶとPDFとしてダウンロードできます。</p>
 
     <!-- 3サービス CTA -->
     <div class="service-cta-section">

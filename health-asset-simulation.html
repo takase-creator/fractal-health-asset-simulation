@@ -1505,8 +1505,8 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 // ═══════════════════════════════════════════════════
 // 0. 公開期間の締切（有効期限）チェック
 // ═══════════════════════════════════════════════════
-// 2026年9月10日（JST）をもって公開終了。9/11 00:00 JST 以降は終了画面を表示。
-const PUBLISH_END = new Date('2026-09-11T00:00:00+09:00');
+// 2026年10月14日（JST）をもって公開終了。10/15 00:00 JST 以降は終了画面を表示。
+const PUBLISH_END = new Date('2026-10-15T00:00:00+09:00');
 if (new Date() >= PUBLISH_END) {
   document.getElementById('expiryOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';

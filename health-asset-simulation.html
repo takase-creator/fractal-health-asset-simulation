@@ -60,20 +60,9 @@ img{display:block;max-width:100%;height:auto;}
   font-weight:500;line-height:1.22;text-wrap:balance;}
 .hero-h1-nowrap{display:inline-block;white-space:nowrap;}
 .hero p{max-width:45em;margin:24px 0 0;color:#343b3d;font-size:15px;line-height:2;}
-.hero-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:34px;}
-.hero-point{min-height:78px;padding:14px 16px;background:var(--white);border:1px solid var(--line);}
-.hero-point span{display:block;color:var(--gold);font-family:"EB Garamond",serif;font-size:13px;
-  font-weight:600;letter-spacing:.16em;}
-.hero-point strong{display:block;margin-top:5px;font-size:14px;line-height:1.5;}
 .hero-visual{position:relative;min-height:430px;background:var(--smoke-dark);}
 .hero-visual img{width:100%;height:100%;min-height:430px;object-fit:cover;}
 .hero-visual::after{position:absolute;inset:0;background:linear-gradient(90deg,rgba(247,248,247,.92) 0%,rgba(247,248,247,.28) 30%,rgba(18,58,56,.12) 100%);content:"";}
-.hero-badge{position:absolute;right:22px;bottom:22px;z-index:2;min-width:218px;padding:18px 20px;
-  background:rgba(49,65,69,.94);border:1px solid rgba(111,208,204,.62);color:var(--white);
-  box-shadow:0 18px 34px rgba(10,18,20,.22);}
-.hero-badge .big{color:var(--gold-2);font-family:"EB Garamond",serif;font-size:32px;
-  font-weight:600;line-height:1;}
-.hero-badge .sub{margin-top:7px;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1.6;}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
@@ -85,9 +74,6 @@ img{display:block;max-width:100%;height:auto;}
 .steps .step:nth-child(1) .step-num{color:var(--teal);}
 .steps .step:nth-child(2) .step-num{color:var(--pink);}
 .steps .step:nth-child(3) .step-num{color:var(--orange);}
-.hero-points .hero-point:nth-child(1) span{color:var(--teal);}
-.hero-points .hero-point:nth-child(2) span{color:var(--pink);}
-.hero-points .hero-point:nth-child(3) span{color:var(--orange);}
 .exam-reasons .exam-reason:nth-child(1) .er-t{color:var(--teal);}
 .exam-reasons .exam-reason:nth-child(2) .er-t{color:var(--pink);}
 .exam-reasons .exam-reason:nth-child(3) .er-t{color:var(--orange);}
@@ -97,13 +83,6 @@ img{display:block;max-width:100%;height:auto;}
 .step-text strong{display:block;margin-top:2px;color:var(--black);font-family:"Shippori Mincho",serif;
   font-size:18px;font-weight:500;line-height:1.45;}
 .step-text span{display:block;margin-top:5px;color:var(--muted);font-size:12px;font-weight:700;}
-
-/* mobile tabs */
-.mobile-tabs{display:none;background:var(--white);border:1px solid var(--line);padding:4px;gap:4px;margin-bottom:12px;}
-.mtab{flex:1;border:none;background:transparent;color:var(--muted);
-  padding:10px 4px;font-size:12px;font-weight:800;
-  cursor:pointer;transition:.18s;}
-.mtab.on{background:var(--smoke-dark);color:#fff;}
 
 /* layout（5ステップ・1カラム連続フロー） */
 .layout{display:block;max-width:900px;margin:0 auto;scroll-behavior:smooth;}
@@ -506,9 +485,6 @@ canvas{width:100%!important;height:auto!important;display:block;}
   .hero::before{width:5px;}
   .hero h1{font-size:31px;line-height:1.32;}
   .hero p{font-size:13px;line-height:1.9;}
-  .hero-points{grid-template-columns:1fr;gap:8px;margin-top:24px;}
-  .hero-point{min-height:auto;}
-  .hero-badge{right:14px;bottom:14px;min-width:180px;padding:14px 16px;}
   .hero-visual{min-height:240px;}
   .hero-visual img{min-height:240px;}
   .steps{grid-template-columns:1fr;gap:8px;}
@@ -706,7 +682,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     height:auto!important;min-height:0!important;overflow:visible!important;}
   *{box-shadow:none!important;text-shadow:none!important;}
   /* 非表示要素 */
-  .brand-meta,.hero,.steps,.mobile-tabs,#p0,
+  .brand-meta,.hero,.steps,#p0,
   .service-cta-section,.sticky-cta,.pdf-btn,.pdf-note,
   .consent-overlay,.form-overlay,.reserve-cta,
   .disc-toggle,.disc-detail,.g-legend,

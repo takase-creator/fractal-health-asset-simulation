@@ -86,7 +86,7 @@ img{display:block;max-width:100%;height:auto;}
 
 /* layout（5ステップ・1カラム連続フロー） */
 .layout{display:block;max-width:900px;margin:0 auto;scroll-behavior:smooth;}
-.panel{background:var(--card);border:1px solid var(--line);box-shadow:0 18px 44px rgba(15,80,76,.08);overflow:hidden;margin-bottom:18px;scroll-margin-top:84px;}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 44px rgba(15,80,76,.08);overflow:hidden;margin-bottom:18px;scroll-margin-top:84px;}
 .ph{scroll-margin-top:84px;position:relative;background:var(--smoke-dark);color:#fff;padding:16px 20px;font-size:15px;
   font-weight:800;letter-spacing:.04em;text-align:left;}
 .ph::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
@@ -94,12 +94,11 @@ img{display:block;max-width:100%;height:auto;}
   background:var(--gold-2);padding:3px 9px;border-radius:12px;margin-right:12px;vertical-align:middle;}
 .pb{padding:20px;}
 
-/* STEP2見出し（入力パネル内）・STEP4/5見出し（結果内） */
-.step2-head{scroll-margin-top:84px;display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:22px 0 10px;padding-top:16px;
-  border-top:1px solid var(--line);font-family:"Shippori Mincho",serif;font-size:18px;font-weight:600;color:var(--black);}
+/* STEP2/4/5 サブセクション見出し（統一スタイル：明朝20px・上ヘアライン罫線・STEPチップ） */
+.step2-head,.step-sec-head{scroll-margin-top:84px;display:flex;align-items:center;gap:0;flex-wrap:wrap;
+  margin:30px 0 14px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);letter-spacing:.02em;}
 .step2-opt{font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-left:10px;}
-.step-sec-head{scroll-margin-top:84px;display:flex;align-items:center;margin:26px 0 12px;
-  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);}
 
 /* 5ステップ・ナビ（追従） */
 .step-nav{position:sticky;top:0;z-index:700;display:flex;gap:4px;max-width:900px;margin:0 auto 16px;

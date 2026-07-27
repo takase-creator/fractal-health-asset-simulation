@@ -141,6 +141,19 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .la-total .la-l{font-weight:800;}
 .la-total .la-y{color:#ffd9d9;font-size:17px;}
 .life-src{margin-top:12px;font-size:10px;line-height:1.6;color:rgba(255,255,255,.55);}
+/* 健康年数バー（維持 vs 放置を視覚化） */
+.life-bar{margin-top:16px;background:rgba(255,255,255,.05);border-radius:8px;padding:15px 14px 12px;}
+.lb-cap-row{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.6);margin-bottom:9px;}
+.lb-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.lb-cap{flex:0 0 62px;font-size:11px;font-weight:800;}
+.lb-cap.good{color:#8fe3de;}
+.lb-cap.bad{color:#ff9a9a;}
+.lb-track{position:relative;flex:1;height:24px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;display:flex;align-items:center;}
+.lb-fill{height:100%;border-radius:6px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.lb-fill.good{background:linear-gradient(90deg,#4fb3ad,#8fe3de);}
+.lb-fill.bad{background:linear-gradient(90deg,#b34a52,#ff9a9a);}
+.lb-age{position:absolute;right:9px;font-size:12px;font-weight:900;color:#08302e;}
+.lb-gap{margin-top:3px;font-size:11px;font-weight:700;color:#ffd9d9;text-align:right;}
 .life-teaser{margin-top:14px;padding:12px 14px;background:var(--gray-50);border:1px dashed var(--line);border-radius:var(--r);font-size:12px;color:var(--muted);line-height:1.7;}
 .life-teaser strong{color:var(--teal-text);}
 /* 試算精度メーター（入力するほど精度が上がるライブフィードバック） */
@@ -173,8 +186,9 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .subnote{font-size:12px;color:var(--muted);margin:-2px 0 10px;line-height:1.7;}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px;}
-.hd-group-label{font-size:12.5px;font-weight:800;color:var(--teal-text);letter-spacing:.08em;
+.hd-group-label{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--teal-text);letter-spacing:.08em;
   margin:14px 0 7px;padding-bottom:4px;border-bottom:1px solid var(--line);}
+.hd-group-label svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--teal);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .hd-group-label:first-of-type{margin-top:4px;}
 .field{display:flex;flex-direction:column;gap:5px;}
 label{font-size:11px;font-weight:800;color:#32383a;letter-spacing:.04em;}
@@ -834,6 +848,20 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
   .sticky-cta{display:block;}
   .page{padding-bottom:72px!important;}
 }
+/* モバイル最終調整（モード選択・精度メーター・健康寿命結果） */
+@media(max-width:560px){
+  .mode-cards{grid-template-columns:1fr;}
+  .mode-select{padding:16px 14px 18px;}
+  .mode-select-q{font-size:14px;}
+  .precision-meter{padding:12px 14px;}
+  .life-result{padding:18px 15px;}
+  .life-main-num{font-size:clamp(38px,13vw,52px);}
+  .life-mini-val{font-size:25px;}
+  .lb-cap{flex:0 0 52px;font-size:10px;}
+  .lb-age{font-size:11px;right:6px;}
+  .la-l{font-size:12px;}
+  .la-y{font-size:14px;}
+}
 </style>
 </head>
 <body>
@@ -1134,45 +1162,46 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       <span class="adv-toggle-sub">数値を入れると疾患リスク・数値推移まで精密に試算できます</span>
     </button>
 
-    <div id="advancedInputs" style="display:none">
     <div class="precision-meter" id="precisionMeter">
       <div class="pm-head">
         <span class="pm-label">試算精度</span>
         <span class="pm-level" id="pmLevel" data-lv="簡易">簡易</span>
       </div>
       <div class="pm-bar"><div class="pm-fill" id="pmFill"></div></div>
-      <div class="pm-note" id="pmNote">健診の数値を入れるほど、<strong>あなた専用の精度</strong>に近づきます。分かる項目だけでOKです。</div>
+      <div class="pm-note" id="pmNote">健診結果を入力すると、<strong>あなた専用の精度</strong>（簡易→標準→詳細）に上がります。分かる項目だけでOK。</div>
     </div>
+
+    <div id="advancedInputs" style="display:none">
     <div class="sec-title">健診データ（標準12項目・任意・空欄OK）</div>
     <div class="subnote">健康診断結果の数値を入力すると、5〜10年後の疾患発症リスクや数値推移まで精密に試算できます。分かる項目だけでOK・全項目空欄でも判定できます。</div>
 
-    <div class="hd-group-label">体格</div>
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/></svg>体格</div>
     <div class="fg2">
       <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" inputmode="decimal" placeholder="170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
       <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" inputmode="decimal" placeholder="68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
       <div class="field"><label for="waist">腹囲 (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
     </div>
 
-    <div class="hd-group-label">血圧</div>
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 20s-6.5-4.2-6.5-9.2A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 6.5 2.6C18.5 15.8 12 20 12 20z"/></svg>血圧</div>
     <div class="fg2">
       <div class="field"><label for="sbp">収縮期血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
       <div class="field"><label for="dbp">拡張期血圧 (mmHg)</label><input id="dbp" type="number" inputmode="decimal" placeholder="80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
     </div>
 
-    <div class="hd-group-label">脂質</div>
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 3.5s5.5 6 5.5 10.5a5.5 5.5 0 0 1-11 0C6.5 9.5 12 3.5 12 3.5z"/></svg>脂質</div>
     <div class="fg3">
       <div class="field"><label for="ldl">LDL (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
       <div class="field"><label for="hdl">HDL (mg/dL)</label><input id="hdl" type="number" inputmode="decimal" placeholder="55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
       <div class="field"><label for="tg">中性脂肪 (mg/dL)</label><input id="tg" type="number" inputmode="decimal" placeholder="120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
     </div>
 
-    <div class="hd-group-label">血糖</div>
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v5.5l-4 7A2 2 0 0 0 7.8 19h8.4a2 2 0 0 0 1.8-3l-4-7V3.5"/><path d="M7.5 14.5h9"/></svg>血糖</div>
     <div class="fg2">
       <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" inputmode="decimal" placeholder="105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
       <div class="field"><label for="hba1c">HbA1c (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
     </div>
 
-    <div class="hd-group-label">肝機能</div>
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M4 8c4-2.5 12-2.5 16 0 0 5.5-3.5 9.5-8.5 11.5C7 17.5 4 13.5 4 8z"/><path d="M9 11c1.5 1.5 4 1.5 5.5 0"/></svg>肝機能</div>
     <div class="fg3">
       <div class="field"><label for="ast">AST/GOT (U/L)</label><input id="ast" type="number" inputmode="decimal" placeholder="22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
       <div class="field"><label for="alt">ALT/GPT (U/L)</label><input id="alt" type="number" inputmode="decimal" placeholder="24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
@@ -1266,6 +1295,18 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <span class="life-mini-val bad" id="lifeNeglectAge">--</span>
           <span class="life-mini-u">歳まで</span>
         </div>
+      </div>
+      <div class="life-bar" id="lifeBar">
+        <div class="lb-cap-row"><span>現在</span><span>元気に自立して過ごせる年齢</span></div>
+        <div class="lb-row">
+          <span class="lb-cap good">健康維持</span>
+          <div class="lb-track"><div class="lb-fill good" id="lbGood"></div><span class="lb-age" id="lbGoodAge">--歳</span></div>
+        </div>
+        <div class="lb-row">
+          <span class="lb-cap bad">現状放置</span>
+          <div class="lb-track"><div class="lb-fill bad" id="lbBad"></div><span class="lb-age" id="lbBadAge">--歳</span></div>
+        </div>
+        <div class="lb-gap" id="lbGap">この差が「失う健康年数」です</div>
       </div>
       <div class="life-actions" id="lifeActions"></div>
       <div class="life-src" id="lifeSrc"></div>
@@ -2299,6 +2340,14 @@ function renderLifespan(s){
   set('lifeLostBig', `−${life.loss}年`);
   set('lifeMaintainAge', life.maintainAge);
   set('lifeNeglectAge', life.neglectAge);
+  // 健康年数バー（維持=100%基準、放置=残り年数比で短縮表示）
+  const gp=Math.round(life.maintainRemain>0?Math.max(6,(life.neglectRemain/life.maintainRemain)*100):100);
+  const lbG=document.getElementById('lbGood'), lbB=document.getElementById('lbBad');
+  if(lbG)lbG.style.width='100%';
+  if(lbB)lbB.style.width=gp+'%';
+  set('lbGoodAge', life.maintainAge+'歳');
+  set('lbBadAge', life.neglectAge+'歳');
+  set('lbGap', `この差 約${life.loss}年 が「失う健康年数」`);
   const la=document.getElementById('lifeActions');
   if(la){
     if(life.actions.length){

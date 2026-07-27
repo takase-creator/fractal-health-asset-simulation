@@ -743,9 +743,47 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 .print-disclaimer{display:none;}
 .print-title{display:none;}
 
-/* ── 印刷（PDF保存）用スタイル：A4横向き1枚 ── */
-@page{size:A4 landscape;margin:8mm 9mm;}
+/* ═══ A4レポート（画像保存＋PDF印刷 共通・モード対応・794×1123px＝A4縦@96dpi） ═══ */
+.report-a4-wrap{position:absolute;left:-99999px;top:0;width:794px;pointer-events:none;z-index:-1;}
+#reportA4{width:794px;min-height:1123px;box-sizing:border-box;padding:34px 38px;background:#fff;color:#14312f;
+  font-family:"Noto Sans JP",sans-serif;display:flex;flex-direction:column;gap:15px;}
+.ra-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--gold);padding-bottom:11px;}
+.ra-brand{display:flex;align-items:center;gap:11px;}
+.ra-brand img{height:38px;width:auto;}
+.ra-brand-txt{font-family:"EB Garamond",serif;font-size:19px;letter-spacing:.12em;color:#123a38;}
+.ra-title{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:#123a38;text-align:right;}
+.ra-title small{display:block;font-family:"Noto Sans JP",sans-serif;font-size:10px;color:#4f6e6b;margin-top:3px;font-weight:400;}
+.ra-hero{background:linear-gradient(135deg,#0e4f4c,#123a38);color:#fff;border-radius:10px;padding:22px 24px;text-align:center;}
+.ra-hero-label{font-size:13px;color:rgba(255,255,255,.82);}
+.ra-hero-num{font-family:"EB Garamond",serif;font-size:46px;font-weight:600;line-height:1.3;color:#8fe3de;margin:6px 0 10px;}
+.ra-hero-sub{font-size:11px;color:rgba(255,255,255,.72);}
+.ra-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.ra-cmp{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:11px 8px;text-align:center;}
+.ra-cmp .l{font-size:11px;color:rgba(255,255,255,.72);}
+.ra-cmp .v{font-family:"EB Garamond",serif;font-size:26px;font-weight:600;margin-top:3px;}
+.ra-cmp .v.good{color:#8fe3de;} .ra-cmp .v.bad{color:#ff9a9a;}
+.ra-sec-t{font-family:"Shippori Mincho",serif;font-size:14px;font-weight:600;color:#123a38;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(18,58,56,.16);}
+.ra-risks .rr{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.ra-risks .rr-n{flex:0 0 96px;font-size:11.5px;font-weight:700;color:#14312f;}
+.ra-risks .rr-bar{flex:0 0 560px;width:560px;height:10px;background:#e7f1ef;border-radius:99px;overflow:hidden;display:block;}
+.ra-risks .rr-fill{display:block;height:10px;border-radius:99px;}
+.ra-risks .rr-v{flex:0 0 30px;text-align:right;font-size:12px;font-weight:800;}
+.ra-list .li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(18,58,56,.1);padding:7px 0;font-size:12.5px;}
+.ra-list .li:last-child{border-bottom:none;}
+.ra-list .li .y{font-weight:800;color:var(--teal-text);white-space:nowrap;}
+.ra-list .li.tot{margin-top:2px;border-top:2px solid rgba(18,58,56,.2);border-bottom:none;font-weight:800;padding-top:8px;}
+.ra-msg{background:#f2fbfa;border:1px solid rgba(15,168,163,.35);border-radius:9px;padding:13px 15px;font-size:12px;line-height:1.75;color:#14312f;}
+.ra-msg strong{color:var(--teal-text);}
+.ra-foot{margin-top:auto;font-size:8.5px;line-height:1.55;color:#8a9a97;border-top:1px solid #e0e8e6;padding-top:9px;}
+
+/* ── 印刷（PDF保存）：A4縦・レポート1枚のみ ── */
+@page{size:A4 portrait;margin:0;}
 @media print{
+  .report-a4-wrap{position:static!important;left:auto!important;top:auto!important;width:794px!important;margin:0 auto!important;pointer-events:auto;z-index:auto;}
+  #reportA4{box-shadow:none!important;max-height:1123px;overflow:hidden;}
+  .report-a4-wrap *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .brand-header,.hero,.step-nav,.layout,.disclaimer,.sticky-cta,.consent-overlay,.form-overlay{display:none!important;}
+  .page{padding:0!important;margin:0!important;max-width:none!important;}
   html,body{background:#fff!important;font-size:9px;
     height:auto!important;min-height:0!important;overflow:visible!important;}
   *{box-shadow:none!important;text-shadow:none!important;}
@@ -1450,7 +1488,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </div>
 
     <!-- 結果まとめカード（画像保存用） -->
-    <div class="share-card" id="shareCard">
+    <div class="share-card mode-asset-only" id="shareCard">
       <div class="sc-card-head">
         <!-- ▼共有カードのロゴ差し替え：BODY PALETTEロゴ受領後にこのdata URIを差し替え（担当:Claudeへ画像を渡せば再埋め込みします） -->
         <img src="data:image/webp;base64,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" alt="BODY PALETTE" class="sc-card-logo">
@@ -1610,6 +1648,35 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     <strong>生涯医療費：</strong>厚労省「生涯医療費」2010年度推計（男性2,300万円・女性2,500万円）を2022年度水準（×1.25）で補正<br>
     <strong>疾患別医療費：</strong>厚労省「令和4年度 国民医療費の概況」患者数・総医療費から1人当たりを算出<br>
     <strong>肥満×医療費：</strong>Cawley & Meyerhoefer, J Health Econ 2012 肥満による年間超過医療費 $2,741/人（米国）
+  </div>
+</div>
+
+<!-- A4レポート（画像保存＋PDF印刷 共通・モード対応・画面上は不可視） -->
+<div class="report-a4-wrap" aria-hidden="true">
+  <div id="reportA4">
+    <div class="ra-head">
+      <div class="ra-brand"><img id="raLogo" alt="BODY PALETTE"><span class="ra-brand-txt">BODY PALETTE</span></div>
+      <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
+    </div>
+    <div class="ra-hero">
+      <div class="ra-hero-label" id="raHeroLabel">--</div>
+      <div class="ra-hero-num" id="raHeroNum">--</div>
+      <div class="ra-hero-sub" id="raHeroSub">--</div>
+      <div class="ra-compare">
+        <div class="ra-cmp"><div class="l" id="raCmpLL">健康維持なら</div><div class="v good" id="raCmpLV">--</div></div>
+        <div class="ra-cmp"><div class="l" id="raCmpRL">現状放置なら</div><div class="v bad" id="raCmpRV">--</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="ra-sec-t">6つの疾患リスク評価</div>
+      <div class="ra-risks" id="raRisks"></div>
+    </div>
+    <div>
+      <div class="ra-sec-t" id="raDetailT">--</div>
+      <div class="ra-list" id="raDetail"></div>
+    </div>
+    <div class="ra-msg" id="raMsg"></div>
+    <div class="ra-foot" id="raFoot"></div>
   </div>
 </div>
 
@@ -2385,6 +2452,53 @@ function setMode(m){
   if(el) el.addEventListener('click',()=>setMode(el.dataset.mode));
 });
 
+// A4レポート（画像保存・PDF印刷 共通）をモード対応で描画
+function renderReportA4(s,sim,life){
+  const g=id=>document.getElementById(id);
+  const set=(id,v)=>{const e=g(id); if(e)e.textContent=v;};
+  const lg=g('raLogo'), sl=document.querySelector('#shareCard .sc-card-logo');
+  if(lg&&sl&&sl.src) lg.src=sl.src;
+  let ds='';
+  try{ const d=new Date(); ds=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`; }catch(e){}
+  set('raDate', ds+' 試算');
+  const order=[['glucose','糖代謝'],['bp','血圧'],['lipid','脂質'],['liver','肝機能'],['kidney','腎機能'],['musculo','筋骨格']];
+  if(g('raRisks')) g('raRisks').innerHTML = order.map(function(o){
+    const v=(s.risks&&s.risks[o[0]])||0, col=bc(v);
+    return `<div class="rr"><span class="rr-n">${o[1]}</span><span class="rr-bar"><span class="rr-fill" style="width:${v}%;background:${col}"></span></span><span class="rr-v" style="color:${col}">${v}</span></div>`;
+  }).join('');
+  if(_lsMode==='lifespan'){
+    set('raTitle','健康寿命シミュレーション結果');
+    set('raHeroLabel','このまま放置すると、健康寿命が');
+    set('raHeroNum',`−${life.loss}年`);
+    set('raHeroSub','健康維持した場合との差（元気に自立して過ごせる年数）');
+    set('raCmpLL','健康維持なら'); set('raCmpLV', life.maintainAge+'歳');
+    set('raCmpRL','現状放置なら'); set('raCmpRV', life.neglectAge+'歳');
+    set('raDetailT','今からできる改善で取り戻せる健康年数');
+    g('raDetail').innerHTML = life.actions.length
+      ? life.actions.map(a=>`<div class="li"><span>${a.label}</span><span class="y">+${a.years}年</span></div>`).join('')
+        + `<div class="li tot"><span>すべて改善すると</span><span class="y">最大 +約${life.loss}年</span></div>`
+      : '<div class="li"><span>現在の生活習慣は良好です。この状態を維持しましょう。</span></div>';
+    g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>専門家の知見のもと継続的な運動習慣</strong>で健康寿命を守りましょう。';
+    g('raFoot').innerHTML='出典：厚労省 健康寿命2022／NIPPON DATA80・90／日本糖尿病学会 2011-2020／国立がん研究センター プール解析／Age &amp; Ageing 2018。集団平均・相対リスクに基づく試算（±'+Math.max(1,Math.round(life.loss*0.25))+'年程度の幅）。医学的診断ではありません。';
+  } else {
+    set('raTitle','健康資産シミュレーション結果');
+    set('raHeroLabel','このまま放置すると、80歳のとき資産が');
+    set('raHeroNum',`−${fmt(sim.diff80)}`);
+    set('raHeroSub','健康維持した場合より少なくなります');
+    set('raCmpLL','健康維持なら'); set('raCmpLV', fmt(sim.blue80));
+    set('raCmpRL','現状放置なら'); set('raCmpRV', fmt(sim.red80));
+    set('raDetailT','健康リスク放置による推定損失（〜80歳）');
+    const tot=sim.cumulativePT+sim.cumulativeMed+sim.compoundLoss;
+    g('raDetail').innerHTML=
+      `<div class="li"><span>生産性低下による評価・昇進への影響</span><span class="y">-${fmt(sim.cumulativePT)}</span></div>`
+     +`<div class="li"><span>疾患別 累積医療費（〜80歳）</span><span class="y">-${fmt(sim.cumulativeMed)}</span></div>`
+     +`<div class="li"><span>投資複利 機会損失（3%換算）</span><span class="y">-${fmt(sim.compoundLoss)}</span></div>`
+     +`<div class="li tot"><span>合計 逸失健康資産（推定）</span><span class="y">-${fmt(tot)}</span></div>`;
+    g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>継続的な運動習慣</strong>で将来の資産を守りましょう。';
+    g('raFoot').innerHTML='出典：厚労省「生涯医療費」／国税庁・総務省・金融庁データ／各疾患の査読論文。参考試算値であり、医学的診断・投資助言ではありません。まずは二次健診の受診を。';
+  }
+}
+
 // 改善（禁煙・運動習慣・減量）を反映した場合の資産推移。altStateはcomputeRisk(overrides)の結果
 function projectImproved(altState){
   const userIncome=n('income')||null;
@@ -2814,6 +2928,7 @@ function updateAll(){
   const trend=computeTrend(s);
   const sim=simulate(s);
   renderLifespan(s);
+  renderReportA4(s,sim,computeLifespan(s));
 
   // 健診基準値アラート（2項目以上で表示）
   const alertFlags=computeAlertFlags(s);
@@ -3427,18 +3542,18 @@ async function saveResultAsImage(btn, note){
     if(note) note.textContent='画像保存機能の読み込みに失敗しました。通信環境をご確認のうえ再度お試しください。';
     return;
   }
-  const card=document.getElementById('shareCard');
+  const card=document.getElementById('reportA4');
   const orig = btn ? btn.innerHTML : null;
   if(btn){ btn.disabled=true; btn.textContent='画像を作成中...'; }
   try{
-    // 高解像度で1枚に。カード自身の濃色背景を敷いて余白なく綺麗に出力
+    // A4レポートを高解像度で1枚に（白背景・794×1123px＝A4縦比）
     const scale = Math.min(3, Math.max(2, (window.devicePixelRatio||1)*1.5));
     const canvas = await html2canvas(card, {
-      backgroundColor:'#0c2523', scale, useCORS:true, logging:false,
-      windowWidth: card.scrollWidth
+      backgroundColor:'#ffffff', scale, useCORS:true, logging:false,
+      width:794, windowWidth:794
     });
     const link=document.createElement('a');
-    link.download='body-palette-健康資産シミュレーション.png';
+    link.download=(_lsMode==='lifespan'?'body-palette-健康寿命シミュレーション.png':'body-palette-健康資産シミュレーション.png');
     link.href=canvas.toDataURL('image/png');
     link.click();
     fwTrack('save_image_success');

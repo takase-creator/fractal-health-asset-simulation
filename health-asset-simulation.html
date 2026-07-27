@@ -94,11 +94,12 @@ img{display:block;max-width:100%;height:auto;}
   background:var(--gold-2);padding:3px 9px;border-radius:12px;margin-right:12px;vertical-align:middle;}
 .pb{padding:20px;}
 
-/* STEP2/4/5 サブセクション見出し（統一スタイル：明朝20px・上ヘアライン罫線・STEPチップ） */
-.step2-head,.step-sec-head{scroll-margin-top:84px;display:flex;align-items:center;gap:0;flex-wrap:wrap;
-  margin:30px 0 14px;padding-top:18px;border-top:1px solid var(--line);
-  font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);letter-spacing:.02em;}
-.step2-opt{font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-left:10px;}
+/* STEP2/4/5 見出し（STEP1/3と統一：濃い緑の全幅バナー・STEPチップ・金下線） */
+.step2-head,.step-sec-head{scroll-margin-top:84px;position:relative;display:flex;align-items:center;gap:0;flex-wrap:wrap;
+  margin:30px -20px 16px;padding:16px 20px;background:var(--smoke-dark);color:#fff;
+  font-family:"Noto Sans JP",sans-serif;font-size:15px;font-weight:800;letter-spacing:.04em;}
+.step2-head::after,.step-sec-head::after{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);content:"";}
+.step2-opt{font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.78);margin-left:10px;}
 
 /* モード選択（健康資産 / 健康寿命） */
 .mode-select{margin:0 0 22px;padding:18px 18px 20px;background:linear-gradient(180deg,#f2fbfa 0%,var(--gray-50) 100%);border:1px solid var(--line);border-radius:var(--r);}
@@ -142,6 +143,17 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .life-src{margin-top:12px;font-size:10px;line-height:1.6;color:rgba(255,255,255,.55);}
 .life-teaser{margin-top:14px;padding:12px 14px;background:var(--gray-50);border:1px dashed var(--line);border-radius:var(--r);font-size:12px;color:var(--muted);line-height:1.7;}
 .life-teaser strong{color:var(--teal-text);}
+/* 試算精度メーター（入力するほど精度が上がるライブフィードバック） */
+.precision-meter{margin:2px 0 16px;padding:14px 16px;background:var(--gray-50);border:1px solid var(--line);border-radius:var(--r);}
+.pm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.pm-label{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em;}
+.pm-level{font-family:"EB Garamond",serif;font-size:21px;font-weight:700;color:var(--muted);transition:color .3s;}
+.pm-level[data-lv="詳細"]{color:var(--teal);}
+.pm-level[data-lv="標準"]{color:var(--orange);}
+.pm-bar{height:8px;background:#dbe8e5;border-radius:99px;overflow:hidden;}
+.pm-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--teal-light),var(--teal));transition:width .5s cubic-bezier(.4,0,.2,1);}
+.pm-note{margin-top:9px;font-size:11px;line-height:1.6;color:var(--muted);}
+.pm-note strong{color:var(--teal-text);}
 
 /* 5ステップ・ナビ（追従） */
 .step-nav{position:sticky;top:0;z-index:700;display:flex;gap:4px;max-width:900px;margin:0 auto 16px;
@@ -1123,6 +1135,14 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </button>
 
     <div id="advancedInputs" style="display:none">
+    <div class="precision-meter" id="precisionMeter">
+      <div class="pm-head">
+        <span class="pm-label">試算精度</span>
+        <span class="pm-level" id="pmLevel" data-lv="簡易">簡易</span>
+      </div>
+      <div class="pm-bar"><div class="pm-fill" id="pmFill"></div></div>
+      <div class="pm-note" id="pmNote">健診の数値を入れるほど、<strong>あなた専用の精度</strong>に近づきます。分かる項目だけでOKです。</div>
+    </div>
     <div class="sec-title">健診データ（標準12項目・任意・空欄OK）</div>
     <div class="subnote">健康診断結果の数値を入力すると、5〜10年後の疾患発症リスクや数値推移まで精密に試算できます。分かる項目だけでOK・全項目空欄でも判定できます。</div>
 
@@ -1693,6 +1713,27 @@ Object.keys(RULES).forEach(id=>{
   const el=document.getElementById(id);
   if(el)el.addEventListener('blur',()=>validateField(id));
 });
+
+// 試算精度メーター：健診項目を入れるほど 簡易→標準→詳細 に上昇（即時フィードバック）
+function updatePrecisionMeter(){
+  const keys=Object.keys(RULES);
+  let entered=0; keys.forEach(id=>{ if(n(id)!==null) entered++; });
+  const lv = entered>=5?'詳細':entered>=3?'標準':'簡易';
+  const pct = Math.min(100, Math.round(entered/5*100));
+  const lvl=document.getElementById('pmLevel'); if(lvl){lvl.textContent=lv;lvl.dataset.lv=lv;}
+  const fill=document.getElementById('pmFill'); if(fill) fill.style.width=pct+'%';
+  const note=document.getElementById('pmNote');
+  if(note){
+    note.innerHTML = lv==='詳細' ? '<strong>詳細レベル</strong>に到達！最も精度の高い試算ができます。'
+      : lv==='標準' ? `いい調子です。あと${Math.max(1,5-entered)}項目で<strong>「詳細」</strong>になります。`
+      : '健診の数値を入れるほど、<strong>あなた専用の精度</strong>に近づきます。分かる項目だけでOKです。';
+  }
+}
+Object.keys(RULES).forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('input',updatePrecisionMeter);
+});
+updatePrecisionMeter();
 function validateAll(){let ok=true;Object.keys(RULES).forEach(id=>{if(!validateField(id))ok=false;});return ok;}
 
 function syms(){return Array.from(document.querySelectorAll('[data-s]:checked')).map(e=>e.dataset.s);}

@@ -100,6 +100,49 @@ img{display:block;max-width:100%;height:auto;}
   font-family:"Shippori Mincho",serif;font-size:20px;font-weight:600;color:var(--black);letter-spacing:.02em;}
 .step2-opt{font-family:"Noto Sans JP",sans-serif;font-size:11px;font-weight:700;color:var(--muted);margin-left:10px;}
 
+/* モード選択（健康資産 / 健康寿命） */
+.mode-select{margin:0 0 22px;padding:18px 18px 20px;background:linear-gradient(180deg,#f2fbfa 0%,var(--gray-50) 100%);border:1px solid var(--line);border-radius:var(--r);}
+.mode-select-q{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:var(--black);margin-bottom:14px;text-align:center;}
+.mode-select-q strong{color:var(--teal-text);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mode-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px 16px 18px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r);cursor:pointer;text-align:left;transition:.18s;position:relative;}
+.mode-card:hover{border-color:var(--teal-light);transform:translateY(-1px);box-shadow:0 10px 22px rgba(15,80,76,.08);}
+.mode-card.on{border-color:var(--teal);background:#f2fbfa;box-shadow:0 0 0 3px rgba(15,168,163,.14);}
+.mode-card.on::after{content:"\2713";position:absolute;top:10px;right:12px;color:var(--teal);font-weight:900;font-size:14px;}
+.mode-ico{font-size:26px;line-height:1;}
+.mode-t{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:var(--black);}
+.mode-card.on .mode-t{color:var(--teal-text);}
+.mode-d{font-size:11px;line-height:1.6;color:var(--muted);}
+/* モード別表示切替 */
+.mode-life-only{display:none;}
+body[data-mode="lifespan"] .mode-life-only{display:block;}
+body[data-mode="lifespan"] .mode-asset-only{display:none;}
+/* 健康寿命 結果 */
+.life-result{margin:0 0 4px;padding:22px 20px;background:linear-gradient(135deg,#0e4f4c 0%,#123a38 100%);border-radius:var(--r);color:#fff;}
+.life-main{text-align:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.14);}
+.life-main-label{font-size:13px;color:rgba(255,255,255,.82);}
+.life-main-num{font-family:"EB Garamond",serif;font-size:clamp(40px,9vw,64px);font-weight:600;line-height:1.05;color:#8fe3de;margin:4px 0 2px;}
+.life-main-sub{font-size:12px;color:rgba(255,255,255,.72);}
+.life-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.life-mini{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:12px 10px;text-align:center;}
+.life-mini-lbl{display:block;font-size:11px;color:rgba(255,255,255,.72);}
+.life-mini-val{display:inline-block;font-family:"EB Garamond",serif;font-size:30px;font-weight:600;margin:2px 0;}
+.life-mini-val.good{color:#8fe3de;}
+.life-mini-val.bad{color:#ff9a9a;}
+.life-mini-u{display:block;font-size:10px;color:rgba(255,255,255,.6);}
+.life-actions{margin-top:16px;background:rgba(255,255,255,.05);border-radius:8px;padding:14px 14px;}
+.la-h{font-size:12px;font-weight:800;color:#8fe3de;margin-bottom:8px;letter-spacing:.04em;}
+.la-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+.la-row:last-child{border-bottom:none;}
+.la-l{font-size:13px;color:#fff;}
+.la-y{font-size:15px;font-weight:900;color:#8fe3de;white-space:nowrap;}
+.la-total{margin-top:4px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2);}
+.la-total .la-l{font-weight:800;}
+.la-total .la-y{color:#ffd9d9;font-size:17px;}
+.life-src{margin-top:12px;font-size:10px;line-height:1.6;color:rgba(255,255,255,.55);}
+.life-teaser{margin-top:14px;padding:12px 14px;background:var(--gray-50);border:1px dashed var(--line);border-radius:var(--r);font-size:12px;color:var(--muted);line-height:1.7;}
+.life-teaser strong{color:var(--teal-text);}
+
 /* 5ステップ・ナビ（追従） */
 .step-nav{position:sticky;top:0;z-index:700;display:flex;gap:4px;max-width:900px;margin:0 auto 16px;
   background:rgba(246,250,249,.94);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;padding:6px;}
@@ -999,6 +1042,22 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
   <div class="ph" id="step1"><span class="ph-step">STEP 1</span>簡易情報入力</div>
   <div class="pb">
 
+    <div class="mode-select" id="modeSelect">
+      <div class="mode-select-q">まず、あなたが<strong>守りたいもの</strong>を選んでください</div>
+      <div class="mode-cards">
+        <button type="button" class="mode-card on" data-mode="asset" id="modeAsset">
+          <span class="mode-ico">💰</span>
+          <span class="mode-t">健康資産を守る</span>
+          <span class="mode-d">健康を放置すると、80歳までにいくら失うかを試算します</span>
+        </button>
+        <button type="button" class="mode-card" data-mode="lifespan" id="modeLife">
+          <span class="mode-ico">🌱</span>
+          <span class="mode-t">健康寿命を守る</span>
+          <span class="mode-d">元気に自立して過ごせる年数が、どれだけ変わるかを試算します</span>
+        </button>
+      </div>
+    </div>
+
     <div class="sec-title">基本情報</div>
     <div class="fg2">
       <div class="field">
@@ -1137,7 +1196,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </div>
 
     <!-- Asset graph（インパクト重視で最上部に配置） -->
-    <div class="graph-wrap">
+    <div class="graph-wrap mode-asset-only">
       <div class="graph-title">健康資産の推移（現在〜80歳）</div>
       <div class="graph-sub">青：健康管理を継続した場合　赤：現状のまま放置した場合</div>
       <canvas id="chart"></canvas>
@@ -1151,7 +1210,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </div>
 
     <!-- 80歳時点の資産 -->
-    <div class="age80-box" id="age80box">
+    <div class="age80-box mode-asset-only" id="age80box">
       <div class="a80-main">
         <div class="a80-main-label" id="a80mainLabel">このまま放置すると、80歳のとき資産が</div>
         <div class="a80-main-num" id="a80diffBig">--</div>
@@ -1168,6 +1227,30 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
         </div>
       </div>
     </div>
+
+    <!-- 健康寿命 結果（lifespanモード時のみ表示） -->
+    <div class="life-result mode-life-only" id="lifespanResult">
+      <div class="life-main">
+        <div class="life-main-label">このまま放置すると、健康寿命が</div>
+        <div class="life-main-num" id="lifeLostBig">--</div>
+        <div class="life-main-sub" id="lifeLostSub">健康維持した場合との差（元気に自立して過ごせる年数）</div>
+      </div>
+      <div class="life-compare">
+        <div class="life-mini">
+          <span class="life-mini-lbl">健康維持なら 約</span>
+          <span class="life-mini-val good" id="lifeMaintainAge">--</span>
+          <span class="life-mini-u">歳まで元気に</span>
+        </div>
+        <div class="life-mini">
+          <span class="life-mini-lbl">現状放置なら 約</span>
+          <span class="life-mini-val bad" id="lifeNeglectAge">--</span>
+          <span class="life-mini-u">歳まで</span>
+        </div>
+      </div>
+      <div class="life-actions" id="lifeActions"></div>
+      <div class="life-src" id="lifeSrc"></div>
+    </div>
+    <div class="life-teaser mode-life-only" id="lifeTeaser"></div>
 
     <!-- Risk bars -->
     <div class="sec-title" style="margin-top:22px;">6つの疾患リスク評価</div>
@@ -1188,7 +1271,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <div class="pr-b">
     <!-- 改善シミュレーション -->
-    <div class="improve-box" id="improveBox">
+    <div class="improve-box mode-asset-only" id="improveBox">
       <div class="improve-title">今から生活習慣を改善したら、どれだけ変わるか</div>
       <div class="improve-sub" id="improveSub">気になる項目にチェックを入れると、改善後の資産推移をグラフに緑の線で追加表示します。</div>
       <div class="improve-toggles" id="improveToggles">
@@ -1231,7 +1314,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <div class="pr-c">
     <!-- Loss summary -->
-    <div class="loss-summary">
+    <div class="loss-summary mode-asset-only">
       <div class="loss-title">健康リスク放置による推定損失内訳（〜80歳）</div>
       <div class="loss-grid">
         <div class="loss-card">
@@ -1255,7 +1338,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     </div>
 
     <!-- Lifetime medical costs -->
-    <div class="med-box">
+    <div class="med-box mode-asset-only">
       <div class="med-title">推定生涯医療費（厚労省データ準拠）</div>
       <table class="med-table" id="medTable">
         <thead><tr><th>年齢帯</th><th>健康維持の場合</th><th>現状放置の場合</th></tr></thead>
@@ -2074,6 +2157,144 @@ function simulate(state){
   };
 }
 
+// ═══════════════════════════════════════════════════
+// 5b. 健康寿命モデル（日本人コホート最優先・全係数に出典）
+//   出力① 予測残り健康寿命（健康維持 vs 現状放置 ＝ 失う健康年数）
+//   出力② 改善アクション別の延伸年数
+//   原則: 集団平均・相対リスクベースの試算。点推定でなくレンジ表示（過剰精度を装わない）。
+//   基準(delta=0)= 非喫煙・SBP<120・正常血糖・BMI21〜27・活発。いずれも修正可能因子。
+// ═══════════════════════════════════════════════════
+// 健康寿命ベースライン（厚労省 2022, 日常生活に制限のない期間） 出典: e-ヘルスネット
+const HALE_BIRTH={male:72.57,female:75.45};
+// 各因子 → 健康年数の増減（年, ≤0）
+function ls_dSmoke(s){
+  if(s.smoking==='never'||!s.smoking) return 0;
+  if(s.smoking==='past') return -1.7;                 // 禁煙者: 40歳平均余命 -1.7y (NIPPON DATA80, J Epidemiol 2007)
+  const c=(s.cigsPerDay==null?20:s.cigsPerDay);
+  const frac=Math.min(1,c/20);
+  const heavy=c>40?Math.min(1,(c-40)/40)*1.5:0;
+  return -(1.5+2.0*frac+heavy);                       // 20本/日で -3.5y (NIPPON DATA80), 重喫煙で最大 ~ -5y
+}
+function ls_dBP(s){
+  if(s.sbp==null||s.sbp<120) return 0;
+  const b=s.gender==='male'?-2.2:-2.9;                // 高血圧(≥140)で 男-2.2/女-2.9y (NIPPON DATA80, 24年追跡)
+  const scale=(s.sbp-120)/20;                         // 140で1.0
+  const factor=scale<=1?scale:1+(s.sbp-140)/20*0.6;   // ≥140は加速 (PSC Lancet 2002 log-linear)
+  return b*Math.min(2.4,Math.max(0,factor));
+}
+function ls_dGlucose(s){
+  const full=s.gender==='male'?-7.2:-10.3;            // 確立糖尿病の死亡年齢差 (日本糖尿病学会 2011-2020調査)
+  let sev=0;
+  if(s.hba1c!=null){
+    if(s.hba1c>=6.5) sev=Math.max(sev,Math.min(1.2,1+(s.hba1c-6.5)/3));
+    else if(s.hba1c>=5.6) sev=Math.max(sev,(s.hba1c-5.6)/0.9*0.35);   // 境界域は最大0.35
+  }
+  if(s.glucose!=null){
+    if(s.glucose>=126) sev=Math.max(sev,1);
+    else if(s.glucose>=100) sev=Math.max(sev,(s.glucose-100)/26*0.35);
+  }
+  return full*Math.min(1.2,sev);
+}
+function ls_dBMI(s){
+  if(s.bmi==null) return 0;
+  let excess=0;
+  if(s.bmi>27) excess=(s.bmi-27)/5; else if(s.bmi<20) excess=(20-s.bmi)/5;  // nadir 21〜27 (国立がん 35万人プール解析)
+  let yrs=-1.6*excess;                                // BMI+5でHR死亡+31% → 健康年数 ~ -1.6y/5 (保守的換算, J Epidemiol 2011)
+  if(s.waist!=null&&((s.gender==='male'&&s.waist>=85)||(s.gender==='female'&&s.waist>=90))) yrs-=0.6;
+  return Math.max(-4,yrs);
+}
+function ls_dActivity(s){
+  const hrs=s.exerciseHours||0;
+  const frac=1-Math.exp(-hrs/1.5);
+  return -4.0*(1-frac);                               // 不活発 -4y 〜 活発 0 (Age & Ageing 2018: 健康な期間+6.3yを保守化 + 用量反応メタ解析)
+}
+function ls_dLipid(s){
+  if(s.ldl==null||s.ldl<140) return 0;
+  return -Math.min(1.5,(s.ldl-140)/40*0.8);           // 高LDLは主にCVD経由で計上（NIPPON DATA80 は総コレを含む）
+}
+// 複合は加算でなく飽和：高血圧+肥満+喫煙+糖尿病で健康寿命 男-9.7/女-10.1y (NIPPON DATA90, 20年追跡) をアンカーに
+function ls_saturate(rawLoss,gender){
+  const Lmax=gender==='male'?12.5:13.5;
+  return Lmax*(1-Math.exp(-Math.max(0,rawLoss)/Lmax));
+}
+function computeLifespan(s){
+  const g=s.gender;
+  const base=Math.max(4,HALE_BIRTH[g]-s.age);         // 現年齢からの残り健康年数(集団平均・日常生活に制限のない期間基準)
+  const deltas={
+    smoke:ls_dSmoke(s), bp:ls_dBP(s), glucose:ls_dGlucose(s),
+    bmi:ls_dBMI(s), activity:ls_dActivity(s), lipid:ls_dLipid(s)
+  };
+  const rawLoss=-(deltas.smoke+deltas.bp+deltas.glucose+deltas.bmi+deltas.activity+deltas.lipid);
+  const loss=ls_saturate(rawLoss,g);                  // 失う健康年数(飽和後)
+  const maintainRemain=base;
+  const neglectRemain=Math.max(2,base-loss);
+  function lossWithout(key){                           // その因子だけ健康側に戻したときの残損失
+    let r=0; for(const k in deltas){ if(k!==key) r+=deltas[k]; }
+    return ls_saturate(-r,g);
+  }
+  const A=[];
+  if(s.smoking==='current'||s.smoking==='past') A.push({key:'smoke',label:s.smoking==='current'?'禁煙する':'禁煙を続ける',years:+(loss-lossWithout('smoke')).toFixed(1),src:'NIPPON DATA80 (J Epidemiol 2007)'});
+  if((s.exerciseHours||0)<3) A.push({key:'activity',label:'運動習慣をつける（週3回目安）',years:+(loss-lossWithout('activity')).toFixed(1),src:'Age & Ageing 2018 ほか'});
+  if(s.bmi!=null&&s.bmi>27) A.push({key:'bmi',label:'適正体重に近づける',years:+(loss-lossWithout('bmi')).toFixed(1),src:'国立がん研究センター プール解析 (J Epidemiol 2011)'});
+  if(s.sbp!=null&&s.sbp>=130) A.push({key:'bp',label:'血圧を下げる',years:+(loss-lossWithout('bp')).toFixed(1),src:'NIPPON DATA80 (24年追跡)'});
+  if((s.hba1c!=null&&s.hba1c>=5.6)||(s.glucose!=null&&s.glucose>=100)) A.push({key:'glucose',label:'血糖を改善する',years:+(loss-lossWithout('glucose')).toFixed(1),src:'日本糖尿病学会 2011-2020調査'});
+  A.sort((a,b)=>b.years-a.years);
+  const band=Math.max(1.0,loss*0.25);                 // レンジ(±)：集団平均ベースの不確実性を明示
+  return {
+    base:+base.toFixed(1), deltas, rawLoss:+rawLoss.toFixed(1),
+    loss:+loss.toFixed(1), lossLo:+Math.max(0,loss-band).toFixed(1), lossHi:+(loss+band).toFixed(1),
+    maintainRemain:+maintainRemain.toFixed(1), neglectRemain:+neglectRemain.toFixed(1),
+    maintainAge:Math.round(s.age+maintainRemain), neglectAge:Math.round(s.age+neglectRemain),
+    actions:A
+  };
+}
+
+// ── モード（健康資産 / 健康寿命）状態・描画・配線 ──
+let _lsMode='asset';
+function renderLifespan(s){
+  document.body.dataset.mode=_lsMode;
+  const life=computeLifespan(s);
+  const set=(id,v)=>{const e=document.getElementById(id); if(e)e.textContent=v;};
+  set('lifeLostBig', `−${life.loss}年`);
+  set('lifeMaintainAge', life.maintainAge);
+  set('lifeNeglectAge', life.neglectAge);
+  const la=document.getElementById('lifeActions');
+  if(la){
+    if(life.actions.length){
+      la.innerHTML='<div class="la-h">今からできる改善で取り戻せる健康年数</div>'
+        + life.actions.map(a=>`<div class="la-row"><span class="la-l">${a.label}</span><span class="la-y">+${a.years}年</span></div>`).join('')
+        + `<div class="la-row la-total"><span class="la-l">すべて改善すると</span><span class="la-y">最大 +約${life.loss}年</span></div>`;
+    } else {
+      la.innerHTML='<div class="la-h">現在の生活習慣は良好です。この状態を維持しましょう。</div>';
+    }
+  }
+  const src=document.getElementById('lifeSrc');
+  if(src){
+    const band=Math.max(1,Math.round(life.loss*0.25));
+    src.innerHTML=`出典: 厚労省 健康寿命2022 ／ NIPPON DATA80・90 ／ 日本糖尿病学会 2011-2020 ／ 国立がん研究センター プール解析 ／ Age &amp; Ageing 2018。集団平均・相対リスクに基づく試算（±${band}年程度の幅）。医学的診断ではありません。`;
+  }
+  const teaser=document.getElementById('lifeTeaser');
+  if(teaser){
+    teaser.innerHTML='ちなみに「健康資産」モードでは、この健康リスクを放置した場合に <strong>80歳までに失う推定資産額</strong> も試算できます。上の「健康資産を守る」を選ぶと切り替わります。';
+  }
+  const h=document.getElementById('step3');
+  if(h) h.innerHTML='<span class="ph-step">STEP 3</span>'+(_lsMode==='lifespan'?'あなたの健康寿命シミュレーション結果':'あなたの健康資産シミュレーション結果');
+}
+function setMode(m){
+  _lsMode=(m==='lifespan')?'lifespan':'asset';
+  document.body.dataset.mode=_lsMode;
+  const a=document.getElementById('modeAsset'), l=document.getElementById('modeLife');
+  if(a)a.classList.toggle('on',_lsMode==='asset');
+  if(l)l.classList.toggle('on',_lsMode==='lifespan');
+  const rb=document.getElementById('runBtn');
+  if(rb)rb.textContent=(_lsMode==='lifespan'?'健康寿命をシミュレーションする':'健康資産をシミュレーションする');
+  try{ updateAll(); }catch(e){}
+}
+['modeAsset','modeLife'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>setMode(el.dataset.mode));
+});
+
 // 改善（禁煙・運動習慣・減量）を反映した場合の資産推移。altStateはcomputeRisk(overrides)の結果
 function projectImproved(altState){
   const userIncome=n('income')||null;
@@ -2502,6 +2723,7 @@ function updateAll(){
   const s=computeRisk();
   const trend=computeTrend(s);
   const sim=simulate(s);
+  renderLifespan(s);
 
   // 健診基準値アラート（2項目以上で表示）
   const alertFlags=computeAlertFlags(s);

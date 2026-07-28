@@ -150,7 +150,7 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
           <div class="big" id="impTotal">–</div>
           <div class="row"><span>参加者1人あたりの平均逸失資産</span><span class="rv" id="impAvg">–</span></div>
           <div class="row"><span>健康寿命の平均短縮（放置シナリオ）</span><span class="rv" id="impLife">–</span></div>
-          <div class="row"><span>現状放置による<strong>追加の生涯医療費</strong>（推定・健保／本人負担）</span><span class="rv" id="impMed" style="color:var(--red)">–</span></div>
+          <div class="row"><span>現状放置による<strong>追加の生涯医療費</strong>（最大・推定／健保・本人負担）</span><span class="rv" id="impMed" style="color:var(--red)">–</span></div>
           <div class="row" id="empRow" style="display:none"><span id="empRowL">全社換算の推定逸失資産</span><span class="rv" id="impEmp">–</span></div>
           <div class="row" id="empMedRow" style="display:none"><span id="empMedRowL">全社換算の追加生涯医療費</span><span class="rv" id="impEmpMed" style="color:var(--red)">–</span></div>
         </div>
@@ -255,17 +255,17 @@ function render(records){
   // 提案
   const highPct=Math.round(highRisk.length/N*100);
   $('pitchH').textContent=`参加者の ${highPct}% が高リスク域。今こそ「継続的な健康施策」が必要です。`;
-  $('pitchP').innerHTML=`今回のセミナーで、参加者${N}名のうち<span class="hl">${highRisk.length}名（${highPct}%）</span>が、いずれかの疾患リスクが高い域にありました。この状態を放置すると、参加者だけで将来資産<span class="hl">${yen(totalLoss)}</span>${avgLife?`・平均 ${avgLife.toFixed(1)}年の健康寿命`:''}が失われ、さらに<span class="hl">追加の生涯医療費 ${yen(totalMed)}</span>が発生する計算です。医療費の増加は健保財政・保険料率にも直結します。健康診断は"気づき"にすぎず、実際に数値を守るのは<span class="hl">受診後の継続的な運動習慣</span>です。`;
+  $('pitchP').innerHTML=`今回のセミナーで、参加者${N}名のうち<span class="hl">${highRisk.length}名（${highPct}%）</span>が、いずれかの疾患リスクが高い域にありました。このまま放置すると、参加者だけで将来資産<span class="hl">最大 ${yen(totalLoss)}</span>${avgLife?`・平均 ${avgLife.toFixed(1)}年の健康寿命`:''}が失われ、追加の生涯医療費が<span class="hl">最大 ${yen(totalMed)}</span>（健保・本人負担）に上る可能性があります。医療費増は健保財政・保険料率にも直結します。<br>その多くは<span class="hl">運動習慣で防げます</span> — 運動不足は糖尿病の約27%・虚血性心疾患の約30%の原因（WHO）。健診は"気づき"にすぎず、数値を守るのは受診後の<span class="hl">継続的な運動習慣</span>です。`;
   $('pitchList').innerHTML=[
     'まずは高リスク者への二次健診受診勧奨（本ツールで動機づけ済み）',
-    '運動習慣づくりの伴走支援（オンライン／対面パーソナル・ピラティス）',
+    'ウォーキングだけでなく<b>筋トレを組み合わせた運動習慣</b>づくりの伴走支援（有酸素＋筋トレで死亡リスク最小）— オンライン／対面パーソナル・ピラティス',
     '四半期ごとの再測定で改善を可視化し、健康経営の指標に反映',
   ].map(x=>`<li>${x}</li>`).join('');
 
   // メタ・フッター
   let ds=''; try{const d=new Date();ds=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;}catch(e){}
   $('repMeta').textContent=`集計日 ${ds}　参加者 ${N}名`;
-  $('repFoot').innerHTML='※本レポートは個人を特定しない匿名の集計データに基づく参考試算です。逸失資産は本ツールのモデル（厚労省・国税庁・各査読論文準拠）による推計であり、医学的診断・投資助言ではありません。｜提供：FRACTAL WORKOUT株式会社';
+  $('repFoot').innerHTML='※本レポートは個人を特定しない匿名の集計データに基づく参考試算です。逸失資産・医療費は本ツールのモデル（厚労省 生涯医療費／国税庁／各査読論文準拠）による<strong>最大ケース</strong>の推計であり、医学的診断・投資助言ではありません。運動効果の根拠：WHO／厚労省「身体活動・運動」、Resistance Training and Mortality（AJPM 2022 メタ解析）。｜提供：FRACTAL WORKOUT株式会社';
 
   $('empty').style.display='none';
   $('report').classList.add('show');

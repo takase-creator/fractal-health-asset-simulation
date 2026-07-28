@@ -172,6 +172,8 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .med-headline .mh-lead{font-size:12px;color:rgba(255,255,255,.86);}
 .med-headline .mh-num{font-family:"EB Garamond",serif;font-size:34px;font-weight:600;line-height:1.15;margin:4px 0;}
 .med-headline .mh-sub{font-size:11px;color:rgba(255,255,255,.82);line-height:1.6;}
+.med-headline .mh-prev{margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.25);font-size:11px;line-height:1.75;color:rgba(255,255,255,.94);text-align:left;}
+.med-headline .mh-prev strong{color:#ffe0b8;}
 
 /* 5ステップ・ナビ（追従） */
 .step-nav{position:sticky;top:0;z-index:700;display:flex;gap:4px;max-width:900px;margin:0 auto 16px;
@@ -1447,9 +1449,10 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     <div class="med-box mode-asset-only">
       <div class="med-title">推定生涯医療費（厚労省データ準拠）</div>
       <div class="med-headline" id="medHeadline">
-        <div class="mh-lead">今の数値がこのまま続くと</div>
-        <div class="mh-num">＋<span id="medExtra">--</span></div>
-        <div class="mh-sub">健康を維持した場合より、生涯でかかる医療費が多くなる計算です</div>
+        <div class="mh-lead">今の数値がこのまま続くと、生涯の医療費は</div>
+        <div class="mh-num">最大 ＋<span id="medExtra">--</span></div>
+        <div class="mh-sub">増える可能性があります（＝現状を放置した場合の上限の試算。実際にかかるかは今後の生活習慣で変わります）</div>
+        <div class="mh-prev">この増加の多くは<strong>運動習慣で防げます</strong>。運動不足は糖尿病の約27%・虚血性心疾患の約30%の原因とされます（WHO／厚労省）。ウォーキングだけでなく<strong>筋トレを組み合わせる</strong>と効果が最大に（有酸素＋筋トレで死亡リスク最小）。</div>
       </div>
       <table class="med-table" id="medTable">
         <thead><tr><th>年齢帯</th><th>健康維持の場合</th><th>現状放置の場合</th></tr></thead>

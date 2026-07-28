@@ -150,7 +150,9 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
           <div class="big" id="impTotal">–</div>
           <div class="row"><span>参加者1人あたりの平均逸失資産</span><span class="rv" id="impAvg">–</span></div>
           <div class="row"><span>健康寿命の平均短縮（放置シナリオ）</span><span class="rv" id="impLife">–</span></div>
+          <div class="row"><span>現状放置による<strong>追加の生涯医療費</strong>（推定・健保／本人負担）</span><span class="rv" id="impMed" style="color:var(--red)">–</span></div>
           <div class="row" id="empRow" style="display:none"><span id="empRowL">全社換算の推定逸失資産</span><span class="rv" id="impEmp">–</span></div>
+          <div class="row" id="empMedRow" style="display:none"><span id="empMedRowL">全社換算の追加生涯医療費</span><span class="rv" id="impEmpMed" style="color:var(--red)">–</span></div>
         </div>
       </div>
 
@@ -231,6 +233,14 @@ function render(records){
   $('impAvg').textContent=yen(avgLoss);
   $('impLife').textContent=avgLife?('平均 約'+avgLife.toFixed(1)+'年 短縮'):'（健康寿命モードのデータなし）';
 
+  // 追加の生涯医療費（med_score→係数×base の健康維持との差／厚労省 生涯医療費準拠）
+  const LIFE_BASE={male:2875,female:3125}; // 万円（男2300/女2500 ×1.25）
+  const medMult=m=> m<40?1.0+0.3*(m/40):m<70?1.3+0.4*((m-40)/30):1.7;
+  const medExtras=records.map(r=>{const b=LIFE_BASE[r.gender==='female'?'female':'male'];return Math.max(0,Math.round(b*(medMult(r.med_score||0)-1)));});
+  const totalMed=medExtras.reduce((a,b)=>a+b,0);
+  const avgMed2=Math.round(totalMed/N);
+  $('impMed').textContent=yen(totalMed);
+
   // 全社換算
   const emp=parseInt($('empCount').value,10);
   if(emp&&emp>=N){
@@ -238,12 +248,14 @@ function render(records){
     $('empRowL').textContent=`全社換算（従業員${emp.toLocaleString()}名・参加者平均を適用）の推定逸失資産`;
     $('impEmp').textContent=yen(scaled);
     $('empRow').style.display='';
-  } else { $('empRow').style.display='none'; }
+    $('impEmpMed').textContent=yen(Math.round(avgMed2*emp));
+    $('empMedRow').style.display='';
+  } else { $('empRow').style.display='none'; $('empMedRow').style.display='none'; }
 
   // 提案
   const highPct=Math.round(highRisk.length/N*100);
   $('pitchH').textContent=`参加者の ${highPct}% が高リスク域。今こそ「継続的な健康施策」が必要です。`;
-  $('pitchP').innerHTML=`今回のセミナーで、参加者${N}名のうち<span class="hl">${highRisk.length}名（${highPct}%）</span>が、いずれかの疾患リスクが高い域にありました。この状態を放置すると、参加者だけで<span class="hl">合計 ${yen(totalLoss)}</span>の将来資産${avgLife?`・平均 ${avgLife.toFixed(1)}年の健康寿命`:''}が失われる計算です。健康診断は"気づき"にすぎず、実際に数値を守るのは<span class="hl">受診後の継続的な運動習慣</span>です。`;
+  $('pitchP').innerHTML=`今回のセミナーで、参加者${N}名のうち<span class="hl">${highRisk.length}名（${highPct}%）</span>が、いずれかの疾患リスクが高い域にありました。この状態を放置すると、参加者だけで将来資産<span class="hl">${yen(totalLoss)}</span>${avgLife?`・平均 ${avgLife.toFixed(1)}年の健康寿命`:''}が失われ、さらに<span class="hl">追加の生涯医療費 ${yen(totalMed)}</span>が発生する計算です。医療費の増加は健保財政・保険料率にも直結します。健康診断は"気づき"にすぎず、実際に数値を守るのは<span class="hl">受診後の継続的な運動習慣</span>です。`;
   $('pitchList').innerHTML=[
     'まずは高リスク者への二次健診受診勧奨（本ツールで動機づけ済み）',
     '運動習慣づくりの伴走支援（オンライン／対面パーソナル・ピラティス）',

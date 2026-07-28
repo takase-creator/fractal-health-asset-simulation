@@ -929,11 +929,12 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     <div class="consent-body">
       <p>本シミュレーションは、入力いただいた健診データ・資産情報をもとに、健康リスクと将来資産への影響を試算するツールです。</p>
       <ul class="consent-points">
-        <li>入力データはお使いのブラウザ内のみで処理されます</li>
-        <li>入力内容はサーバーへ送信・保存されません</li>
-        <li>氏名・住所等の個人を特定する情報の入力は不要です</li>
+        <li>入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます</li>
+        <li>外部サーバーやGoogle Analytics等へ<strong>送信しません</strong>。勤務先・人事にも共有されません</li>
+        <li>シミュレーション自体に氏名・連絡先は不要です（相談を希望する場合のみ、任意で入力）</li>
         <li>結果は参考試算値であり、医療診断・投資助言ではありません</li>
       </ul>
+      <p style="margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;">提供：FRACTAL WORKOUT株式会社</p>
       <label class="consent-check-row" for="consentCheck">
         <input type="checkbox" id="consentCheck">
         <span class="check-icon"></span>
@@ -1076,7 +1077,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
         </div>
 
         <button type="submit" class="form-submit" id="formSubmitBtn">送信する — 無料カウンセリングを申し込む</button>
-        <p class="privacy-note" style="margin-top:8px;">送信内容はSSL暗号化により保護されます。スパムメールは送信しません。</p>
+        <p class="privacy-note" style="margin-top:8px;">いただいた個人情報はご相談対応の目的にのみ利用し、FRACTAL WORKOUT株式会社が管理します。ご本人の同意なく第三者へ提供しません。</p>
       </form>
 
     </div>
@@ -1094,8 +1095,8 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 <!-- HERO -->
 <section class="hero">
   <div class="hero-copy">
-    <h1>あなたの今の健康意識が、<br><span class="hero-h1-nowrap">将来の健康資産を守る。</span></h1>
-    <p>健診で気になる数値があった方へ。今の身体のリスクと、放置した場合に80歳までに失う資産額をその場で試算します。まずは二次健診で正確な数値を——そして、運動習慣で将来の資産を守りましょう。その一歩の"投資対効果"まで、数字でお見せします。</p>
+    <h1>あなたの今の健康意識が、<br><span class="hero-h1-nowrap">将来を守る。</span></h1>
+    <p>健診で気になる数値があった方へ。今の身体のリスクと、放置した場合に失うもの——<strong>将来の資産</strong>、または<strong>健康寿命</strong>——をその場で試算します。まずは二次健診で正確な数値を、そして運動習慣で将来を守りましょう。数字でお見せします。</p>
   </div>
   <div class="hero-visual">
     <!-- ▼扉絵差し替え：assets/images/hero-cover.jpg を新しい写真で上書きするだけでOK（HTML編集不要） -->
@@ -1202,11 +1203,11 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <div class="precision-meter" id="precisionMeter">
       <div class="pm-head">
-        <span class="pm-label">試算精度</span>
+        <span class="pm-label">入力カバー率</span>
         <span class="pm-level" id="pmLevel" data-lv="簡易">簡易</span>
       </div>
       <div class="pm-bar"><div class="pm-fill" id="pmFill"></div></div>
-      <div class="pm-note" id="pmNote">健診結果を入力すると、<strong>あなた専用の精度</strong>（簡易→標準→詳細）に上がります。分かる項目だけでOK。</div>
+      <div class="pm-note" id="pmNote">健診結果を入れるほど、<strong>判定に使える項目</strong>が増えます（簡易→標準→詳細）。分かる項目だけでOK。</div>
     </div>
 
     <div id="advancedInputs" style="display:none">
@@ -1832,9 +1833,9 @@ function updatePrecisionMeter(){
   const fill=document.getElementById('pmFill'); if(fill) fill.style.width=pct+'%';
   const note=document.getElementById('pmNote');
   if(note){
-    note.innerHTML = lv==='詳細' ? '<strong>詳細レベル</strong>に到達！最も精度の高い試算ができます。'
+    note.innerHTML = lv==='詳細' ? '<strong>詳細レベル</strong>に到達！判定に使える健診項目がそろいました（集団平均に基づく試算です）。'
       : lv==='標準' ? `いい調子です。あと${Math.max(1,5-entered)}項目で<strong>「詳細」</strong>になります。`
-      : '健診の数値を入れるほど、<strong>あなた専用の精度</strong>に近づきます。分かる項目だけでOKです。';
+      : '健診の数値を入れるほど、<strong>判定に使える項目</strong>が増えます。分かる項目だけでOKです。';
   }
 }
 Object.keys(RULES).forEach(id=>{
@@ -2006,14 +2007,14 @@ function computeTrend(s){
   if(s.hba1c!==null){
     const h=s.hba1c;
     let r5,label;
-    if(h>=6.4){r5=67.8;label=`HbA1c ${h}%（糖尿病域）`;}
-    else if(h>=6.2){r5=51.6;label=`HbA1c ${h}%（高値境界域）`;}
+    if(h>=6.5){r5=67.8;label=`HbA1c ${h}%（糖尿病型の域・要受診）`;}
+    else if(h>=6.2){r5=51.6;label=`HbA1c ${h}%（高値・要精査）`;}
     else if(h>=6.0){r5=27.5;label=`HbA1c ${h}%（境界域上位）`;}
     else if(h>=5.8){r5=13.8;label=`HbA1c ${h}%（境界域）`;}
     else if(h>=5.6){r5=8.9;label=`HbA1c ${h}%（境界域下位）`;}
     else{r5=3.6;label=`HbA1c ${h}%（正常域）`;}
     const ok=h<5.6;
-    rows.push({label,val:`5年以内の糖尿病発症確率 ${r5}%`,ok});
+    rows.push({label,val:`同じHbA1c帯の5年以内の糖尿病発症率（集団平均）${r5}%`,ok});
     srcs.push(`① HbA1c：PMC4390315（日本人コホート n=52,781 追跡5年）5年発症率 ${r5}%`);
   }
 
@@ -3244,7 +3245,7 @@ function fwTrack(event, props = {}) {
   if(typeof dataLayer !== 'undefined') {
     dataLayer.push({ event, ...props, ref_source: _refSource, is_partner: _isPartner });
   }
-  console.log('[FW Track]', entry);
+  /* 本番ビルドでは操作ログのconsole出力は無効（投影時にConsoleへ出さない） */
 }
 
 // ページビュー計測
@@ -3519,15 +3520,15 @@ document.getElementById('consultForm').addEventListener('submit', async function
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
       });
+      this.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+      fwTrack('form_complete', { purpose: data.purpose });
+    } else {
+      // 送信先未設定：偽りの受付をしない。個人情報は端末にも保存しない（本番前にFORM_ENDPOINTを設定）
+      btn.disabled = false;
+      btn.textContent = '送信する — 無料カウンセリングを申し込む';
+      alert('現在オンライン受付を準備中です。恐れ入りますが、会場スタッフにお声がけいただくか、記載の窓口までご連絡ください。（この内容は送信・保存されていません）');
     }
-    // 送信成功（エンドポイント未設定時も成功扱い＆ローカル保存）
-    const submissions = JSON.parse(localStorage.getItem('fw_submissions') || '[]');
-    submissions.push(data);
-    localStorage.setItem('fw_submissions', JSON.stringify(submissions.slice(-20)));
-
-    this.style.display = 'none';
-    document.getElementById('formSuccess').classList.add('show');
-    fwTrack('form_complete', { purpose: data.purpose });
   } catch(err) {
     btn.disabled = false;
     btn.textContent = '送信する — 無料カウンセリングを申し込む';

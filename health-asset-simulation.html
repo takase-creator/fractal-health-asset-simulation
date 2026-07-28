@@ -929,8 +929,9 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     <div class="consent-body">
       <p>本シミュレーションは、入力いただいた健診データ・資産情報をもとに、健康リスクと将来資産への影響を試算するツールです。</p>
       <ul class="consent-points">
-        <li>入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます</li>
-        <li>外部サーバーやGoogle Analytics等へ<strong>送信しません</strong>。勤務先・人事にも共有されません</li>
+        <li>入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）</li>
+        <li>氏名等の個人情報や<strong>あなた個人の結果</strong>は取得・送信せず、<strong>勤務先・人事にも共有されません</strong></li>
+        <li>サービス改善と全体傾向の把握のため、<strong>個人を特定しない匿名の集計情報</strong>（年齢層・性別・リスクの区分など）のみ取得する場合があります</li>
         <li>シミュレーション自体に氏名・連絡先は不要です（相談を希望する場合のみ、任意で入力）</li>
         <li>結果は参考試算値であり、医療診断・投資助言ではありません</li>
       </ul>
@@ -3304,6 +3305,9 @@ function saveAnonRecord(state, sim) {
     med_score:    state.medScore,
     // 差額（万円単位で丸め）
     diff80_bracket: Math.round(sim.diff80 / 100) * 100,
+    // モードと健康寿命損失（B2B集計用・匿名区分）
+    mode:        (typeof _lsMode!=='undefined') ? _lsMode : 'asset',
+    life_loss:   (function(){ try{ return computeLifespan(state).loss; }catch(e){ return null; } })(),
     // 流入元（UTM全情報）
     ref_source:   _refSource,
     ref_medium:   _refMedium,

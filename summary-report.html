@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>健康セミナー 集計サマリー｜企業ご担当者様向け｜BODY PALETTE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Noto+Sans+JP:wght@400;500;700;800;900&family=Shippori+Mincho:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0fa8a3;--teal-text:#0a6a66;--pink:#e368a0;--orange:#f0925a;--smoke-dark:#123a38;
+  --black:#14312f;--muted:#4f6e6b;--line:rgba(18,58,56,.14);--gray-50:#f6faf9;--red:#e24c5e;--r:10px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2;line-height:1.7;padding:24px;}
+.wrap{max-width:940px;margin:0 auto;}
+.tool-note{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:18px;font-size:13px;color:var(--muted);}
+.tool-note strong{color:var(--teal-text);}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px;}
+.controls textarea{flex:1;min-width:260px;min-height:70px;font-family:monospace;font-size:12px;padding:10px;border:1px solid var(--line);border-radius:8px;resize:vertical;}
+.controls .col{display:flex;flex-direction:column;gap:5px;}
+.controls label{font-size:11px;font-weight:800;color:var(--muted);}
+.controls input[type=number]{width:130px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;}
+.btn{border:none;border-radius:8px;padding:11px 16px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap;}
+.btn.primary{background:linear-gradient(180deg,#0fa8a3,#0a807c);color:#fff;}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--teal-text);}
+.hint{font-size:11px;color:var(--muted);margin-bottom:18px;}
+
+/* レポート本体（A4想定） */
+#report{background:#fff;border-radius:var(--r);box-shadow:0 20px 50px rgba(15,80,76,.1);overflow:hidden;display:none;}
+#report.show{display:block;}
+.rep-head{display:flex;justify-content:space-between;align-items:flex-end;padding:26px 32px 16px;border-bottom:3px solid var(--teal);}
+.rep-brand{display:flex;align-items:center;gap:12px;}
+.rep-brand img{height:40px;width:auto;}
+.rep-brand .bt{font-family:"EB Garamond",serif;font-size:20px;letter-spacing:.12em;color:var(--smoke-dark);}
+.rep-brand .bt span{display:block;font-family:"Noto Sans JP",sans-serif;font-size:10px;letter-spacing:.02em;color:var(--muted);margin-top:2px;}
+.rep-title{text-align:right;}
+.rep-title h1{font-family:"Shippori Mincho",serif;font-size:18px;color:var(--smoke-dark);}
+.rep-title small{font-size:11px;color:var(--muted);}
+.rep-body{padding:24px 32px 30px;}
+
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
+.kpi{background:linear-gradient(135deg,#0e4f4c,#123a38);color:#fff;border-radius:10px;padding:18px 16px;text-align:center;}
+.kpi.alt{background:linear-gradient(135deg,#7a2f52,#e368a0);}
+.kpi.warn{background:linear-gradient(135deg,#8a4a1f,#f0925a);}
+.kpi .k-l{font-size:11px;color:rgba(255,255,255,.82);}
+.kpi .k-v{font-family:"EB Garamond",serif;font-size:40px;font-weight:600;line-height:1.05;margin:4px 0 2px;}
+.kpi .k-s{font-size:10px;color:rgba(255,255,255,.72);}
+
+.sec{margin-top:22px;}
+.sec-t{font-family:"Shippori Mincho",serif;font-size:15px;font-weight:600;color:var(--smoke-dark);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:12px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-row .n{flex:0 0 120px;font-size:12px;font-weight:700;}
+.bar-row .track{flex:1;height:16px;background:#e7f1ef;border-radius:99px;overflow:hidden;display:block;}
+.bar-row .fill{display:block;height:16px;border-radius:99px;}
+.bar-row .v{flex:0 0 74px;text-align:right;font-size:12px;font-weight:800;}
+.dist{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--gray-50);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:12px;font-weight:700;}
+.chip b{color:var(--teal-text);}
+
+.impact{background:var(--gray-50);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-top:8px;}
+.impact .big{font-family:"EB Garamond",serif;font-size:34px;font-weight:600;color:var(--red);}
+.impact .lbl{font-size:12px;color:var(--muted);}
+.impact .row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);}
+.impact .row:last-child{border-bottom:none;}
+.impact .row .rv{font-weight:800;font-size:16px;}
+
+.pitch{margin-top:22px;background:linear-gradient(135deg,#0e4f4c,#123a38);color:#fff;border-radius:12px;padding:22px 24px;}
+.pitch h2{font-family:"Shippori Mincho",serif;font-size:19px;margin-bottom:10px;}
+.pitch p{font-size:13px;line-height:1.9;color:rgba(255,255,255,.9);}
+.pitch .hl{color:#8fe3de;font-weight:800;}
+.pitch ul{margin:12px 0 0 18px;font-size:13px;}
+.pitch li{margin-bottom:5px;}
+
+.rep-foot{padding:14px 32px 22px;font-size:10px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);}
+.repbtns{margin:16px 0 8px;display:flex;gap:10px;}
+.small{font-size:11px;color:var(--muted);}
+.empty{background:#fff;border:1px dashed var(--line);border-radius:var(--r);padding:40px;text-align:center;color:var(--muted);}
+@media print{
+  @page{size:A4 portrait;margin:8mm;}
+  body{background:#fff;padding:0;}
+  .tool-note,.controls,.hint,.repbtns{display:none!important;}
+  #report{box-shadow:none;border-radius:0;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+}
+@media(max-width:640px){.kpi-row{grid-template-columns:1fr;}.grid2{grid-template-columns:1fr;}.rep-head{flex-direction:column;gap:10px;align-items:flex-start;}.rep-title{text-align:left;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tool-note">
+    <strong>企業ご担当者様向け・集計サマリー生成ツール（社内用）</strong><br>
+    健康セミナーで参加者が入力した<strong>匿名の集計データ</strong>（個人を特定しない年齢層・リスク区分など）を読み込み、貴社全体の傾向と推定インパクトをまとめた提案用サマリーを生成します。個人の結果・氏名等は含まれません。
+  </div>
+
+  <div class="controls">
+    <textarea id="jsonIn" placeholder='ここに匿名データのJSONを貼り付け（本体ツールの ?fw_admin=1 → 「JSONコピー」、またはスプレッドシートのエクスポート）'></textarea>
+    <div class="col">
+      <label>従業員数（任意・全社換算用）</label>
+      <input type="number" id="empCount" placeholder="例：500" min="1">
+    </div>
+    <button class="btn primary" id="loadBtn">読み込んで集計</button>
+    <button class="btn ghost" id="localBtn">この端末の記録</button>
+    <button class="btn ghost" id="sampleBtn">サンプルで表示</button>
+  </div>
+  <div class="hint">※ データは会社ごと・セミナー回ごとに分けて集計してください。参加者が少ないと統計的なばらつきが大きくなります（目安20名以上）。</div>
+
+  <div class="empty" id="empty">上のボタンからデータを読み込むと、ここに提案用サマリーが表示されます。まずは「サンプルで表示」で体裁をご確認ください。</div>
+
+  <div class="repbtns" id="repbtns" style="display:none">
+    <button class="btn primary" onclick="window.print()">🖨 PDF / 印刷（A4）</button>
+    <span class="small">印刷ダイアログで用紙A4・背景のグラフィックONを推奨。</span>
+  </div>
+
+  <div id="report">
+    <div class="rep-head">
+      <div class="rep-brand">
+        <img src="./assets/images/bp-logo.png" alt="BODY PALETTE" onerror="this.style.display='none'">
+        <div class="bt">BODY PALETTE<span>健康セミナー 集計サマリー</span></div>
+      </div>
+      <div class="rep-title">
+        <h1>従業員の健康リスク 集計レポート</h1>
+        <small id="repMeta">—</small>
+      </div>
+    </div>
+    <div class="rep-body">
+      <div class="kpi-row">
+        <div class="kpi"><div class="k-l">参加者数</div><div class="k-v" id="kN">–</div><div class="k-s">名（匿名集計）</div></div>
+        <div class="kpi warn"><div class="k-l">高リスク該当者</div><div class="k-v" id="kHigh">–</div><div class="k-s" id="kHighSub">いずれかの疾患リスクが高い方</div></div>
+        <div class="kpi alt"><div class="k-l">平均 総合リスク</div><div class="k-v" id="kMed">–</div><div class="k-s">100点満点の平均</div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="sec">
+          <div class="sec-t">参加者プロフィール</div>
+          <div class="dist" id="ageDist"></div>
+          <div class="dist" id="genDist" style="margin-top:8px"></div>
+          <div class="small" id="detailNote" style="margin-top:10px"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-t">疾患別 高リスク者の割合</div>
+          <div id="diseaseBars"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">放置した場合の推定インパクト</div>
+        <div class="impact">
+          <div class="lbl">参加者が現状を放置した場合、80歳までに失う推定資産の<strong>合計</strong></div>
+          <div class="big" id="impTotal">–</div>
+          <div class="row"><span>参加者1人あたりの平均逸失資産</span><span class="rv" id="impAvg">–</span></div>
+          <div class="row"><span>健康寿命の平均短縮（放置シナリオ）</span><span class="rv" id="impLife">–</span></div>
+          <div class="row" id="empRow" style="display:none"><span id="empRowL">全社換算の推定逸失資産</span><span class="rv" id="impEmp">–</span></div>
+        </div>
+      </div>
+
+      <div class="pitch">
+        <h2 id="pitchH">— </h2>
+        <p id="pitchP">—</p>
+        <ul id="pitchList"></ul>
+      </div>
+    </div>
+    <div class="rep-foot" id="repFoot"></div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function yen(man){ // manは万円
+  if(man>=10000) return (man/10000).toFixed(1)+'億円';
+  return Math.round(man).toLocaleString()+'万円';
+}
+const DIS=[['risk_glucose','糖代謝'],['risk_bp','血圧'],['risk_lipid','脂質'],['risk_liver','肝機能'],['risk_kidney','腎機能'],['risk_musculo','筋骨格']];
+const AGE_ORDER=['20代','30代','40代','50代','60代','70代'];
+
+function ageLabel(g){ // saveAnonRecordのage_groupは「30-39」等かもしれないので吸収
+  if(!g) return '不明';
+  const m=String(g).match(/(\d2?0)/); if(m){const d=Math.floor(parseInt(m[1],10)/10)*10; return d+'代';}
+  if(/20/.test(g))return '20代'; if(/30/.test(g))return '30代'; if(/40/.test(g))return '40代';
+  if(/50/.test(g))return '50代'; if(/60/.test(g))return '60代'; if(/70/.test(g))return '70代';
+  return String(g);
+}
+function bc(s){return s>=70?'#e24c5e':s>=40?'#f0925a':'#0fa8a3';}
+
+function render(records){
+  records=(records||[]).filter(r=>r&&typeof r==='object');
+  if(!records.length){ alert('有効なレコードがありません。JSON形式（配列）をご確認ください。'); return; }
+  const N=records.length;
+  const highRisk=records.filter(r=>Math.max(r.risk_glucose||0,r.risk_bp||0,r.risk_lipid||0,r.risk_liver||0,r.risk_kidney||0,r.risk_musculo||0)>=70);
+  const avgMed=Math.round(records.reduce((s,r)=>s+(r.med_score||0),0)/N);
+  // 年齢分布
+  const ages={}; records.forEach(r=>{const a=ageLabel(r.age_group); ages[a]=(ages[a]||0)+1;});
+  // 性別
+  const gen={male:0,female:0}; records.forEach(r=>{ if(r.gender==='female')gen.female++; else gen.male++; });
+  // 疾患別高リスク率
+  const disease=DIS.map(([k,label])=>{
+    const cnt=records.filter(r=>(r[k]||0)>=70).length;
+    const avg=Math.round(records.reduce((s,r)=>s+(r[k]||0),0)/N);
+    return {label,cnt,rate:Math.round(cnt/N*100),avg};
+  });
+  // 逸失資産（diff80_bracketは万円）
+  const losses=records.map(r=>Math.max(0,r.diff80_bracket||0));
+  const totalLoss=losses.reduce((a,b)=>a+b,0);
+  const avgLoss=Math.round(totalLoss/N);
+  // 健康寿命損失
+  const lifeVals=records.map(r=>r.life_loss).filter(v=>typeof v==='number'&&v>0);
+  const avgLife=lifeVals.length?(lifeVals.reduce((a,b)=>a+b,0)/lifeVals.length):null;
+  // 詳細入力率
+  const detailed=records.filter(r=>(r.entered||0)>=5).length;
+
+  // KPI
+  $('kN').textContent=N;
+  $('kHigh').textContent=Math.round(highRisk.length/N*100)+'%';
+  $('kHighSub').textContent=`${N}名中 ${highRisk.length}名`;
+  $('kMed').textContent=avgMed;
+
+  // プロフィール
+  $('ageDist').innerHTML=AGE_ORDER.filter(a=>ages[a]).map(a=>`<span class="chip">${a} <b>${ages[a]}名</b></span>`).join('')
+    + Object.keys(ages).filter(a=>!AGE_ORDER.includes(a)).map(a=>`<span class="chip">${a} <b>${ages[a]}名</b></span>`).join('');
+  $('genDist').innerHTML=`<span class="chip">男性 <b>${gen.male}名</b></span><span class="chip">女性 <b>${gen.female}名</b></span>`;
+  $('detailNote').textContent=`健診数値を詳しく入力した方：${detailed}名（${Math.round(detailed/N*100)}%）。入力が多いほど判定の網羅性が高まります。`;
+
+  // 疾患バー
+  $('diseaseBars').innerHTML=disease.map(d=>`
+    <div class="bar-row"><span class="n">${d.label}</span>
+      <span class="track"><span class="fill" style="width:${d.rate}%;background:${bc(d.avg)}"></span></span>
+      <span class="v">${d.rate}%（${d.cnt}名）</span></div>`).join('');
+
+  // インパクト
+  $('impTotal').textContent=yen(totalLoss);
+  $('impAvg').textContent=yen(avgLoss);
+  $('impLife').textContent=avgLife?('平均 約'+avgLife.toFixed(1)+'年 短縮'):'（健康寿命モードのデータなし）';
+
+  // 全社換算
+  const emp=parseInt($('empCount').value,10);
+  if(emp&&emp>=N){
+    const scaled=Math.round(avgLoss*emp);
+    $('empRowL').textContent=`全社換算（従業員${emp.toLocaleString()}名・参加者平均を適用）の推定逸失資産`;
+    $('impEmp').textContent=yen(scaled);
+    $('empRow').style.display='';
+  } else { $('empRow').style.display='none'; }
+
+  // 提案
+  const highPct=Math.round(highRisk.length/N*100);
+  $('pitchH').textContent=`参加者の ${highPct}% が高リスク域。今こそ「継続的な健康施策」が必要です。`;
+  $('pitchP').innerHTML=`今回のセミナーで、参加者${N}名のうち<span class="hl">${highRisk.length}名（${highPct}%）</span>が、いずれかの疾患リスクが高い域にありました。この状態を放置すると、参加者だけで<span class="hl">合計 ${yen(totalLoss)}</span>の将来資産${avgLife?`・平均 ${avgLife.toFixed(1)}年の健康寿命`:''}が失われる計算です。健康診断は"気づき"にすぎず、実際に数値を守るのは<span class="hl">受診後の継続的な運動習慣</span>です。`;
+  $('pitchList').innerHTML=[
+    'まずは高リスク者への二次健診受診勧奨（本ツールで動機づけ済み）',
+    '運動習慣づくりの伴走支援（オンライン／対面パーソナル・ピラティス）',
+    '四半期ごとの再測定で改善を可視化し、健康経営の指標に反映',
+  ].map(x=>`<li>${x}</li>`).join('');
+
+  // メタ・フッター
+  let ds=''; try{const d=new Date();ds=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;}catch(e){}
+  $('repMeta').textContent=`集計日 ${ds}　参加者 ${N}名`;
+  $('repFoot').innerHTML='※本レポートは個人を特定しない匿名の集計データに基づく参考試算です。逸失資産は本ツールのモデル（厚労省・国税庁・各査読論文準拠）による推計であり、医学的診断・投資助言ではありません。｜提供：FRACTAL WORKOUT株式会社';
+
+  $('empty').style.display='none';
+  $('report').classList.add('show');
+  $('repbtns').style.display='flex';
+  window.scrollTo(0,0);
+}
+
+$('loadBtn').addEventListener('click',()=>{
+  let txt=$('jsonIn').value.trim();
+  if(!txt){ alert('JSONを貼り付けてください。'); return; }
+  let data;
+  try{ data=JSON.parse(txt); }catch(e){ alert('JSONの形式が正しくありません。'); return; }
+  if(!Array.isArray(data)) data=[data];
+  render(data);
+});
+$('localBtn').addEventListener('click',()=>{
+  let recs=[];
+  try{ recs=JSON.parse(localStorage.getItem('fw_anon_records')||'[]'); }catch(e){}
+  if(!recs.length){ alert('この端末に匿名データがありません（本体ツールを同じ端末で実行した記録が必要です）。'); return; }
+  render(recs);
+});
+$('sampleBtn').addEventListener('click',()=>{
+  // サンプル：40名の匿名レコードを生成（体裁確認・デモ用）
+  const ages=['30-39','40-49','50-59','60-69'];
+  const recs=[];
+  for(let i=0;i<40;i++){
+    const sev=Math.random(); // 0..1 リスクの重さ
+    const base=v=>Math.min(100,Math.round(v*sev+Math.random()*25));
+    const gl=base(70),bp=base(60),lp=base(55),lv=base(45),kd=base(40),ms=20+Math.round(Math.random()*40);
+    const med=Math.round((gl+bp+lp+lv+kd+ms*0.8)/5.8);
+    recs.push({
+      age_group:ages[Math.floor(Math.random()*ages.length)],
+      gender:Math.random()<0.62?'male':'female',
+      bmi_cat:sev>0.6?'肥満':'普通',
+      entered:Math.random()<0.5?Math.floor(Math.random()*5):5+Math.floor(Math.random()*8),
+      risk_glucose:gl,risk_bp:bp,risk_lipid:lp,risk_liver:lv,risk_kidney:kd,risk_musculo:ms,
+      med_score:med,
+      diff80_bracket:Math.round((1500+sev*11000)/100)*100,
+      mode:Math.random()<0.5?'asset':'lifespan',
+      life_loss:+(sev*11).toFixed(1)
+    });
+  }
+  render(recs);
+});
+</script>
+</body>
+</html>

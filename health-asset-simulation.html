@@ -185,6 +185,12 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .demo-bar button{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 13px;font-size:12px;font-weight:800;color:var(--teal-text);cursor:pointer;}
 .demo-bar button:hover{background:#f2fbfa;border-color:var(--teal);}
 .demo-bar .db-reset{color:var(--muted);}
+/* 結果の入場アニメ（押した瞬間に立ち上がる山場） */
+@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#p1.revealed .pr-a{animation:reveal .5s ease-out both;}
+body.pre-run .sticky-cta{display:none!important;}
+.exam-save-btn{display:block;width:100%;margin-top:16px;padding:14px;background:#fff;color:var(--teal-text);border:none;border-radius:8px;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.18);transition:.15s;}
+.exam-save-btn:hover{background:#f2fbfa;transform:translateY(-1px);}
 /* 実行前：結果を隠しプレースホルダ表示 */
 #prerunMsg{display:none;padding:46px 26px;text-align:center;}
 #prerunMsg .pm-ico{font-size:34px;line-height:1;}
@@ -1530,6 +1536,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <div class="exam-step"><div class="es-n">3</div><div class="es-t">二次健診を受診<br>正確な数値を把握</div></div>
         </div>
       </div>
+      <button type="button" class="exam-save-btn" id="examSaveBtn">この結果を保存して、受診時に持参する →</button>
       <p class="exam-note">※受診方法・費用補助の詳細は、会社の健康管理担当または加入する健康保険組合の案内をご確認ください。この結果は印刷・画像保存して、受診時の参考資料としてお使いいただけます。</p>
     </div>
 
@@ -2451,6 +2458,7 @@ function renderLifespan(s){
   const life=computeLifespan(s);
   const set=(id,v)=>{const e=document.getElementById(id); if(e)e.textContent=v;};
   set('lifeLostBig', `−${life.loss}年`);
+  window._lifeTarget=life.loss;
   set('lifeMaintainAge', life.maintainAge);
   set('lifeNeglectAge', life.neglectAge);
   // 健康年数バー（維持=100%基準、放置=残り年数比で短縮表示）
@@ -2489,9 +2497,22 @@ function setMode(m){
   const a=document.getElementById('modeAsset'), l=document.getElementById('modeLife');
   if(a)a.classList.toggle('on',_lsMode==='asset');
   if(l)l.classList.toggle('on',_lsMode==='lifespan');
+  const preRun=document.body.classList.contains('pre-run');
   const rb=document.getElementById('runBtn');
-  if(rb)rb.textContent=(_lsMode==='lifespan'?'健康寿命をシミュレーションする':'健康資産をシミュレーションする');
+  if(rb)rb.textContent = preRun
+    ? (_lsMode==='lifespan'?'健康寿命をシミュレーションする':'健康資産をシミュレーションする')
+    : 'もう一度シミュレーションする';
+  // 実行前プレースホルダをモード連動＝"これから出る答え"を予告
+  const pmT=document.querySelector('#prerunMsg .pm-t'), pmS=document.querySelector('#prerunMsg .pm-s');
+  if(pmT) pmT.textContent = _lsMode==='lifespan' ? '健康寿命が何年変わるかを試算します' : '80歳までに失いかねない“金額”を試算します';
+  if(pmS) pmS.innerHTML = '上の情報を入力して「シミュレーションする」を押すと、<br>ここに結果が表示されます。';
   try{ updateAll(); }catch(e){}
+  // 実行済みならモード切替でもう一方の結果へ誘導＋山場を再演出
+  if(!preRun){
+    const _t=_lsMode==='lifespan'?document.getElementById('lifespanResult'):document.getElementById('age80box');
+    if(_t) _t.scrollIntoView({behavior:'smooth',block:'center'});
+    animateHero();
+  }
 }
 ['modeAsset','modeLife'].forEach(id=>{
   const el=document.getElementById(id);
@@ -3075,11 +3096,13 @@ function updateAll(){
     a80label.textContent='このまま放置すると、80歳のとき資産が';
     a80big.textContent=`−${fmt(sim.diff80)}`;
     a80sub.textContent='健康維持した場合より少なくなります';
+    window._a80target=sim.diff80;
   } else {
     a80big.classList.add('good');
     a80label.textContent='今の生活を続けても、80歳の資産への影響は';
     a80big.textContent='ほとんど差はありません';
     a80sub.textContent='この良い状態をキープしましょう';
+    window._a80target=0;
   }
 
   let greenArr=null;
@@ -3440,6 +3463,29 @@ document.getElementById('consentOverlay').addEventListener('click', function(e) 
 });
 
 // シミュレーション実行（何度でも再実行可能）
+// 数字のカウントアップ演出（押した瞬間の"山場"）
+function _animNum(el, target, render, dur){
+  if(!el) return;
+  dur=dur||850; let t0=null;
+  function step(now){
+    if(t0===null) t0=now;
+    const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3);
+    el.textContent=render(target*e);
+    if(p<1) requestAnimationFrame(step); else el.textContent=render(target);
+  }
+  requestAnimationFrame(step);
+}
+function animateHero(){
+  try{
+    if(typeof _lsMode!=='undefined' && _lsMode==='lifespan'){
+      const t=window._lifeTarget||0;
+      if(t>0) _animNum(document.getElementById('lifeLostBig'), t, v=>`−${v.toFixed(1)}年`);
+    } else {
+      const t=window._a80target||0;
+      if(t>=10) _animNum(document.getElementById('a80diffBig'), t, v=>`−${fmt(Math.round(v))}`);
+    }
+  }catch(e){}
+}
 function runSimulation() {
   const btn = document.getElementById('runBtn');
 
@@ -3469,6 +3515,8 @@ function runSimulation() {
     const _t = (typeof _lsMode!=='undefined'&&_lsMode==='lifespan')
       ? document.getElementById('lifespanResult') : document.getElementById('age80box');
     (_t||document.getElementById('step3')).scrollIntoView({behavior:'smooth', block:'center'});
+    const _p1=document.getElementById('p1'); if(_p1){ _p1.classList.remove('revealed'); void _p1.offsetWidth; _p1.classList.add('revealed'); }
+    animateHero();
   }, 250);
 }
 
@@ -3540,6 +3588,8 @@ document.getElementById('stickyCta').addEventListener('click', function(e){
     document.getElementById('step4').scrollIntoView({behavior:'smooth', block:'start'});
   }, 60);
 });
+// 着地CTAの「保存して受診時に持参」→画像保存を発火（見る→保存→受診の導線を途切れさせない）
+(function(){ const b=document.getElementById('examSaveBtn'); if(b) b.addEventListener('click',()=>{ fwTrack('exam_save_click'); const s=document.getElementById('shareImgBtn'); if(s) s.click(); }); })();
 
 // フォーム到達計測
 document.getElementById('formOverlay').addEventListener('transitionend', function() {

@@ -54,7 +54,7 @@ img{display:block;max-width:100%;height:auto;}
   box-shadow:var(--shadow);overflow:hidden;}
 .hero::before{position:absolute;inset:0 auto 0 0;width:8px;background:var(--gold);content:"";}
 .hero-copy{position:relative;z-index:2;padding:56px 48px 48px 56px;}
-.section-label,.hero-tag{margin:0 0 18px;color:var(--gold);font-family:"EB Garamond",serif;
+.section-label,.hero-tag{margin:0 0 18px;color:var(--teal-text);font-family:"EB Garamond",serif;
   font-size:15px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;}
 .hero h1{margin:0;font-family:"Shippori Mincho",serif;font-size:clamp(34px,4.4vw,56px);
   font-weight:500;line-height:1.22;text-wrap:balance;}
@@ -113,7 +113,7 @@ img{display:block;max-width:100%;height:auto;}
 .mode-ico{font-size:26px;line-height:1;}
 .mode-t{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:var(--black);}
 .mode-card.on .mode-t{color:var(--teal-text);}
-.mode-d{font-size:11px;line-height:1.6;color:var(--muted);}
+.mode-d{font-size:12px;line-height:1.65;color:#3d5450;}
 /* モード別表示切替 */
 .mode-life-only{display:none;}
 body[data-mode="lifespan"] .mode-life-only{display:block;}
@@ -165,7 +165,7 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 .pm-level[data-lv="標準"]{color:var(--orange);}
 .pm-bar{height:8px;background:#dbe8e5;border-radius:99px;overflow:hidden;}
 .pm-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--teal-light),var(--teal));transition:width .5s cubic-bezier(.4,0,.2,1);}
-.pm-note{margin-top:9px;font-size:11px;line-height:1.6;color:var(--muted);}
+.pm-note{margin-top:9px;font-size:12px;line-height:1.65;color:#3d5450;}
 .pm-note strong{color:var(--teal-text);}
 /* 医療費インパクト ヘッドライン（このまま続くと…） */
 .med-headline{background:linear-gradient(135deg,#8a2f2f,#b34a3e);color:#fff;border-radius:8px;padding:15px 16px;margin-bottom:13px;text-align:center;}
@@ -200,7 +200,7 @@ body.pre-run #prerunMsg{display:block;}
   text-decoration:none;color:var(--muted);border-radius:7px;transition:.18s;min-width:0;}
 .step-nav-item .sn-num{width:22px;height:22px;border-radius:50%;background:var(--gray-100);color:var(--smoke);
   font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;transition:.18s;}
-.step-nav-item .sn-label{font-size:10px;font-weight:800;letter-spacing:.02em;white-space:nowrap;}
+.step-nav-item .sn-label{font-size:12px;font-weight:800;letter-spacing:.01em;white-space:nowrap;}
 .step-nav-item.on{color:var(--teal-deep);}
 .step-nav-item.on .sn-num{background:var(--teal);color:#fff;}
 .step-nav-item:hover .sn-num{background:var(--teal-light);color:#0b1416;}
@@ -215,8 +215,8 @@ body.pre-run #prerunMsg{display:block;}
   margin:14px 0 7px;padding-bottom:4px;border-bottom:1px solid var(--line);}
 .hd-group-label svg{width:16px;height:16px;flex:0 0 auto;stroke:var(--teal);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .hd-group-label:first-of-type{margin-top:4px;}
-.field{display:flex;flex-direction:column;gap:5px;}
-label{font-size:11px;font-weight:800;color:#32383a;letter-spacing:.04em;}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0;}
+label{font-size:13px;font-weight:800;color:#2b3133;letter-spacing:.02em;line-height:1.5;overflow-wrap:anywhere;}
 input,select{width:100%;min-height:44px;border:1px solid rgba(18,58,56,.18);background:#fff;
   border-radius:0;padding:10px 11px;font-size:14px;color:var(--text);outline:none;-webkit-appearance:none;
   transition:border-color .18s,box-shadow .18s,background .18s;}
@@ -1248,33 +1248,33 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
     <div class="fg2">
       <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" inputmode="decimal" placeholder="170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
       <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" inputmode="decimal" placeholder="68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
-      <div class="field"><label for="waist">腹囲 (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
+      <div class="field"><label for="waist">腹囲・おへそ周り (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 20s-6.5-4.2-6.5-9.2A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 6.5 2.6C18.5 15.8 12 20 12 20z"/></svg>血圧</div>
     <div class="fg2">
-      <div class="field"><label for="sbp">収縮期血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
-      <div class="field"><label for="dbp">拡張期血圧 (mmHg)</label><input id="dbp" type="number" inputmode="decimal" placeholder="80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
+      <div class="field"><label for="sbp">収縮期・上の血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
+      <div class="field"><label for="dbp">拡張期・下の血圧 (mmHg)</label><input id="dbp" type="number" inputmode="decimal" placeholder="80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 3.5s5.5 6 5.5 10.5a5.5 5.5 0 0 1-11 0C6.5 9.5 12 3.5 12 3.5z"/></svg>脂質</div>
     <div class="fg3">
-      <div class="field"><label for="ldl">LDL (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
-      <div class="field"><label for="hdl">HDL (mg/dL)</label><input id="hdl" type="number" inputmode="decimal" placeholder="55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
-      <div class="field"><label for="tg">中性脂肪 (mg/dL)</label><input id="tg" type="number" inputmode="decimal" placeholder="120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
+      <div class="field"><label for="ldl">LDL・悪玉 (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
+      <div class="field"><label for="hdl">HDL・善玉 (mg/dL)</label><input id="hdl" type="number" inputmode="decimal" placeholder="55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
+      <div class="field"><label for="tg">中性脂肪・TG (mg/dL)</label><input id="tg" type="number" inputmode="decimal" placeholder="120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v5.5l-4 7A2 2 0 0 0 7.8 19h8.4a2 2 0 0 0 1.8-3l-4-7V3.5"/><path d="M7.5 14.5h9"/></svg>血糖</div>
     <div class="fg2">
       <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" inputmode="decimal" placeholder="105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
-      <div class="field"><label for="hba1c">HbA1c (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
+      <div class="field"><label for="hba1c">HbA1c・過去1〜2ヶ月の血糖 (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M4 8c4-2.5 12-2.5 16 0 0 5.5-3.5 9.5-8.5 11.5C7 17.5 4 13.5 4 8z"/><path d="M9 11c1.5 1.5 4 1.5 5.5 0"/></svg>肝機能</div>
     <div class="fg3">
-      <div class="field"><label for="ast">AST/GOT (U/L)</label><input id="ast" type="number" inputmode="decimal" placeholder="22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
-      <div class="field"><label for="alt">ALT/GPT (U/L)</label><input id="alt" type="number" inputmode="decimal" placeholder="24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
-      <div class="field"><label for="ggt">γ-GTP (U/L)</label><input id="ggt" type="number" inputmode="decimal" placeholder="35" min="5" max="2000"><span class="ferr" id="e-ggt">5〜2000で入力</span></div>
+      <div class="field"><label for="ast">AST・肝機能 (U/L)</label><input id="ast" type="number" inputmode="decimal" placeholder="22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
+      <div class="field"><label for="alt">ALT・肝機能 (U/L)</label><input id="alt" type="number" inputmode="decimal" placeholder="24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
+      <div class="field"><label for="ggt">γ-GTP・肝機能/飲酒 (U/L)</label><input id="ggt" type="number" inputmode="decimal" placeholder="35" min="5" max="2000"><span class="ferr" id="e-ggt">5〜2000で入力</span></div>
     </div>
 
     <!-- MetS自動判定バナー -->

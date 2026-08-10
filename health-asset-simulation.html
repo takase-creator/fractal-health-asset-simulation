@@ -191,6 +191,11 @@ body[data-mode="lifespan"] .mode-asset-only{display:none;}
 body.pre-run .sticky-cta{display:none!important;}
 .exam-save-btn{display:block;width:100%;margin-top:16px;padding:14px;background:#fff;color:var(--teal-text);border:none;border-radius:8px;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.18);transition:.15s;}
 .exam-save-btn:hover{background:#f2fbfa;transform:translateY(-1px);}
+/* ブラッシュアップ: A11y（プレースホルダ薄色/キーボードフォーカス可視/タップ領域） */
+input::placeholder,textarea::placeholder{color:#9aada9;font-weight:400;opacity:1;}
+a:focus-visible,button:focus-visible,.mode-card:focus-visible,.chip:focus-visible,.adv-toggle:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px;}
+.demo-bar button{min-height:42px;}
+.chip{min-height:42px;}
 /* 実行前：結果を隠しプレースホルダ表示 */
 #prerunMsg{display:none;padding:46px 26px;text-align:center;}
 #prerunMsg .pm-ico{font-size:34px;line-height:1;}
@@ -1252,35 +1257,35 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/></svg>体格</div>
     <div class="fg2">
-      <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" inputmode="decimal" placeholder="170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
-      <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" inputmode="decimal" placeholder="68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
-      <div class="field"><label for="waist">腹囲・おへそ周り (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
+      <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" inputmode="decimal" placeholder="例：170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
+      <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" inputmode="decimal" placeholder="例：68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
+      <div class="field"><label for="waist">腹囲・おへそ周り (cm)</label><input id="waist" type="number" inputmode="decimal" placeholder="例：85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 20s-6.5-4.2-6.5-9.2A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 6.5 2.6C18.5 15.8 12 20 12 20z"/></svg>血圧</div>
     <div class="fg2">
-      <div class="field"><label for="sbp">収縮期・上の血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
-      <div class="field"><label for="dbp">拡張期・下の血圧 (mmHg)</label><input id="dbp" type="number" inputmode="decimal" placeholder="80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
+      <div class="field"><label for="sbp">収縮期・上の血圧 (mmHg)</label><input id="sbp" type="number" inputmode="decimal" placeholder="例：128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
+      <div class="field"><label for="dbp">拡張期・下の血圧 (mmHg)</label><input id="dbp" type="number" inputmode="decimal" placeholder="例：80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 3.5s5.5 6 5.5 10.5a5.5 5.5 0 0 1-11 0C6.5 9.5 12 3.5 12 3.5z"/></svg>脂質</div>
     <div class="fg3">
-      <div class="field"><label for="ldl">LDL・悪玉 (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
-      <div class="field"><label for="hdl">HDL・善玉 (mg/dL)</label><input id="hdl" type="number" inputmode="decimal" placeholder="55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
-      <div class="field"><label for="tg">中性脂肪・TG (mg/dL)</label><input id="tg" type="number" inputmode="decimal" placeholder="120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
+      <div class="field"><label for="ldl">LDL・悪玉 (mg/dL)</label><input id="ldl" type="number" inputmode="decimal" placeholder="例：120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
+      <div class="field"><label for="hdl">HDL・善玉 (mg/dL)</label><input id="hdl" type="number" inputmode="decimal" placeholder="例：55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
+      <div class="field"><label for="tg">中性脂肪・TG (mg/dL)</label><input id="tg" type="number" inputmode="decimal" placeholder="例：120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v5.5l-4 7A2 2 0 0 0 7.8 19h8.4a2 2 0 0 0 1.8-3l-4-7V3.5"/><path d="M7.5 14.5h9"/></svg>血糖</div>
     <div class="fg2">
-      <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" inputmode="decimal" placeholder="105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
-      <div class="field"><label for="hba1c">HbA1c・過去1〜2ヶ月の血糖 (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
+      <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" inputmode="decimal" placeholder="例：105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
+      <div class="field"><label for="hba1c">HbA1c・過去1〜2ヶ月の血糖 (%)</label><input id="hba1c" type="number" inputmode="decimal" step="0.1" placeholder="例：5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
     </div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M4 8c4-2.5 12-2.5 16 0 0 5.5-3.5 9.5-8.5 11.5C7 17.5 4 13.5 4 8z"/><path d="M9 11c1.5 1.5 4 1.5 5.5 0"/></svg>肝機能</div>
     <div class="fg3">
-      <div class="field"><label for="ast">AST・肝機能 (U/L)</label><input id="ast" type="number" inputmode="decimal" placeholder="22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
-      <div class="field"><label for="alt">ALT・肝機能 (U/L)</label><input id="alt" type="number" inputmode="decimal" placeholder="24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
-      <div class="field"><label for="ggt">γ-GTP・肝機能/飲酒 (U/L)</label><input id="ggt" type="number" inputmode="decimal" placeholder="35" min="5" max="2000"><span class="ferr" id="e-ggt">5〜2000で入力</span></div>
+      <div class="field"><label for="ast">AST・肝機能 (U/L)</label><input id="ast" type="number" inputmode="decimal" placeholder="例：22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
+      <div class="field"><label for="alt">ALT・肝機能 (U/L)</label><input id="alt" type="number" inputmode="decimal" placeholder="例：24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
+      <div class="field"><label for="ggt">γ-GTP・肝機能/飲酒 (U/L)</label><input id="ggt" type="number" inputmode="decimal" placeholder="例：35" min="5" max="2000"><span class="ferr" id="e-ggt">5〜2000で入力</span></div>
     </div>
 
     <!-- MetS自動判定バナー -->

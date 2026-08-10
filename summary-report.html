@@ -84,9 +84,28 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 }
 @media(max-width:640px){.kpi-row{grid-template-columns:1fr;}.grid2{grid-template-columns:1fr;}.rep-head{flex-direction:column;gap:10px;align-items:flex-start;}.rep-title{text-align:left;}}
+/* 社内用ソフトガード */
+#repGate{position:fixed;inset:0;z-index:99999;background:#123a38;display:flex;align-items:center;justify-content:center;padding:24px;}
+.rg-card{background:#fff;color:#14312f;border-radius:12px;padding:32px 28px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.35);}
+.rg-logo{font-family:"EB Garamond",serif;font-size:18px;letter-spacing:.14em;color:#0a6a66;margin-bottom:16px;}
+.rg-card h1{font-family:"Shippori Mincho",serif;font-size:20px;color:#123a38;margin-bottom:8px;}
+.rg-card>p{font-size:12px;color:#4f6e6b;line-height:1.7;margin-bottom:16px;}
+.rg-card input{width:100%;padding:12px;border:1px solid rgba(18,58,56,.2);border-radius:8px;font-size:16px;margin-bottom:12px;text-align:center;box-sizing:border-box;}
+.rg-card button{width:100%;padding:13px;background:linear-gradient(180deg,#0fa8a3,#0a807c);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;}
+.rg-err{color:#e24c5e!important;font-weight:700;margin-top:4px;}
 </style>
 </head>
 <body>
+<div id="repGate">
+  <div class="rg-card">
+    <div class="rg-logo">BODY PALETTE</div>
+    <h1>社内用ページ</h1>
+    <p>この集計サマリーは社内・提案用です。<br>アクセスキーを入力してください。</p>
+    <input type="password" id="rgKey" placeholder="アクセスキー" autocomplete="off">
+    <button type="button" id="rgBtn">開く</button>
+    <p class="rg-err" id="rgErr" style="display:none">アクセスキーが違います。</p>
+  </div>
+</div>
 <div class="wrap">
   <div class="tool-note">
     <strong>企業ご担当者様向け・集計サマリー生成ツール（社内用）</strong><br>
@@ -167,6 +186,19 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
 </div>
 
 <script>
+// ── 社内用ソフトガード（簡易。完全なアクセス制御ではなくキーはソース内にあります）──
+var REPORT_KEY='fractal2026';   // ← 共有・変更してください（?key=fractal2026 でも解錠）
+(function(){
+  var g=document.getElementById('repGate');
+  function unlock(){ if(g) g.style.display='none'; try{sessionStorage.setItem('rg_ok','1');}catch(e){} }
+  var p=new URLSearchParams(location.search);
+  var ok=false; try{ ok=sessionStorage.getItem('rg_ok')==='1'; }catch(e){}
+  if(p.get('key')===REPORT_KEY || ok){ unlock(); return; }
+  var btn=document.getElementById('rgBtn'), inp=document.getElementById('rgKey'), err=document.getElementById('rgErr');
+  function tryKey(){ if(inp && inp.value.trim()===REPORT_KEY){ unlock(); } else if(err){ err.style.display='block'; } }
+  if(btn) btn.addEventListener('click',tryKey);
+  if(inp){ inp.addEventListener('keydown',function(e){ if(e.key==='Enter') tryKey(); }); inp.focus(); }
+})();
 const $=id=>document.getElementById(id);
 function yen(man){ // manは万円
   if(man>=10000) return (man/10000).toFixed(1)+'億円';

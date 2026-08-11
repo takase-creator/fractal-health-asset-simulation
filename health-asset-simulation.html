@@ -1597,15 +1597,15 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
         <table class="roi-table" id="roiTable">
           <thead>
-            <tr><th>運動プラン</th><th>習慣化までの投資<br>（週2回×3ヶ月＝24回）</th><th>守れる生涯資産</th><th>投資対効果</th></tr>
+            <tr><th>運動プラン</th><th>生涯の運動投資<br>（週2回を80歳まで継続）</th><th>守れる生涯資産</th><th>投資対効果</th></tr>
           </thead>
           <tbody id="roiTableBody"></tbody>
         </table>
 
         <div class="roi-punch" id="roiPunch">
-          たった十数万円の"習慣づくり投資"で、<strong id="roiPunchNum">--</strong>の資産を守れる計算です。<br>運動は、いちばん割のいい「資産防衛」です。
+          運動を続ける費用を差し引いても、<strong id="roiPunchNum">--</strong>の資産を守れる計算です。<br>運動は、いちばん割のいい「資産防衛」です。
         </div>
-        <p class="roi-note">※習慣化に必要な回数は Lally et al. <em>Eur J Soc Psychol</em> 2010（習慣形成の中央値66日）を参考に「週2回×約3ヶ月＝24回」で試算。習慣が身につけば、その後は費用をかけずに続けられます。単価は30分5,000円／60分10,000円で計算した目安です。金額は入力値からの試算であり、効果を保証するものではありません。</p>
+        <p class="roi-note">※「守れる生涯資産」は現在の年齢から80歳まで週2回の運動を継続した場合の試算値です。「生涯の運動投資」は同じ期間・週2回を<strong>PT単価（30分5,000円／60分10,000円）で換算した上限の目安</strong>で、習慣化後に自己運動で続ければ費用はさらに下がり、投資対効果はより高くなります。金額は入力値からの試算であり効果を保証するものではありません。習慣形成の目安は Lally et al. <em>Eur J Soc Psychol</em> 2010（中央値66日）を参考。</p>
       </div>
 
       <div class="service-cta-label">だから、運動習慣づくりを BODY PALETTE がサポートします</div>
@@ -2689,9 +2689,12 @@ function renderExerciseROI(s, sim){
 
   headNum.textContent = '+' + fmt(Math.max(0, Math.round(b30)));
 
+  // 継続コストを織り込む：週2回の運動を80歳まで続けた場合の総費用（PT単価換算）
+  const _yrs = Math.max(1, 80 - s.age);
+  const _totalSessions = 2 * 52 * _yrs;   // 週2回×52週×残り年数
   const rows = [
-    {course:'30分コース', per:'1回 5,000円', invYen: HABIT_FORM_SESSIONS*PT_PRICE_30, protectMan: b30, plan:'週2回×30分'},
-    {course:'60分コース', per:'1回 10,000円', invYen: HABIT_FORM_SESSIONS*PT_PRICE_60, protectMan: b60, plan:'週2回×60分'},
+    {course:'30分コース', per:'1回 5,000円', invYen: _totalSessions*PT_PRICE_30, protectMan: b30, plan:'週2回×30分'},
+    {course:'60分コース', per:'1回 10,000円', invYen: _totalSessions*PT_PRICE_60, protectMan: b60, plan:'週2回×60分'},
   ];
   const body = document.getElementById('roiTableBody');
   body.innerHTML = '';
@@ -2706,7 +2709,7 @@ function renderExerciseROI(s, sim){
       `<td class="rt-roi">約${roi.toLocaleString()}倍</td>`;
     body.appendChild(tr);
   });
-  document.getElementById('roiPunchNum').textContent = fmt(Math.max(0, Math.round(b30)));
+  document.getElementById('roiPunchNum').textContent = fmt(Math.max(0, Math.round(b30 - (_totalSessions*PT_PRICE_30)/10000)));
   box.style.display = '';
 }
 

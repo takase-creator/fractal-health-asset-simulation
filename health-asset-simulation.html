@@ -196,6 +196,17 @@ input::placeholder,textarea::placeholder{color:#9aada9;font-weight:400;opacity:1
 a:focus-visible,button:focus-visible,.mode-card:focus-visible,.chip:focus-visible,.adv-toggle:focus-visible,[tabindex]:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px;}
 .demo-bar button{min-height:42px;}
 .chip{min-height:42px;}
+/* 80歳資産の計算式（健康維持 − 現状放置 = 放置で少なくなる額） */
+.a80-calc{display:flex;align-items:stretch;justify-content:center;gap:8px;flex-wrap:nowrap;}
+.a80-c-cell{flex:1 1 0;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:4px;justify-content:center;}
+.a80-c-cell .cl{font-size:11px;color:rgba(255,255,255,.74);line-height:1.35;}
+.a80-c-cell .cv{font-family:"EB Garamond",serif;font-size:22px;font-weight:600;line-height:1.05;white-space:nowrap;}
+.a80-c-cell .cv.good{color:#8fe3de;}
+.a80-c-cell .cv.bad{color:#ff9a9a;}
+.a80-c-cell.res{background:rgba(227,104,160,.16);border-color:rgba(227,104,160,.42);}
+.a80-c-cell.res .cv.diff{color:#ffc0d6;}
+.a80-c-op{display:flex;align-items:center;font-size:20px;color:rgba(255,255,255,.7);font-weight:700;flex:0 0 auto;}
+@media(max-width:560px){.a80-calc{gap:5px;}.a80-c-cell{padding:8px 3px;}.a80-c-cell .cl{font-size:9px;}.a80-c-cell .cv{font-size:15px;}.a80-c-op{font-size:14px;}}
 /* 実行前：結果を隠しプレースホルダ表示 */
 #prerunMsg{display:none;padding:46px 26px;text-align:center;}
 #prerunMsg .pm-ico{font-size:34px;line-height:1;}
@@ -1354,15 +1365,12 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
         <div class="a80-main-num" id="a80diffBig">--</div>
         <div class="a80-main-sub" id="a80mainSub">健康維持した場合より少なくなります</div>
       </div>
-      <div class="a80-compare">
-        <div class="a80-mini">
-          <span class="a80-mini-lbl">健康維持なら</span>
-          <span class="a80-mini-val good" id="a80good">--</span>
-        </div>
-        <div class="a80-mini">
-          <span class="a80-mini-lbl">現状放置なら</span>
-          <span class="a80-mini-val bad" id="a80bad">--</span>
-        </div>
+      <div class="a80-calc">
+        <div class="a80-c-cell"><span class="cl">健康維持なら</span><span class="cv good" id="a80good">--</span></div>
+        <span class="a80-c-op">−</span>
+        <div class="a80-c-cell"><span class="cl">現状放置なら</span><span class="cv bad" id="a80bad">--</span></div>
+        <span class="a80-c-op">＝</span>
+        <div class="a80-c-cell res"><span class="cl">放置で少なくなる額</span><span class="cv diff" id="a80diffCalc">--</span></div>
       </div>
     </div>
 
@@ -2763,6 +2771,9 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
   ctx.scale(dpr,dpr);
   const W=dW,H=dH;
   ctx.clearRect(0,0,W,H);
+  // チャート内テキストはUIと同じフォント・固定サイズ（画面幅で肥大化・重なりさせない）
+  const CF='"Noto Sans JP","Hiragino Sans",Meiryo,sans-serif';
+  const _cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 
   const pad={l:52,r:14,t:12,b:28};
   const all=[...blueArr,...redArr,...(greenArr||[])];
@@ -2780,7 +2791,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
     const val=minV+(maxV-minV)*(1-i/steps);
     ctx.fillStyle='#7a8284';
-    ctx.font=`${Math.max(10,Math.round(W/60)+1)}px sans-serif`;
+    ctx.font=`${_cl(Math.round(W/70),11,13)}px ${CF}`;
     ctx.fillText((val>=10000?Math.round(val/10000)+'億':Math.round(val/100)*100+'万'),2,y+4);
   }
 
@@ -2792,7 +2803,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     ctx.beginPath();ctx.moveTo(x60,pad.t);ctx.lineTo(x60,H-pad.b);ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle='#7a8284';
-    ctx.font=`${Math.max(9,Math.round(W/72)+1)}px sans-serif`;
+    ctx.font=`${_cl(Math.round(W/80),10,12)}px ${CF}`;
     ctx.fillText('60歳',x60+2,pad.t+22);
   }
 
@@ -2804,7 +2815,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     ctx.beginPath();ctx.moveTo(x65,pad.t);ctx.lineTo(x65,H-pad.b);ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle='#0fa8a3';
-    ctx.font=`bold ${Math.max(9,Math.round(W/72)+1)}px sans-serif`;
+    ctx.font=`bold ${_cl(Math.round(W/80),10,12)}px ${CF}`;
     ctx.fillText('65歳',x65+3,pad.t+12);
   }
 
@@ -2840,8 +2851,8 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
 
   // X axis labels
   ctx.fillStyle='#60738f';
-  const fs=Math.max(10,Math.round(W/55)+1);
-  ctx.font=`${fs}px sans-serif`;
+  const fs=_cl(Math.round(W/60),11,13);
+  ctx.font=`${fs}px ${CF}`;
   ages.forEach((a,i)=>{
     if(a===startAge||a%10===0||a===80){
       ctx.fillText(`${a}歳`,xFn(i)-(a>=10?10:6),H-4);
@@ -2928,7 +2939,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
 
     lines.forEach((ln,i)=>{
       ctx.fillStyle=ln.c;
-      ctx.font=`300 ${Math.max(9,fs-1)}px sans-serif`;
+      ctx.font=`300 ${_cl(fs-1,10,12)}px ${CF}`;
       ctx.fillText(ln.t, bxP+5, byP+13+i*lh);
     });
   });
@@ -2945,7 +2956,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     const bx=lastX-tw-10;
     const by=(bY+rY)/2-10;
     ctx.beginPath();ctx.roundRect(bx-4,by,tw+8,18,5);ctx.fill();
-    ctx.fillStyle='white';ctx.font=`bold ${fs}px sans-serif`;
+    ctx.fillStyle='white';ctx.font=`bold ${fs}px ${CF}`;
     ctx.fillText(lbl,bx,by+13);
   }
 }
@@ -3093,6 +3104,8 @@ function updateAll(){
   // Age 80 callout（差額を主役に簡略表示）
   document.getElementById('a80good').textContent=fmt(sim.blue80);
   document.getElementById('a80bad').textContent=fmt(sim.red80);
+  const _a80dc=document.getElementById('a80diffCalc');
+  if(_a80dc) _a80dc.textContent=fmt(Math.max(0,Math.round(sim.diff80)));
   const a80big=document.getElementById('a80diffBig');
   const a80label=document.getElementById('a80mainLabel');
   const a80sub=document.getElementById('a80mainSub');
@@ -3512,8 +3525,8 @@ function runSimulation() {
   btn.disabled = true;
   btn.textContent = '計算中...';
   setTimeout(() => {
+    document.body.classList.remove('pre-run');   // 先に表示して幅を確定→グラフ等を正しいサイズで描画（押した瞬間に結果）
     updateAll();
-    document.body.classList.remove('pre-run');   // 実行前の非表示を解除＝押した瞬間に結果が出る
     btn.disabled = false;
     btn.textContent = 'もう一度シミュレーションする';
     // 結果の"数字"を画面中央に据えてスクロール（グラフでなく金額/年数）

@@ -1495,24 +1495,6 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       </div>
     </div>
 
-    <!-- Lifetime medical costs -->
-    <div class="med-box mode-asset-only">
-      <div class="med-title">推定生涯医療費（厚労省データ準拠）</div>
-      <div class="med-headline" id="medHeadline">
-        <div class="mh-lead">今の数値がこのまま続くと、生涯の医療費は</div>
-        <div class="mh-num">最大 ＋<span id="medExtra">--</span></div>
-        <div class="mh-sub">増える可能性があります（＝現状を放置した場合の上限の試算。実際にかかるかは今後の生活習慣で変わります）</div>
-        <div class="mh-prev">この増加の多くは<strong>運動習慣で防げます</strong>。運動不足は糖尿病の約27%・虚血性心疾患の約30%の原因とされます（WHO／厚労省）。ウォーキングだけでなく<strong>筋トレを組み合わせる</strong>と効果が最大に（有酸素＋筋トレで死亡リスク最小）。</div>
-      </div>
-      <table class="med-table" id="medTable">
-        <thead><tr><th>年齢帯</th><th>健康維持の場合</th><th>現状放置の場合</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="med-note">
-        ※厚生労働省「生涯医療費」2010年度推計（男性2,300万円・女性2,500万円）を2022年度国民医療費の物価水準（×1.25）で補正した独自試算値です。<br>
-        ※現状放置の場合は健康リスクスコアに応じて×1.0〜×1.7の係数を適用しています（医学的診断ではありません）。
-      </div>
-    </div>
     </div><!-- /pr-c -->
 
     <div class="step-sec-head" id="step4"><span class="ph-step">STEP 4</span>今すぐできる対策</div>
@@ -3024,7 +3006,6 @@ function updateAll(){
     alertBox.style.display='none';
   }
   if(_consentGiven) saveAnonRecord(s, sim);
-  const ltm=lifetimeMedTable(s.gender,s.medScore);
 
   // 改善（禁煙・運動習慣・減量）トグルの表示制御 ── リスクバーより先に判定する
   const quitEl=document.getElementById('impQuitSmoke');
@@ -3179,25 +3160,6 @@ function updateAll(){
   }
   exBox.style.display='';
 
-  // Lifetime medical table
-  const tbody=document.querySelector('#medTable tbody');tbody.innerHTML='';
-  let hTotal=0,rTotal=0;
-  ltm.forEach(row=>{
-    hTotal+=row.healthy;rTotal+=row.risk;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${row.label}</td><td>${row.healthy.toLocaleString()}万円</td>
-      <td class="hi">${row.risk.toLocaleString()}万円</td>`;
-    tbody.appendChild(tr);
-  });
-  const totRow=document.createElement('tr');
-  totRow.innerHTML=`<td><strong>生涯合計</strong></td>
-    <td><strong>${hTotal.toLocaleString()}万円</strong></td>
-    <td class="hi"><strong>${rTotal.toLocaleString()}万円</strong></td>`;
-  tbody.appendChild(totRow);
-  // 「このまま続くと余計にかかる生涯医療費」ヘッドライン
-  const extraMed=Math.max(0,rTotal-hTotal);
-  const meEl=document.getElementById('medExtra');
-  if(meEl) meEl.textContent=fmt(extraMed);
 }
 
 // ═══════════════════════════════════════════════════

@@ -534,7 +534,11 @@ canvas{width:100%!important;height:auto!important;display:block;}
 .isr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .isr-label{font-weight:700;font-size:12px;color:var(--text);}
 .isr-val{font-weight:900;font-size:14px;color:var(--green);}
-.improve-slider-row input[type=range]{width:100%;accent-color:var(--green);}
+.improve-slider-row input[type=range]{-webkit-appearance:auto;appearance:auto;flex:1;width:auto;height:30px;min-height:0;border:none;background:transparent;padding:0;border-radius:0;accent-color:var(--green);cursor:pointer;}
+.isr-ctrl{display:flex;align-items:center;gap:10px;}
+.isr-btn{flex:0 0 auto;width:42px;height:42px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:22px;font-weight:900;color:var(--teal-text);cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;}
+.isr-btn:hover{background:#f2fbfa;border-color:var(--teal);}
+.isr-btn:active{transform:scale(.95);}
 .isr-note{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6;}
 .improve-result{margin-top:14px;background:linear-gradient(135deg,#103230,#16423e);
   padding:18px 16px;color:#fff;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;
@@ -1449,8 +1453,12 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
             <div class="isr-label">体重を減らす</div>
             <div class="isr-val" id="impWeightVal">0kg</div>
           </div>
-          <input type="range" id="impWeightLoss" min="0" max="15" step="1" value="0">
-          <div class="isr-note" id="impWeightNote">身長・体重を入力すると、減量後の疾患リスクをシミュレーションできます。</div>
+          <div class="isr-ctrl">
+            <button type="button" class="isr-btn" id="impWeightMinus" aria-label="1kg減らす">−</button>
+            <input type="range" id="impWeightLoss" min="0" max="15" step="1" value="0">
+            <button type="button" class="isr-btn" id="impWeightPlus" aria-label="1kg増やす">＋</button>
+          </div>
+          <div class="isr-note" id="impWeightNote">ボタン（−／＋）またはバーで、減らす体重を選べます。身長・体重の入力が必要です。</div>
         </div>
       </div>
       <div class="improve-result" id="improveResult" style="display:none">
@@ -3047,9 +3055,10 @@ function updateAll(){
   const canSimulateWeight=s.bmi!==null;
   weightRow.classList.toggle('done',!canSimulateWeight);
   wlEl.disabled=!canSimulateWeight;
-  document.getElementById('impWeightVal').textContent=`-${wlEl.value}kg`;
+  document.getElementById('impWeightVal').textContent=(Number(wlEl.value)>0?`-${wlEl.value}kg`:'0kg');
   if(!canSimulateWeight){
     wlEl.value=0;
+    document.getElementById('impWeightVal').textContent='0kg';
     weightNote.textContent='身長・体重を入力すると、減量後の疾患リスクをシミュレーションできます。';
   } else {
     weightNote.textContent=`現在の体重${n('weight')}kg → ${(n('weight')-Number(wlEl.value))}kg（目安の試算値。腹囲の変化は考慮していません）`;
@@ -3541,6 +3550,20 @@ document.getElementById('impWeightLoss').addEventListener('input',()=>{
 document.getElementById('impWeightLoss').addEventListener('change',()=>{
   fwTrack('improve_weight_slider',{kg:document.getElementById('impWeightLoss').value});
 });
+// 減量の −/＋ ボタン（ドラッグ不要で確実に調整できる）
+(function(){
+  const sl=document.getElementById('impWeightLoss');
+  function step(d){
+    if(!sl) return;
+    const v=Math.max(0, Math.min(15, (parseInt(sl.value,10)||0)+d));
+    sl.value=String(v);
+    updateAll();
+    fwTrack('improve_weight_btn',{kg:v});
+  }
+  const m=document.getElementById('impWeightMinus'), p=document.getElementById('impWeightPlus');
+  if(m) m.addEventListener('click',()=>step(-1));
+  if(p) p.addEventListener('click',()=>step(1));
+})();
 
 // ═══════════════════════════════════════════════════
 // 15. 相談フォームモーダル

@@ -1952,6 +1952,16 @@ function smokingExcessFraction(cigsPerDay, gender){
 // ═══════════════════════════════════════════════════
 // 4. リスクスコア計算
 // ═══════════════════════════════════════════════════
+/* storage安全ラッパ：プライベートブラウズ等でstorageが例外でも落ちない（本番堅牢化） */
+var _fwSS=null,_fwLS=null;
+try{ _fwSS=window.sessionStorage; }catch(e){}
+try{ _fwLS=window.localStorage; }catch(e){}
+var _fwMem={};
+function ssGet(k){ try{ if(_fwSS) return _fwSS.getItem(k); }catch(e){} return (('s:'+k) in _fwMem)? _fwMem['s:'+k] : null; }
+function ssSet(k,v){ try{ if(_fwSS){ _fwSS.setItem(k,v); return; } }catch(e){} _fwMem['s:'+k]=v; }
+function lsGet(k){ try{ if(_fwLS) return _fwLS.getItem(k); }catch(e){} return (('l:'+k) in _fwMem)? _fwMem['l:'+k] : null; }
+function lsSet(k,v){ try{ if(_fwLS){ _fwLS.setItem(k,v); return; } }catch(e){} _fwMem['l:'+k]=v; }
+
 function computeRisk(overrides){
   overrides=overrides||{};
   const gender=document.getElementById('gender').value;
@@ -3276,8 +3286,8 @@ const _referrer    = document.referrer
   : 'direct';
 
 // セッションストレージに流入元を保存（フォーム送信時に付与）
-sessionStorage.setItem('fw_ref', _refSource);
-if(_isPartner) sessionStorage.setItem('fw_partner', '1');
+ssSet('fw_ref', _refSource);
+if(_isPartner) ssSet('fw_partner', '1');
 
 function fwTrack(event, props = {}) {
   const entry = {
@@ -3290,9 +3300,9 @@ function fwTrack(event, props = {}) {
   };
   // ローカルストレージに蓄積（直近100件）
   try {
-    const logs = JSON.parse(localStorage.getItem('fw_events') || '[]');
+    const logs = JSON.parse(lsGet('fw_events') || '[]');
     logs.push(entry);
-    localStorage.setItem('fw_events', JSON.stringify(logs.slice(-100)));
+    lsSet('fw_events', JSON.stringify(logs.slice(-100)));
   } catch(e) {}
   // GA4 / GTM が導入されている場合は自動送信
   if(typeof gtag === 'function') {
@@ -3340,9 +3350,9 @@ function bmiCategory(bmi) {
 function saveAnonRecord(state, sim) {
   const record = {
     ts:         new Date().toISOString(),
-    session_id: sessionStorage.getItem('fw_sid') || (()=>{
+    session_id: ssGet('fw_sid') || (()=>{
                   const id = Math.random().toString(36).slice(2,10);
-                  sessionStorage.setItem('fw_sid', id); return id; })(),
+                  ssSet('fw_sid', id); return id; })(),
     // 年齢層・性別（個人特定不可）
     age_group:  ageGroup(state.age),
     gender:     state.gender,
@@ -3373,9 +3383,9 @@ function saveAnonRecord(state, sim) {
 
   // ── ローカル保存 ──────────────────────────────
   try {
-    const records = JSON.parse(localStorage.getItem(ANON_STORE_KEY) || '[]');
+    const records = JSON.parse(lsGet(ANON_STORE_KEY) || '[]');
     records.push(record);
-    localStorage.setItem(ANON_STORE_KEY, JSON.stringify(records.slice(-MAX_LOCAL_RECORDS)));
+    lsSet(ANON_STORE_KEY, JSON.stringify(records.slice(-MAX_LOCAL_RECORDS)));
   } catch(e) {}
 
   // ── Google スプレッドシートへ送信（ANON_ENDPOINT 設定時のみ）──
@@ -3401,12 +3411,12 @@ function saveAnonRecord(state, sim) {
 // ── 管理画面（URL末尾に ?fw_admin=1 で表示）─────────
 if (_urlParams.get('fw_admin') === '1') {
   window.addEventListener('DOMContentLoaded', () => {
-    const records = JSON.parse(localStorage.getItem(ANON_STORE_KEY) || '[]');
+    const records = JSON.parse(lsGet(ANON_STORE_KEY) || '[]');
     const panel = document.createElement('div');
     panel.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;' +
       'background:#111;color:#eee;font:12px/1.6 monospace;padding:16px;z-index:99999;border-top:2px solid #0fa8a3;';
     panel.innerHTML = `<strong style="color:#6fd0cc">FW 匿名データ（${records.length}件）</strong>` +
-      `　<button onclick="navigator.clipboard.writeText(JSON.stringify(JSON.parse(localStorage.getItem('${ANON_STORE_KEY}')||'[]'),null,2))" ` +
+      `　<button onclick="navigator.clipboard.writeText(JSON.stringify(JSON.parse(lsGet('${ANON_STORE_KEY}')||'[]'),null,2))" ` +
       `style="background:#0fa8a3;color:#fff;border:none;padding:3px 10px;cursor:pointer;font-size:11px;margin-left:8px;">JSONコピー</button>` +
       `　<button onclick="this.closest('div').remove()" style="background:#555;color:#fff;border:none;padding:3px 10px;cursor:pointer;font-size:11px;">閉じる</button><hr style="border-color:#333;margin:8px 0">` +
       `<pre style="margin:0;white-space:pre-wrap;">${JSON.stringify(records.slice(-20), null, 2)}</pre>`;
@@ -3417,7 +3427,7 @@ if (_urlParams.get('fw_admin') === '1') {
 // ═══════════════════════════════════════════════════
 // 14. 同意モーダル
 // ═══════════════════════════════════════════════════
-let _consentGiven = sessionStorage.getItem('fw_consent') === '1';
+let _consentGiven = ssGet('fw_consent') === '1';
 
 function showConsentModal() {
   document.getElementById('consentOverlay').classList.add('open');
@@ -3435,7 +3445,7 @@ document.getElementById('consentCheck').addEventListener('change', function() {
 
 document.getElementById('consentOkBtn').addEventListener('click', () => {
   _consentGiven = true;
-  sessionStorage.setItem('fw_consent', '1');
+  ssSet('fw_consent', '1');
   closeConsentModal();
   fwTrack('consent_given');
   runSimulation();
@@ -3590,8 +3600,8 @@ document.getElementById('consultForm').addEventListener('submit', async function
   btn.textContent = '送信中...';
 
   const data = Object.fromEntries(new FormData(this));
-  data.ref = sessionStorage.getItem('fw_ref') || 'direct';
-  data.is_partner = sessionStorage.getItem('fw_partner') === '1';
+  data.ref = ssGet('fw_ref') || 'direct';
+  data.is_partner = ssGet('fw_partner') === '1';
   data.submitted_at = new Date().toISOString();
 
   fwTrack('form_submit', { purpose: data.purpose, partner_flow: data.is_partner });

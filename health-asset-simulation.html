@@ -497,6 +497,16 @@ canvas{width:100%!important;height:auto!important;display:block;}
 .sc-card-highlight-num{font-size:30px;font-weight:600;color:#7fe0d8;margin:8px 0;line-height:1.1;}
 .sc-card-highlight-sub{font-size:12px;color:rgba(255,255,255,.82);}
 .sc-card-foot{margin-top:16px;font-size:10px;color:rgba(255,255,255,.5);text-align:center;line-height:1.6;}
+/* ★結果まとめカード：結論を大きな1行に集約して出現 */
+.sc-headline{text-align:center;padding:8px 0 2px;}
+.sc-hl-pre{display:block;font-size:13px;color:rgba(255,255,255,.82);line-height:1.6;margin-bottom:6px;}
+.sc-hl-num{display:block;font-size:clamp(32px,8.5vw,52px);font-weight:600;line-height:1.04;letter-spacing:-.01em;}
+.sc-hl-num.bad{color:#ff8fae;}
+.sc-hl-num.good{color:#7fe0d8;font-size:clamp(22px,5vw,30px);}
+.sc-hl-sub{text-align:center;font-size:12px;color:rgba(255,255,255,.8);line-height:1.7;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.14);}
+.sc-hl-sub b{font-weight:800;}
+.sc-hl-sub b.good{color:#ffe27a;}
+.sc-hl-sub b.teal{color:#7fe0d8;}
 .share-actions{margin-top:12px;}
 .share-btn{background:linear-gradient(180deg,#0a807c 0%,#455049 100%);box-shadow:0 10px 22px rgba(50,60,52,.28);}
 /* 保存ボタンを横一行に */
@@ -508,7 +518,23 @@ canvas{width:100%!important;height:auto!important;display:block;}
   .sc-card-assets{gap:8px;}
   .sc-card-asset-val{font-size:16px;}
   .sc-card-highlight-num{font-size:24px;}
+  .sc-hl-pre{font-size:12px;}
 }
+
+/* STEP5（サービス紹介）折りたたみ：押したら見える */
+.step5-toggle{width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+  margin-top:14px;padding:15px 18px;background:#fff;border:1px solid var(--line);border-radius:10px;
+  cursor:pointer;transition:border-color .18s,background .18s,box-shadow .18s;}
+.step5-toggle:hover{border-color:var(--teal);background:#f7fdfc;box-shadow:0 6px 16px rgba(12,58,56,.08);}
+.step5-toggle .s5t-icon{flex:0 0 30px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:#fff;background:var(--teal);border-radius:50%;line-height:1;transition:transform .2s;}
+.step5-toggle[aria-expanded="true"] .s5t-icon{transform:rotate(45deg);}
+.step5-toggle .s5t-txt{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.step5-toggle .s5t-main{font-size:15px;font-weight:800;color:var(--text);}
+.step5-toggle .s5t-sub{font-size:11px;color:var(--muted);line-height:1.5;}
+.service-cta-wrap[hidden]{display:none;}
+.service-cta-wrap:not([hidden]){animation:s5reveal .32s ease;}
+@keyframes s5reveal{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
 
 /* improvement simulation */
 .improve-box{margin-top:16px;border:1px solid rgba(21,143,138,.35);background:#f8faf8;padding:18px 20px;}
@@ -797,15 +823,15 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
 /* ═══ A4レポート（画像保存＋PDF印刷 共通・モード対応・794×1123px＝A4縦@96dpi） ═══ */
 .report-a4-wrap{position:absolute;left:-99999px;top:0;width:794px;pointer-events:none;z-index:-1;}
-#reportA4{width:794px;min-height:1123px;box-sizing:border-box;padding:34px 38px;background:#fff;color:#14312f;
-  font-family:"Noto Sans JP",sans-serif;display:flex;flex-direction:column;gap:15px;}
+#reportA4{width:794px;min-height:1123px;box-sizing:border-box;padding:32px 38px;background:#fff;color:#14312f;
+  font-family:"Noto Sans JP",sans-serif;display:flex;flex-direction:column;gap:12px;}
 .ra-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--gold);padding-bottom:11px;}
 .ra-brand{display:flex;align-items:center;gap:11px;}
 .ra-brand img{height:38px;width:auto;}
 .ra-brand-txt{font-family:"EB Garamond",serif;font-size:18px;letter-spacing:.12em;color:#123a38;}
 .ra-title{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:#123a38;text-align:right;}
 .ra-title small{display:block;font-family:"Noto Sans JP",sans-serif;font-size:10px;color:#4f6e6b;margin-top:3px;font-weight:400;}
-.ra-hero{background:linear-gradient(135deg,#0e4f4c,#123a38);color:#fff;border-radius:10px;padding:22px 24px;text-align:center;}
+.ra-hero{background:linear-gradient(135deg,#0e4f4c,#123a38);color:#fff;border-radius:10px;padding:18px 24px;text-align:center;}
 .ra-hero-label{font-size:13px;color:rgba(255,255,255,.82);}
 .ra-hero-num{font-family:"EB Garamond",serif;font-size:46px;font-weight:600;line-height:1.3;color:#8fe3de;margin:6px 0 10px;}
 .ra-hero-sub{font-size:11px;color:rgba(255,255,255,.72);}
@@ -827,6 +853,15 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 .ra-msg{background:#f2fbfa;border:1px solid rgba(15,168,163,.35);border-radius:9px;padding:13px 15px;font-size:12px;line-height:1.75;color:#14312f;}
 .ra-msg strong{color:var(--teal-text);}
 .ra-foot{margin-top:auto;font-size:8px;line-height:1.55;color:#8a9a97;border-top:1px solid #e0e8e6;padding-top:9px;}
+/* ★PDF：入力データ（基本情報・健診結果） */
+.ra-input .ra-sec-t{margin-bottom:7px;}
+.ra-input-grid{display:flex;flex-direction:column;gap:7px;}
+.ra-igroup{display:flex;flex-wrap:wrap;align-items:center;gap:6px 7px;}
+.ra-igl{flex:0 0 auto;font-size:10px;font-weight:800;color:#0e5f5b;background:#e7f5f3;border-radius:4px;padding:3px 9px;}
+.ra-ichip{display:inline-flex;align-items:baseline;gap:5px;font-size:11px;background:#f4f8f7;border:1px solid #e0eae8;border-radius:5px;padding:3px 9px;}
+.ra-ichip .k{color:#5a736f;font-size:10px;}
+.ra-ichip .v{color:#14312f;font-weight:700;}
+.ra-inone{font-size:10px;color:#8a9a97;}
 
 /* ── 印刷（PDF保存）：A4縦・レポート1枚のみ ── */
 @page{size:A4 portrait;margin:0;}
@@ -1555,21 +1590,11 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
         <span class="sc-card-risk-label">総合疾患リスクスコア</span>
         <span class="sc-card-risk-badge" id="scRiskBadge">--</span>
       </div>
-      <div class="sc-card-assets">
-        <div class="sc-card-asset-item">
-          <div class="sc-card-asset-label">健康維持した場合の80歳資産</div>
-          <div class="sc-card-asset-val good" id="scGood">--</div>
-        </div>
-        <div class="sc-card-asset-item">
-          <div class="sc-card-asset-label">現状放置した場合の80歳資産</div>
-          <div class="sc-card-asset-val bad" id="scBad">--</div>
-        </div>
+      <div class="sc-headline">
+        <span class="sc-hl-pre" id="scHlPre">現状放置すると、80歳で</span>
+        <span class="sc-hl-num bad" id="scHlNum">--</span>
       </div>
-      <div class="sc-card-highlight" id="scExerciseBox">
-        <div class="sc-card-highlight-label">30分の運動 1回で、将来の資産の目減りを</div>
-        <div class="sc-card-highlight-num" id="scExerciseVal">--</div>
-        <div class="sc-card-highlight-sub">防げる計算になります</div>
-      </div>
+      <div class="sc-hl-sub" id="scHlSub">--</div>
       <div class="sc-card-foot">BODY PALETTE ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません。まずは二次健診の受診を。</div>
     </div>
     <div class="share-actions">
@@ -1589,6 +1614,16 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 
     <div class="step-sec-head" id="step5"><span class="ph-step">STEP 5</span>継続と相談で、資産を守る</div>
 
+    <!-- STEP5＝サービス紹介。押したら開く（既定は閉じておく） -->
+    <button type="button" class="step5-toggle" id="step5Toggle" aria-expanded="false" aria-controls="step5Body">
+      <span class="s5t-icon">＋</span>
+      <span class="s5t-txt">
+        <span class="s5t-main">継続サポート・サービスのご案内を見る</span>
+        <span class="s5t-sub">BODY PALETTE の運動習慣サポート（オンラインPT・医療費控除対象パーソナル・女性専門ピラティス）</span>
+      </span>
+    </button>
+
+    <div class="service-cta-wrap" id="step5Body" hidden>
     <!-- 3サービス CTA -->
     <div class="service-cta-section">
 
@@ -1644,6 +1679,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       </div>
       <p class="service-note">初回カウンセリングは無料・予約不要。オンライン対応可。</p>
     </div>
+    </div><!-- /#step5Body -->
 
 
   </div>
@@ -1723,6 +1759,10 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
         <div class="ra-cmp"><div class="l" id="raCmpLL">健康維持なら</div><div class="v good" id="raCmpLV">--</div></div>
         <div class="ra-cmp"><div class="l" id="raCmpRL">現状放置なら</div><div class="v bad" id="raCmpRV">--</div></div>
       </div>
+    </div>
+    <div class="ra-input">
+      <div class="ra-sec-t">入力データ（基本情報・健診結果）</div>
+      <div class="ra-input-grid" id="raInputGrid"></div>
     </div>
     <div>
       <div class="ra-sec-t">6つの疾患リスク評価</div>
@@ -2578,6 +2618,43 @@ function renderReportA4(s,sim,life){
     g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>継続的な運動習慣</strong>で将来の資産を守りましょう。';
     g('raFoot').innerHTML='出典：厚労省「生涯医療費」／国税庁・総務省・金融庁データ／各疾患の査読論文。参考試算値であり、医学的診断・投資助言ではありません。まずは二次健診の受診を。';
   }
+  renderReportInputs();
+}
+
+// PDF/画像レポートに「入力データ（基本情報・健診結果）」を出力（入力された項目のみ表示）
+function renderReportInputs(){
+  const grid=document.getElementById('raInputGrid');
+  if(!grid) return;
+  const val=id=>{const e=document.getElementById(id); return e?String(e.value||'').trim():'';};
+  const selTxt=id=>{const e=document.getElementById(id); return (e&&e.selectedIndex>=0&&e.options[e.selectedIndex])?e.options[e.selectedIndex].text:'';};
+  const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  // 基本情報
+  const basic=[];
+  const bpush=(k,v)=>{ if(v) basic.push([k,v]); };
+  bpush('性別', selTxt('gender'));
+  bpush('年齢', val('age')?val('age')+'歳':'');
+  bpush('身長', val('height')?val('height')+'cm':'');
+  bpush('体重', val('weight')?val('weight')+'kg':'');
+  bpush('腹囲', val('waist')?val('waist')+'cm':'');
+  const _h=parseFloat(val('height')), _w=parseFloat(val('weight'));
+  if(_h>0&&_w>0) bpush('BMI', (_w/Math.pow(_h/100,2)).toFixed(1));
+  bpush('運動習慣', selTxt('habit'));
+  { let sm=selTxt('smoking'); const smEl=document.getElementById('smoking');
+    if(smEl && smEl.value==='current'){ const c=val('cigCount'); sm=sm+(c?'（'+c+'本/日）':''); }
+    bpush('喫煙', sm); }
+  bpush('年収', val('income')?val('income')+'万円':'');
+  bpush('総資産', val('assets')?val('assets')+'万円':'');
+  // 健診値（入力があるものだけ）
+  const labs=[];
+  if(val('sbp')||val('dbp')) labs.push(['血圧', (val('sbp')||'—')+'/'+(val('dbp')||'—')+' mmHg']);
+  const lpush=(k,id,u)=>{ if(val(id)) labs.push([k, val(id)+(u||'')]); };
+  lpush('LDL','ldl',' mg/dL'); lpush('HDL','hdl',' mg/dL'); lpush('中性脂肪','tg',' mg/dL');
+  lpush('空腹時血糖','glucose',' mg/dL'); lpush('HbA1c','hba1c',' %');
+  lpush('AST','ast',' U/L'); lpush('ALT','alt',' U/L'); lpush('γ-GTP','ggt',' U/L');
+  const chip=p=>'<span class="ra-ichip"><span class="k">'+esc(p[0])+'</span><span class="v">'+esc(p[1])+'</span></span>';
+  let html='<div class="ra-igroup"><span class="ra-igl">基本情報</span>'+basic.map(chip).join('')+'</div>';
+  html+='<div class="ra-igroup"><span class="ra-igl">健診値</span>'+(labs.length?labs.map(chip).join(''):'<span class="ra-inone">未入力（基本情報のみで試算）</span>')+'</div>';
+  grid.innerHTML=html;
 }
 
 // 改善（禁煙・運動習慣・減量）を反映した場合の資産推移。altStateはcomputeRisk(overrides)の結果
@@ -3158,30 +3235,28 @@ function updateAll(){
   const total=sim.cumulativePT+sim.cumulativeMed+sim.compoundLoss;
   document.getElementById('lossTotal').textContent=`-${fmt(total)}`;
 
-  // 結果まとめカード（30分の運動の価値／画像保存用）
+  // 結果まとめカード（結論を大きな1行に集約して出現）
   document.getElementById('scRiskBadge').textContent=`${s.medScore} （${lv(s.medScore)}）`;
-  document.getElementById('scGood').textContent=fmt(sim.blue80);
-  document.getElementById('scBad').textContent=fmt(sim.red80);
   document.getElementById('scDate').textContent=new Date().toLocaleDateString('ja-JP');
+  const scPre=document.getElementById('scHlPre');
+  const scNum=document.getElementById('scHlNum');
+  const scSub=document.getElementById('scHlSub');
   const exVal=computeExerciseValue(s,sim);
-  const exBox=document.getElementById('scExerciseBox');
-  const exLabel=exBox.querySelector('.sc-card-highlight-label');
-  const exSub=exBox.querySelector('.sc-card-highlight-sub');
-  if(exVal){
-    exLabel.textContent='30分の運動 1回で、将来の資産の目減りを';
-    document.getElementById('scExerciseVal').textContent=fmtYen(exVal.perSessionYen);
-    exSub.textContent='防げる計算になります';
-  } else if(s.exerciseHours>=3){
-    exLabel.textContent='すでに週3回以上の運動習慣があります。';
-    document.getElementById('scExerciseVal').textContent='素晴らしいです！';
-    exSub.textContent='その習慣が将来の資産を守っています。';
+  if(sim.diff80>=10){
+    scPre.textContent='現状放置すると、80歳で';
+    scNum.className='sc-hl-num bad';
+    scNum.textContent=`−${fmt(sim.diff80)}`;
+    let sub=`健康維持なら <b class="good">${fmt(sim.blue80)}</b>`;
+    if(exVal) sub+=` ／ 30分の運動 1回で <b class="teal">${fmtYen(exVal.perSessionYen)}</b> を守れる計算です`;
+    else if(s.exerciseHours>=3) sub+=` ／ すでに週3回以上の運動習慣が将来の資産を守っています`;
+    else sub+=` ／ 運動習慣が将来の資産を守ります`;
+    scSub.innerHTML=sub;
   } else {
-    // 現状の入力では医療費に影響するほどのリスクが顕在化していないケース
-    exLabel.textContent='現在は大きな健康リスクは見られません。';
-    document.getElementById('scExerciseVal').textContent='この状態をキープ';
-    exSub.textContent='運動習慣が、将来のリスク上昇を防ぐ一番のお守りです。';
+    scPre.textContent='今の状態なら、80歳の資産への影響は';
+    scNum.className='sc-hl-num good';
+    scNum.textContent='ほとんど差なし';
+    scSub.innerHTML='この良い状態をキープしましょう。運動習慣が将来のリスク上昇を防ぐ一番のお守りです。';
   }
-  exBox.style.display='';
 
 }
 
@@ -3485,7 +3560,10 @@ function animateHero(){
       if(t>0) _animNum(document.getElementById('lifeLostBig'), t, v=>`−${v.toFixed(1)}年`);
     } else {
       const t=window._a80target||0;
-      if(t>=10) _animNum(document.getElementById('a80diffBig'), t, v=>`−${fmt(Math.round(v))}`);
+      if(t>=10){
+        _animNum(document.getElementById('a80diffBig'), t, v=>`−${fmt(Math.round(v))}`);
+        _animNum(document.getElementById('scHlNum'), t, v=>`−${fmt(Math.round(v))}`);
+      }
     }
   }catch(e){}
 }
@@ -3563,6 +3641,19 @@ document.getElementById('impWeightLoss').addEventListener('change',()=>{
   const m=document.getElementById('impWeightMinus'), p=document.getElementById('impWeightPlus');
   if(m) m.addEventListener('click',()=>step(-1));
   if(p) p.addEventListener('click',()=>step(1));
+})();
+// STEP5（サービス紹介）：押したら開く／もう一度押すと閉じる
+(function(){
+  const btn=document.getElementById('step5Toggle');
+  const body=document.getElementById('step5Body');
+  if(!btn||!body) return;
+  const main=btn.querySelector('.s5t-main');
+  btn.addEventListener('click',()=>{
+    const willOpen=body.hasAttribute('hidden');
+    if(willOpen){ body.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); if(main)main.textContent='継続サポート・サービスのご案内を閉じる'; }
+    else{ body.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); if(main)main.textContent='継続サポート・サービスのご案内を見る'; }
+    try{ fwTrack('step5_toggle',{open:willOpen}); }catch(e){}
+  });
 })();
 
 // ═══════════════════════════════════════════════════

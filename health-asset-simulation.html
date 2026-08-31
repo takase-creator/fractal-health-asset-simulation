@@ -846,7 +846,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 .ra-risks .rr-bar{flex:0 0 560px;width:560px;height:10px;background:#e7f1ef;border-radius:99px;overflow:hidden;display:block;}
 .ra-risks .rr-fill{display:block;height:10px;border-radius:99px;}
 .ra-risks .rr-v{flex:0 0 30px;text-align:right;font-size:12px;font-weight:800;}
-.ra-list .li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(18,58,56,.1);padding:7px 0;font-size:12px;}
+.ra-list .li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(18,58,56,.1);padding:5px 0;font-size:12px;}
 .ra-list .li:last-child{border-bottom:none;}
 .ra-list .li .y{font-weight:800;color:var(--teal-text);white-space:nowrap;}
 .ra-list .li.tot{margin-top:2px;border-top:2px solid rgba(18,58,56,.2);border-bottom:none;font-weight:800;padding-top:8px;}
@@ -862,12 +862,48 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
 .ra-ichip .k{color:#5a736f;font-size:10px;}
 .ra-ichip .v{color:#14312f;font-weight:700;}
 .ra-inone{font-size:10px;color:#8a9a97;}
+/* ★PDF：ヒーロー計算式 */
+.ra-formula{display:flex;align-items:stretch;justify-content:center;gap:9px;margin-top:8px;flex-wrap:nowrap;}
+.rf-cell{flex:1;min-width:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:9px 5px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:4px;}
+.rf-cell.res{background:rgba(255,210,122,.16);border-color:rgba(255,210,122,.45);}
+.rf-l{font-size:10px;color:rgba(255,255,255,.72);line-height:1.3;}
+.rf-v{font-family:"EB Garamond",serif;font-size:25px;font-weight:600;line-height:1.05;white-space:nowrap;}
+.rf-v.good{color:#8fe3de;} .rf-v.bad{color:#ff9a9a;} .rf-v.diff{color:#ffd27a;}
+.rf-op{display:flex;align-items:center;font-size:20px;font-weight:700;color:rgba(255,255,255,.55);}
+/* ★PDF：入力データ 基準範囲 */
+.ra-sec-note{font-size:9px;font-weight:400;color:#6a807c;margin-left:8px;}
+.ra-sec-note b.warn{color:#d17d1a;}
+.ra-ichip.warn{background:#fdf1e7;border-color:#f3d3b0;}
+.ra-ichip.warn .v{color:#c25e12;}
+.ra-ichip .u{color:#5a736f;font-size:9px;font-weight:400;}
+.ra-ichip .ref{color:#94a3a0;font-size:9px;font-weight:400;border-left:1px solid #d8e2e0;padding-left:5px;margin-left:1px;}
+/* ★PDF：リスク評価＋現状継続時の見込み 2カラム */
+.ra-risk2,.ra-bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.ra-risk2 .ra-risks .rr-bar{flex:1 1 auto;width:auto;}
+.ra-risk2 .ra-risks .rr-n{flex:0 0 58px;font-size:10px;}
+.ra-risk2 .ra-risks .rr{margin-bottom:9px;}
+.ra-trend{display:flex;flex-direction:column;gap:6px;}
+.ra-tr{border-left:3px solid #e0a94f;padding:1px 0 1px 8px;}
+.ra-tr.ok{border-left-color:#3fae86;}
+.ra-tr .tl{display:block;font-size:10px;font-weight:700;color:#14312f;line-height:1.35;}
+.ra-tr .tv{display:block;font-size:10px;color:#5a736f;line-height:1.4;}
+.ra-tr.ok .tv{color:#2a7d5f;}
+.ra-cvd-note{margin-top:8px;font-size:9px;color:#7a8a87;background:#f4f8f7;border-radius:5px;padding:6px 9px;line-height:1.55;}
+/* ★PDF：次にすべきこと */
+.ra-next{background:#f2fbfa;border:1px solid rgba(15,168,163,.3);border-radius:9px;padding:11px 14px;}
+.ra-next .ra-sec-t{border:none;padding:0;margin-bottom:8px;color:#0e5f5b;}
+.ra-steps{margin:0;padding:0;list-style:none;counter-reset:s;}
+.ra-steps li{position:relative;padding:3px 0 3px 25px;font-size:11px;line-height:1.5;color:#14312f;counter-increment:s;}
+.ra-steps li+li{margin-top:3px;}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:3px;width:18px;height:18px;background:var(--teal);color:#fff;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.ra-steps li b{color:var(--teal-text);font-weight:800;}
 
 /* ── 印刷（PDF保存）：A4縦・レポート1枚のみ ── */
 @page{size:A4 portrait;margin:0;}
 @media print{
   .report-a4-wrap{position:static!important;left:auto!important;top:auto!important;width:794px!important;margin:0 auto!important;pointer-events:auto;z-index:auto;}
-  #reportA4{box-shadow:none!important;max-height:1123px;overflow:hidden;}
+  #reportA4{box-shadow:none!important;overflow:visible;}
+  .ra-hero,.ra-input,.ra-risk2,.ra-bottom,.ra-msg,.ra-risk2>div,.ra-bottom>div{break-inside:avoid;}
   .report-a4-wrap *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   .brand-header,.hero,.step-nav,.layout,.disclaimer,.sticky-cta,.consent-overlay,.form-overlay{display:none!important;}
   .page{padding:0!important;margin:0!important;max-width:none!important;}
@@ -1752,25 +1788,39 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
       <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
     </div>
     <div class="ra-hero">
-      <div class="ra-hero-label" id="raHeroLabel">--</div>
-      <div class="ra-hero-num" id="raHeroNum">--</div>
-      <div class="ra-hero-sub" id="raHeroSub">--</div>
-      <div class="ra-compare">
-        <div class="ra-cmp"><div class="l" id="raCmpLL">健康維持なら</div><div class="v good" id="raCmpLV">--</div></div>
-        <div class="ra-cmp"><div class="l" id="raCmpRL">現状放置なら</div><div class="v bad" id="raCmpRV">--</div></div>
+      <div class="ra-hero-label" id="raHeroLabel">このまま放置すると、80歳のとき</div>
+      <div class="ra-formula">
+        <div class="rf-cell"><span class="rf-l" id="raFmLL">健康維持なら</span><span class="rf-v good" id="raFmLV">--</span></div>
+        <span class="rf-op">−</span>
+        <div class="rf-cell"><span class="rf-l" id="raFmRL">現状放置なら</span><span class="rf-v bad" id="raFmRV">--</span></div>
+        <span class="rf-op">＝</span>
+        <div class="rf-cell res"><span class="rf-l" id="raFmDL">資産損失の可能性</span><span class="rf-v diff" id="raFmDV">--</span></div>
       </div>
     </div>
     <div class="ra-input">
-      <div class="ra-sec-t">入力データ（基本情報・健診結果）</div>
+      <div class="ra-sec-t">入力データ（基本情報・健診結果）<span class="ra-sec-note">健診値は右に基準範囲を併記／<b class="warn">オレンジ</b>は基準を外れた要注意項目</span></div>
       <div class="ra-input-grid" id="raInputGrid"></div>
     </div>
-    <div>
-      <div class="ra-sec-t">6つの疾患リスク評価</div>
-      <div class="ra-risks" id="raRisks"></div>
+    <div class="ra-risk2">
+      <div>
+        <div class="ra-sec-t">6つの疾患リスク評価</div>
+        <div class="ra-risks" id="raRisks"></div>
+      </div>
+      <div>
+        <div class="ra-sec-t">現状の数値が続いた場合の見込み</div>
+        <div class="ra-trend" id="raTrend"></div>
+        <div class="ra-cvd-note">※CVD＝心血管疾患。心筋梗塞・脳卒中など、心臓と血管の病気の総称です。数値は集団平均・相対リスクに基づく試算です。</div>
+      </div>
     </div>
-    <div>
-      <div class="ra-sec-t" id="raDetailT">--</div>
-      <div class="ra-list" id="raDetail"></div>
+    <div class="ra-bottom">
+      <div>
+        <div class="ra-sec-t" id="raDetailT">--</div>
+        <div class="ra-list" id="raDetail"></div>
+      </div>
+      <div class="ra-next">
+        <div class="ra-sec-t">この結果から、次にすべきこと</div>
+        <ol class="ra-steps" id="raSteps"></ol>
+      </div>
     </div>
     <div class="ra-msg" id="raMsg"></div>
     <div class="ra-foot" id="raFoot"></div>
@@ -2587,27 +2637,26 @@ function renderReportA4(s,sim,life){
     const v=(s.risks&&s.risks[o[0]])||0, col=bc(v);
     return `<div class="rr"><span class="rr-n">${o[1]}</span><span class="rr-bar"><span class="rr-fill" style="width:${v}%;background:${col}"></span></span><span class="rr-v" style="color:${col}">${v}</span></div>`;
   }).join('');
+  renderReportTrend(s);
   if(_lsMode==='lifespan'){
     set('raTitle','健康寿命シミュレーション結果');
-    set('raHeroLabel','このまま放置すると、健康寿命が');
-    set('raHeroNum',`−${life.loss}年`);
-    set('raHeroSub','健康維持した場合との差（元気に自立して過ごせる年数）');
-    set('raCmpLL','健康維持なら'); set('raCmpLV', life.maintainAge+'歳');
-    set('raCmpRL','現状放置なら'); set('raCmpRV', life.neglectAge+'歳');
+    set('raHeroLabel','このまま放置すると、元気に自立して過ごせる年齢は');
+    set('raFmLL','健康維持なら'); set('raFmLV', life.maintainAge+'歳');
+    set('raFmRL','現状放置なら'); set('raFmRV', life.neglectAge+'歳');
+    set('raFmDL','健康寿命の損失'); set('raFmDV', life.loss+'年');
     set('raDetailT','今からできる改善で取り戻せる健康年数');
     g('raDetail').innerHTML = life.actions.length
-      ? life.actions.map(a=>`<div class="li"><span>${a.label}</span><span class="y">+${a.years}年</span></div>`).join('')
+      ? life.actions.slice(0,4).map(a=>`<div class="li"><span>${a.label}</span><span class="y">+${a.years}年</span></div>`).join('')
         + `<div class="li tot"><span>すべて改善すると</span><span class="y">最大 +約${life.loss}年</span></div>`
       : '<div class="li"><span>現在の生活習慣は良好です。この状態を維持しましょう。</span></div>';
     g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>専門家の知見のもと継続的な運動習慣</strong>で健康寿命を守りましょう。';
     g('raFoot').innerHTML='出典：厚労省 健康寿命2022／NIPPON DATA80・90／日本糖尿病学会 2011-2020／国立がん研究センター プール解析／Age &amp; Ageing 2018。集団平均・相対リスクに基づく試算（±'+Math.max(1,Math.round(life.loss*0.25))+'年程度の幅）。医学的診断ではありません。';
   } else {
     set('raTitle','健康資産シミュレーション結果');
-    set('raHeroLabel','このまま放置すると、80歳のとき資産が');
-    set('raHeroNum',`−${fmt(sim.diff80)}`);
-    set('raHeroSub','健康維持した場合より少なくなります');
-    set('raCmpLL','健康維持なら'); set('raCmpLV', fmt(sim.blue80));
-    set('raCmpRL','現状放置なら'); set('raCmpRV', fmt(sim.red80));
+    set('raHeroLabel','このまま放置すると、80歳のときの資産は');
+    set('raFmLL','健康維持なら'); set('raFmLV', fmt(sim.blue80));
+    set('raFmRL','現状放置なら'); set('raFmRV', fmt(sim.red80));
+    set('raFmDL','資産損失の可能性'); set('raFmDV', fmt(sim.diff80));
     set('raDetailT','健康リスク放置による推定損失（〜80歳）');
     const tot=sim.cumulativePT+sim.cumulativeMed+sim.compoundLoss;
     g('raDetail').innerHTML=
@@ -2619,42 +2668,79 @@ function renderReportA4(s,sim,life){
     g('raFoot').innerHTML='出典：厚労省「生涯医療費」／国税庁・総務省・金融庁データ／各疾患の査読論文。参考試算値であり、医学的診断・投資助言ではありません。まずは二次健診の受診を。';
   }
   renderReportInputs();
+  renderReportSteps(s);
 }
 
-// PDF/画像レポートに「入力データ（基本情報・健診結果）」を出力（入力された項目のみ表示）
+// PDF/画像レポートに「入力データ（基本情報・健診結果＋基準範囲）」を出力（入力された項目のみ）
 function renderReportInputs(){
   const grid=document.getElementById('raInputGrid');
   if(!grid) return;
   const val=id=>{const e=document.getElementById(id); return e?String(e.value||'').trim():'';};
+  const num=id=>{const v=val(id); return v===''?null:parseFloat(v);};
   const selTxt=id=>{const e=document.getElementById(id); return (e&&e.selectedIndex>=0&&e.options[e.selectedIndex])?e.options[e.selectedIndex].text:'';};
+  const gv=id=>{const e=document.getElementById(id); return e?e.value:'';};
   const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const chip=o=>`<span class="ra-ichip${o.warn?' warn':''}"><span class="k">${esc(o.k)}</span><span class="v">${esc(o.v)}</span>${o.u?`<span class="u">${esc(o.u)}</span>`:''}${o.ref?`<span class="ref">${esc(o.ref)}</span>`:''}</span>`;
   // 基本情報
   const basic=[];
-  const bpush=(k,v)=>{ if(v) basic.push([k,v]); };
+  const bpush=(k,v,warn)=>{ if(v) basic.push({k,v,warn:!!warn}); };
   bpush('性別', selTxt('gender'));
   bpush('年齢', val('age')?val('age')+'歳':'');
   bpush('身長', val('height')?val('height')+'cm':'');
   bpush('体重', val('weight')?val('weight')+'kg':'');
-  bpush('腹囲', val('waist')?val('waist')+'cm':'');
-  const _h=parseFloat(val('height')), _w=parseFloat(val('weight'));
-  if(_h>0&&_w>0) bpush('BMI', (_w/Math.pow(_h/100,2)).toFixed(1));
+  const _wa=num('waist'), _g=gv('gender');
+  if(val('waist')) bpush('腹囲', val('waist')+'cm', (_g==='male'&&_wa>=85)||(_g==='female'&&_wa>=90));
+  const _h=num('height'), _w=num('weight');
+  if(_h>0&&_w>0){ const bmi=_w/Math.pow(_h/100,2); bpush('BMI', bmi.toFixed(1), bmi>=25); }
   bpush('運動習慣', selTxt('habit'));
-  { let sm=selTxt('smoking'); const smEl=document.getElementById('smoking');
-    if(smEl && smEl.value==='current'){ const c=val('cigCount'); sm=sm+(c?'（'+c+'本/日）':''); }
-    bpush('喫煙', sm); }
+  { let sm=selTxt('smoking'); const smv=gv('smoking');
+    if(smv==='current'){ const c=val('cigCount'); sm=sm+(c?'（'+c+'本/日）':''); }
+    bpush('喫煙', sm, smv==='current'); }
   bpush('年収', val('income')?val('income')+'万円':'');
   bpush('総資産', val('assets')?val('assets')+'万円':'');
-  // 健診値（入力があるものだけ）
+  // 健診値（基準範囲つき・入力があるものだけ）
   const labs=[];
-  if(val('sbp')||val('dbp')) labs.push(['血圧', (val('sbp')||'—')+'/'+(val('dbp')||'—')+' mmHg']);
-  const lpush=(k,id,u)=>{ if(val(id)) labs.push([k, val(id)+(u||'')]); };
-  lpush('LDL','ldl',' mg/dL'); lpush('HDL','hdl',' mg/dL'); lpush('中性脂肪','tg',' mg/dL');
-  lpush('空腹時血糖','glucose',' mg/dL'); lpush('HbA1c','hba1c',' %');
-  lpush('AST','ast',' U/L'); lpush('ALT','alt',' U/L'); lpush('γ-GTP','ggt',' U/L');
-  const chip=p=>'<span class="ra-ichip"><span class="k">'+esc(p[0])+'</span><span class="v">'+esc(p[1])+'</span></span>';
+  { const sbp=num('sbp'), dbp=num('dbp');
+    if(val('sbp')||val('dbp')) labs.push({k:'血圧', v:(val('sbp')||'—')+'/'+(val('dbp')||'—'), u:'mmHg', ref:'基準 <130/85', warn:(sbp!==null&&sbp>=130)||(dbp!==null&&dbp>=85)}); }
+  const L=(k,id,u,lo,hi,ref)=>{ const x=num(id); if(x!==null) labs.push({k,v:val(id),u,ref,warn:(lo!==null&&x<lo)||(hi!==null&&x>hi)}); };
+  L('LDL','ldl','mg/dL',null,139,'基準 <120');
+  L('HDL','hdl','mg/dL',40,null,'基準 ≥40');
+  L('中性脂肪','tg','mg/dL',null,149,'基準 <150');
+  L('空腹時血糖','glucose','mg/dL',null,99,'基準 <100');
+  L('HbA1c','hba1c','%',null,5.5,'基準 <5.6');
+  L('AST','ast','U/L',null,30,'基準 ≤30');
+  L('ALT','alt','U/L',null,30,'基準 ≤30');
+  L('γ-GTP','ggt','U/L',null,50,'基準 ≤50');
   let html='<div class="ra-igroup"><span class="ra-igl">基本情報</span>'+basic.map(chip).join('')+'</div>';
   html+='<div class="ra-igroup"><span class="ra-igl">健診値</span>'+(labs.length?labs.map(chip).join(''):'<span class="ra-inone">未入力（基本情報のみで試算）</span>')+'</div>';
   grid.innerHTML=html;
+}
+
+// PDF：「現状の数値が続いた場合の見込み」（computeTrend を再利用）
+function renderReportTrend(s){
+  const box=document.getElementById('raTrend');
+  if(!box) return;
+  let trend; try{ trend=computeTrend(s); }catch(e){ trend={rows:[]}; }
+  const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const rows=(trend&&trend.rows)||[];
+  box.innerHTML = rows.length
+    ? rows.map(r=>`<div class="ra-tr ${r.ok?'ok':''}"><span class="tl">${esc(r.label)}</span><span class="tv">${esc(r.val)}</span></div>`).join('')
+    : '<div class="ra-tr ok"><span class="tv">主要なリスクシグナルは検出されませんでした。この状態の維持を。</span></div>';
+}
+
+// PDF：「この結果から、次にすべきこと」（入力から具体的な行動を生成）
+function renderReportSteps(s){
+  const ol=document.getElementById('raSteps');
+  if(!ol) return;
+  let flags=[]; try{ flags=computeAlertFlags(s)||[]; }catch(e){}
+  const steps=[];
+  if(flags.length) steps.push(`基準を外れた項目（${flags.length}つ）を<b>二次健診で精密検査</b>し、医師に相談する`);
+  else steps.push(`気になる数値は<b>二次健診で正確に確認</b>する（健診はふるい分けの簡易検査です）`);
+  if(s.exerciseHours>=2.5) steps.push(`今の<b>運動習慣を継続</b>する（週150分以上でCVD死亡リスク約29%減）`);
+  else steps.push(`<b>運動習慣を身につける</b>（まずは週2〜3回・1回30分から。将来の資産を守る一番割のいい対策）`);
+  if(s.smoking==='current') steps.push(`<b>禁煙</b>に取り組む（本数を減らすだけでもリスクは下がります）`);
+  if(s.bmi!==null&&s.bmi>=25) steps.push(`<b>減量</b>する（まずは現体重の3〜5%を目標に）`);
+  ol.innerHTML = steps.slice(0,4).map(t=>`<li>${t}</li>`).join('');
 }
 
 // 改善（禁煙・運動習慣・減量）を反映した場合の資産推移。altStateはcomputeRisk(overrides)の結果

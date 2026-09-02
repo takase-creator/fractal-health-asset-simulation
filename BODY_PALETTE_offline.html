@@ -804,6 +804,9 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
   font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;
   transition:background .18s,color .18s,border-color .18s;text-align:center;}
 .sc-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* 予約（STORES）ボタン：塗りつぶしの主action */
+.sc-btn-book{display:block;margin-top:8px;background:var(--gold);border-color:var(--gold);color:#fff;text-decoration:none;}
+.sc-btn-book:hover{background:var(--gold);color:#fff;filter:brightness(1.08);}
 .service-note{font-size:10px;color:var(--muted);text-align:center;margin-top:8px;}
 @media(max-width:768px){
   .service-cta-grid{grid-template-columns:1fr;}
@@ -1675,17 +1678,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <div class="rh-sub" id="roiProtectSub">現状放置のシナリオと比べた差額（試算値）</div>
         </div>
 
-        <table class="roi-table" id="roiTable">
-          <thead>
-            <tr><th>運動プラン</th><th>生涯の運動投資<br>（週2回を80歳まで継続）</th><th>守れる生涯資産</th><th>投資対効果</th></tr>
-          </thead>
-          <tbody id="roiTableBody"></tbody>
-        </table>
-
-        <div class="roi-punch" id="roiPunch">
-          運動を続ける費用を差し引いても、<strong id="roiPunchNum">--</strong>の資産を守れる計算です。<br>運動は、いちばん割のいい「資産防衛」です。
-        </div>
-        <p class="roi-note">※「守れる生涯資産」は現在の年齢から80歳まで週2回の運動を継続した場合の試算値です。「生涯の運動投資」は同じ期間・週2回を<strong>PT単価（30分5,000円／60分10,000円）で換算した上限の目安</strong>で、習慣化後に自己運動で続ければ費用はさらに下がり、投資対効果はより高くなります。金額は入力値からの試算であり効果を保証するものではありません。習慣形成の目安は Lally et al. <em>Eur J Soc Psychol</em> 2010（中央値66日）を参考。</p>
+        <p class="roi-note">※現在の年齢から80歳まで、継続的な運動習慣を実践した場合の試算値です。金額は入力値からの試算であり、効果を保証するものではありません。まずは二次健診の受診を。</p>
       </div>
 
       <div class="service-cta-label">だから、運動習慣づくりを BODY PALETTE がサポートします</div>
@@ -1696,6 +1689,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <div class="sc-title">オンライン<br>パーソナルトレーニング</div>
           <div class="sc-desc">自宅・出張先どこからでも。プロトレーナーと1対1でトレーニング継続をサポート。</div>
           <button class="sc-btn" data-cta-pos="bottom" data-service="online">詳細・無料相談する</button>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4274609" target="_blank" rel="noopener noreferrer" data-reserve="online">予約・体験する →</a>
         </div>
 
         <div class="service-card">
@@ -1703,6 +1697,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <div class="sc-title">医療費控除対象<br>パーソナルトレーニング</div>
           <div class="sc-desc">健康保険適用外ながら医療費控除の対象となるプラン。予防医療・健康経営に。</div>
           <button class="sc-btn" data-cta-pos="bottom" data-service="harajuku-pt">詳細・無料相談する</button>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/2847212" target="_blank" rel="noopener noreferrer" data-reserve="harajuku-pt">予約・体験する →</a>
         </div>
 
         <div class="service-card">
@@ -1710,6 +1705,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <div class="sc-title">ピラティス<br>（女性専門コース）</div>
           <div class="sc-desc">体幹・姿勢・コンディショニングを重視した女性専門のピラティスプログラム。</div>
           <button class="sc-btn" data-cta-pos="bottom" data-service="pilates">詳細・無料相談する</button>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4897576" target="_blank" rel="noopener noreferrer" data-reserve="pilates">予約・体験する →</a>
         </div>
 
       </div>
@@ -2838,13 +2834,10 @@ function protectedAssetsMan(s, sim, targetHours){
 }
 function renderExerciseROI(s, sim){
   const box = document.getElementById('roiBlock');
+  if(!box) return;
   const titleEl = box.querySelector('.roi-title');
   const leadEl = box.querySelector('.roi-lead');
   const headNum = document.getElementById('roiProtect');
-  const headSub = document.getElementById('roiProtectSub');
-  const table = document.getElementById('roiTable');
-  const punch = document.getElementById('roiPunch');
-  const note = box.querySelector('.roi-note');
 
   // 30分×週2回=1h/週、60分×週2回=2h/週 の2プランで守れる資産を試算
   const b30 = protectedAssetsMan(s, sim, 1.0);
@@ -2852,46 +2845,17 @@ function renderExerciseROI(s, sim){
 
   // すでに十分な運動習慣がある / これ以上の上乗せ効果がほぼ無い場合は維持メッセージ
   if(s.exerciseHours >= 2 || (b30 <= 0 && b60 <= 0)){
-    titleEl.innerHTML = 'すでに<span class="hl">良い運動習慣</span>をお持ちです。その習慣が、将来の資産を守っています。';
-    leadEl.textContent = '二次健診で数値を確認しつつ、今の運動習慣をぜひ継続してください。より効果的なトレーニングや継続のサポートが必要な場合は、下記もご活用ください。';
-    headNum.parentElement.style.display = 'none';
-    table.style.display = 'none';
-    punch.style.display = 'none';
-    note.style.display = 'none';
+    if(titleEl) titleEl.innerHTML = 'すでに<span class="hl">良い運動習慣</span>をお持ちです。その習慣が、将来の資産を守っています。';
+    if(leadEl) leadEl.textContent = '二次健診で数値を確認しつつ、今の運動習慣をぜひ継続してください。より効果的なトレーニングや継続のサポートが必要な場合は、下記もご活用ください。';
+    if(headNum && headNum.parentElement) headNum.parentElement.style.display = 'none';
     box.style.display = '';
     return;
   }
 
-  headNum.parentElement.style.display = '';
-  table.style.display = '';
-  punch.style.display = '';
-  note.style.display = '';
-  titleEl.innerHTML = '二次健診で数値を知ったら、次は<span class="hl">「運動習慣」で資産を守る</span>番です。';
-  leadEl.textContent = '健康診断は"現在地の確認"にすぎません。将来の資産を実際に守るのは、その後の——「継続的な健康習慣」です。運動習慣を身につけると、あなたの場合——';
-
-  headNum.textContent = '+' + fmt(Math.max(0, Math.round(b30)));
-
-  // 継続コストを織り込む：週2回の運動を80歳まで続けた場合の総費用（PT単価換算）
-  const _yrs = Math.max(1, 80 - s.age);
-  const _totalSessions = 2 * 52 * _yrs;   // 週2回×52週×残り年数
-  const rows = [
-    {course:'30分コース', per:'1回 5,000円', invYen: _totalSessions*PT_PRICE_30, protectMan: b30, plan:'週2回×30分'},
-    {course:'60分コース', per:'1回 10,000円', invYen: _totalSessions*PT_PRICE_60, protectMan: b60, plan:'週2回×60分'},
-  ];
-  const body = document.getElementById('roiTableBody');
-  body.innerHTML = '';
-  rows.forEach(r=>{
-    const protectMan = Math.max(0, Math.round(r.protectMan));
-    const roi = r.invYen>0 ? Math.round((protectMan*10000)/r.invYen) : 0;
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      `<td class="rt-course">${r.course}<small>${r.plan}／${r.per}</small></td>`+
-      `<td class="rt-invest">${(r.invYen/10000).toLocaleString()}万円</td>`+
-      `<td class="rt-protect">${fmt(protectMan)}</td>`+
-      `<td class="rt-roi">約${roi.toLocaleString()}倍</td>`;
-    body.appendChild(tr);
-  });
-  document.getElementById('roiPunchNum').textContent = fmt(Math.max(0, Math.round(b30 - (_totalSessions*PT_PRICE_30)/10000)));
+  if(headNum && headNum.parentElement) headNum.parentElement.style.display = '';
+  if(titleEl) titleEl.innerHTML = '二次健診で数値を知ったら、次は<span class="hl">「運動習慣」で資産を守る</span>番です。';
+  if(leadEl) leadEl.textContent = '健康診断は"現在地の確認"にすぎません。将来の資産を実際に守るのは、その後の——「継続的な健康習慣」です。運動習慣を身につけると、あなたの場合——';
+  if(headNum) headNum.textContent = '+' + fmt(Math.max(0, Math.round(b30)));
   box.style.display = '';
 }
 
@@ -3772,6 +3736,10 @@ document.getElementById('formOverlay').addEventListener('click', function(e) {
 // CTA ボタン（トップ・中段・下部・スマホ追従）をまとめてバインド
 document.querySelectorAll('[data-cta-pos]').forEach(btn => {
   btn.addEventListener('click', () => openConsultForm(btn.dataset.ctaPos, btn.dataset.service || ''));
+});
+// 予約（STORES）リンクのクリック計測
+document.querySelectorAll('a[data-reserve]').forEach(a => {
+  a.addEventListener('click', () => { try{ fwTrack('reserve_click', {service:a.dataset.reserve}); }catch(e){} });
 });
 
 // 下部固定CTA（二次健診受診勧奨）：STEP4（対策）へスクロール

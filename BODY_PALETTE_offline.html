@@ -804,6 +804,8 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
   font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;
   transition:background .18s,color .18s,border-color .18s;text-align:center;}
 .sc-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* サービスカードのボタンをリンク(a)にしても体裁が崩れないように */
+a.sc-btn{display:block;text-decoration:none;}
 /* 予約（STORES）ボタン：塗りつぶしの主action */
 .sc-btn-book{display:block;margin-top:8px;background:var(--gold);border-color:var(--gold);color:#fff;text-decoration:none;}
 .sc-btn-book:hover{background:var(--gold);color:#fff;filter:brightness(1.08);}
@@ -1688,7 +1690,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <span class="sc-badge">場所を選ばない</span>
           <div class="sc-title">オンライン<br>パーソナルトレーニング</div>
           <div class="sc-desc">自宅・出張先どこからでも。プロトレーナーと1対1でトレーニング継続をサポート。</div>
-          <button class="sc-btn" data-cta-pos="bottom" data-service="online">詳細・無料相談する</button>
+          <a class="sc-btn" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4274609" target="_blank" rel="noopener noreferrer" data-reserve="online-detail">詳細・無料相談する</a>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4274609" target="_blank" rel="noopener noreferrer" data-reserve="online">予約・体験する →</a>
         </div>
 
@@ -1696,7 +1698,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <span class="sc-badge">原宿通い ｜ 男性・女性</span>
           <div class="sc-title">医療費控除対象<br>パーソナルトレーニング</div>
           <div class="sc-desc">健康保険適用外ながら医療費控除の対象となるプラン。予防医療・健康経営に。</div>
-          <button class="sc-btn" data-cta-pos="bottom" data-service="harajuku-pt">詳細・無料相談する</button>
+          <a class="sc-btn" href="https://fractal-workout.stores.jp/reserve/fractal-workout/2847212" target="_blank" rel="noopener noreferrer" data-reserve="harajuku-pt-detail">詳細・無料相談する</a>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/2847212" target="_blank" rel="noopener noreferrer" data-reserve="harajuku-pt">予約・体験する →</a>
         </div>
 
@@ -1704,7 +1706,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(15,168,163,.12
           <span class="sc-badge">原宿通い ｜ 女性向け</span>
           <div class="sc-title">ピラティス<br>（女性専門コース）</div>
           <div class="sc-desc">体幹・姿勢・コンディショニングを重視した女性専門のピラティスプログラム。</div>
-          <button class="sc-btn" data-cta-pos="bottom" data-service="pilates">詳細・無料相談する</button>
+          <a class="sc-btn" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4897576" target="_blank" rel="noopener noreferrer" data-reserve="pilates-detail">詳細・無料相談する</a>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4897576" target="_blank" rel="noopener noreferrer" data-reserve="pilates">予約・体験する →</a>
         </div>
 

@@ -867,6 +867,7 @@ a.sc-btn{display:block;text-decoration:none;}
 .ra-ichip .k{color:#5a736f;font-size:10px;}
 .ra-ichip .v{color:#14312f;font-weight:700;}
 .ra-inone{font-size:10px;color:#8a9a97;}
+.ra-detail-note{font-size:9px;color:#8a9a97;line-height:1.5;margin-top:6px;}
 /* ★PDF：ヒーロー計算式 */
 .ra-formula{display:flex;align-items:stretch;justify-content:center;gap:9px;margin-top:8px;flex-wrap:nowrap;}
 .rf-cell{flex:1;min-width:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:8px;padding:9px 5px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:4px;}
@@ -1448,8 +1449,8 @@ a.sc-btn{display:block;text-decoration:none;}
       </div>
       <div class="a80-calc">
         <div class="a80-c-cell"><span class="cl">健康維持なら</span><span class="cv good" id="a80good">--</span></div>
-        <span class="a80-c-op">−</span>
-        <div class="a80-c-cell"><span class="cl">現状放置なら</span><span class="cv bad" id="a80bad">--</span></div>
+        <span class="a80-c-op" id="a80op">−</span>
+        <div class="a80-c-cell"><span class="cl" id="a80badLabel">現状放置なら</span><span class="cv bad" id="a80bad">--</span></div>
         <span class="a80-c-op">＝</span>
         <div class="a80-c-cell res"><span class="cl">放置で少なくなる額</span><span class="cv diff" id="a80diffCalc">--</span></div>
       </div>
@@ -1786,7 +1787,7 @@ a.sc-btn{display:block;text-decoration:none;}
       <div class="ra-hero-label" id="raHeroLabel">このまま放置すると、80歳のとき</div>
       <div class="ra-formula">
         <div class="rf-cell"><span class="rf-l" id="raFmLL">健康維持なら</span><span class="rf-v good" id="raFmLV">--</span></div>
-        <span class="rf-op">−</span>
+        <span class="rf-op" id="raFmOp">−</span>
         <div class="rf-cell"><span class="rf-l" id="raFmRL">現状放置なら</span><span class="rf-v bad" id="raFmRV">--</span></div>
         <span class="rf-op">＝</span>
         <div class="rf-cell res"><span class="rf-l" id="raFmDL">資産損失の可能性</span><span class="rf-v diff" id="raFmDV">--</span></div>
@@ -2637,7 +2638,7 @@ function renderReportA4(s,sim,life){
     set('raTitle','健康寿命シミュレーション結果');
     set('raHeroLabel','このまま放置すると、元気に自立して過ごせる年齢は');
     set('raFmLL','健康維持なら'); set('raFmLV', life.maintainAge+'歳');
-    set('raFmRL','現状放置なら'); set('raFmRV', life.neglectAge+'歳');
+    set('raFmRL','現状放置なら'); set('raFmRV', life.neglectAge+'歳'); set('raFmOp','−');
     set('raFmDL','健康寿命の損失'); set('raFmDV', life.loss+'年');
     set('raDetailT','今からできる改善で取り戻せる健康年数');
     g('raDetail').innerHTML = life.actions.length
@@ -2650,7 +2651,8 @@ function renderReportA4(s,sim,life){
     set('raTitle','健康資産シミュレーション結果');
     set('raHeroLabel','このまま放置すると、80歳のときの資産は');
     set('raFmLL','健康維持なら'); set('raFmLV', fmt(sim.blue80));
-    set('raFmRL','現状放置なら'); set('raFmRV', fmt(sim.red80));
+    if(sim.red80 < 0){ set('raFmRL','現状放置なら（赤字）'); set('raFmRV', fmt(-sim.red80)); set('raFmOp','＋'); }
+    else { set('raFmRL','現状放置なら'); set('raFmRV', fmt(sim.red80)); set('raFmOp','−'); }
     set('raFmDL','資産損失の可能性'); set('raFmDV', fmt(sim.diff80));
     set('raDetailT','健康リスク放置による推定損失（〜80歳）');
     const tot=sim.cumulativePT+sim.cumulativeMed+sim.compoundLoss;
@@ -2658,7 +2660,8 @@ function renderReportA4(s,sim,life){
       `<div class="li"><span>生産性低下による評価・昇進への影響</span><span class="y">-${fmt(sim.cumulativePT)}</span></div>`
      +`<div class="li"><span>疾患別 累積医療費（〜80歳）</span><span class="y">-${fmt(sim.cumulativeMed)}</span></div>`
      +`<div class="li"><span>投資複利 機会損失（3%換算）</span><span class="y">-${fmt(sim.compoundLoss)}</span></div>`
-     +`<div class="li tot"><span>合計 逸失健康資産（推定）</span><span class="y">-${fmt(tot)}</span></div>`;
+     +`<div class="li tot"><span>合計 逸失健康資産（推定）</span><span class="y">-${fmt(tot)}</span></div>`
+     +`<div class="ra-detail-note">※上部の「資産損失の可能性」は資産推移（複利込み）で比較した80歳時点の差額です。こちらは主な損失要因の内訳のため算定範囲が異なり、金額は一致しません。</div>`;
     g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>継続的な運動習慣</strong>で将来の資産を守りましょう。';
     g('raFoot').innerHTML='出典：厚労省「生涯医療費」／国税庁・総務省・金融庁データ／各疾患の査読論文。参考試算値であり、医学的診断・投資助言ではありません。まずは二次健診の受診を。';
   }
@@ -3233,7 +3236,9 @@ function updateAll(){
 
   // Age 80 callout（差額を主役に簡略表示）
   document.getElementById('a80good').textContent=fmt(sim.blue80);
-  document.getElementById('a80bad').textContent=fmt(sim.red80);
+  { const _bad=document.getElementById('a80bad'), _op=document.getElementById('a80op'), _lbl=document.getElementById('a80badLabel');
+    if(sim.red80 < 0){ if(_bad)_bad.textContent=fmt(-sim.red80); if(_op)_op.textContent='＋'; if(_lbl)_lbl.textContent='現状放置なら（赤字）'; }
+    else { if(_bad)_bad.textContent=fmt(sim.red80); if(_op)_op.textContent='−'; if(_lbl)_lbl.textContent='現状放置なら'; } }
   const _a80dc=document.getElementById('a80diffCalc');
   if(_a80dc) _a80dc.textContent=fmt(Math.max(0,Math.round(sim.diff80)));
   const a80big=document.getElementById('a80diffBig');

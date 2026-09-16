@@ -646,9 +646,18 @@ canvas{width:100%!important;height:auto!important;display:block;}
 @keyframes s5reveal{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
 
 /* improvement simulation */
-.improve-box{margin-top:16px;border:1px solid rgba(21,143,138,.35);background:#f8faf8;padding:18px 20px;}
+.improve-box{margin-top:16px;border:1px solid rgba(21,143,138,.45);background:linear-gradient(150deg,#f6fbfa 0%,#fff 72%);padding:20px;}
 .improve-title{font-family:"Shippori Mincho",serif;font-size:16px;font-weight:600;color:var(--black);margin-bottom:4px;}
 .improve-sub{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.improve-try{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;margin:15px 0 13px;padding:15px 16px;border:1px solid rgba(21,143,138,.38);background:#e9f5f2;}
+.improve-try-kicker{font-size:10px;font-weight:900;letter-spacing:.11em;color:var(--teal-text);margin-bottom:3px;}
+.improve-try-title{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:700;color:var(--black);line-height:1.35;}
+.improve-try-desc{font-size:11px;color:var(--muted);line-height:1.55;margin-top:4px;}
+.try-improve-btn{min-height:46px;border:0;background:var(--teal-text);color:#fff;padding:0 16px;font-size:13px;font-weight:900;letter-spacing:.02em;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px rgba(18,58,56,.18);transition:transform .16s,background .16s,box-shadow .16s;}
+.try-improve-btn:hover{background:#0b4d49;transform:translateY(-1px);box-shadow:0 6px 15px rgba(18,58,56,.25);}
+.try-improve-btn:active{transform:translateY(0);}
+.try-improve-btn:disabled{background:#4f7975;cursor:default;box-shadow:none;transform:none;}
+.improve-box.has-improvement{border-color:var(--green);}
 .improve-toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .improve-chk{border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:9px;
   font-size:12px;min-height:44px;padding:0 12px;cursor:pointer;user-select:none;transition:background .18s,border-color .18s;}
@@ -683,7 +692,8 @@ canvas{width:100%!important;height:auto!important;display:block;}
 .ir-label{font-size:10px;color:rgba(255,255,255,.62);font-weight:300;letter-spacing:.05em;}
 .ir-val{color:#7fe0d8;font-size:24px;font-weight:500;margin-top:6px;line-height:1.1;}
 .ir-val.small{font-size:18px;}
-@media(max-width:480px){.improve-toggles{grid-template-columns:1fr;}.ir-item{padding:0 8px;}
+@media(max-width:600px){.improve-try{grid-template-columns:1fr;gap:10px;}.try-improve-btn{width:100%;}.improve-toggles{grid-template-columns:1fr;}}
+@media(max-width:480px){.ir-item{padding:0 8px;}
   .improve-result{grid-template-columns:1fr;}.ir-item+.ir-item{border-left:none;border-top:1px solid rgba(255,255,255,.12);padding-top:10px;margin-top:10px;}}
 
 /* 運動頻度の1歩ずつインパクト表 */
@@ -1649,8 +1659,16 @@ a.sc-btn{display:block;text-decoration:none;}
     <div class="pr-b">
     <!-- 改善シミュレーション -->
     <div class="improve-box" id="improveBox">
-      <div class="improve-title" id="improveTitle">今から生活習慣を改善したら、どれだけ変わるか</div>
-      <div class="improve-sub" id="improveSub">気になる項目にチェックを入れると、改善後の資産推移をグラフに緑の線で追加表示します。</div>
+      <div class="improve-title" id="improveTitle">もし明日から生活習慣を変えたら、何を取り戻せるか</div>
+      <div class="improve-sub" id="improveSub">まず1つ、未来を動かしてみてください。改善後の数字がすぐに表示されます。</div>
+      <div class="improve-try" id="improveTry">
+        <div>
+          <div class="improve-try-kicker">まず、未来を1つ動かしてみる</div>
+          <div class="improve-try-title" id="improveTryTitle">もし明日から、運動を週3回にしたら？</div>
+          <div class="improve-try-desc" id="improveTryDesc">改善後に守れる数字を、いまの結果と比べて確認できます。</div>
+        </div>
+        <button type="button" class="try-improve-btn" id="tryImproveBtn" data-improve-action="exercise">この変化を試す →</button>
+      </div>
       <div class="improve-toggles" id="improveToggles">
         <label class="improve-chk" for="impQuitSmoke" id="impQuitSmokeWrap">
           <input type="checkbox" id="impQuitSmoke">
@@ -3408,6 +3426,44 @@ function renderNextPlan(s,alertFlags){
   });
 }
 
+// 結果を「読む」だけで終わらせず、最も効果が見込める変化を一押しで試せるようにする
+function renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,hasImprovement,isLifeMode}){
+  const box=document.getElementById('improveBox');
+  const tryBox=document.getElementById('improveTry');
+  const title=document.getElementById('improveTryTitle');
+  const desc=document.getElementById('improveTryDesc');
+  const button=document.getElementById('tryImproveBtn');
+  if(!box||!tryBox||!title||!desc||!button)return;
+
+  box.classList.toggle('has-improvement',hasImprovement);
+  let action='';
+  if(!alreadyNonSmoker){
+    action='quit';
+    title.textContent='もし明日から、禁煙したら？';
+    desc.textContent=isLifeMode
+      ? '禁煙後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
+      : '禁煙後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+  } else if(!alreadyActive){
+    action='exercise';
+    title.textContent='もし明日から、運動を週3回にしたら？';
+    desc.textContent=isLifeMode
+      ? '運動を足した後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
+      : '運動を足した後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+  } else if(canSimulateWeight && s.bmi>=25){
+    action='weight';
+    title.textContent='もし体重を3kg減らせたら？';
+    desc.textContent=isLifeMode
+      ? '減量後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
+      : '減量後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+  }
+
+  tryBox.style.display=action?'':'none';
+  if(!action)return;
+  button.dataset.improveAction=action;
+  button.disabled=hasImprovement;
+  button.textContent=hasImprovement?'改善後の数字を表示中 ✓':'この変化を試す →';
+}
+
 function updateAll(){
   if(!validateAll())return;
   const s=computeRisk();
@@ -3441,10 +3497,10 @@ function updateAll(){
   const exNote=document.getElementById('impExerciseNote');
   const weightNote=document.getElementById('impWeightNote');
 
-  const alreadyNonSmoker=s.smoking==='never';
+  const alreadyNonSmoker=s.smoking!=='current';
   quitWrap.classList.toggle('done',alreadyNonSmoker);
   quitEl.disabled=alreadyNonSmoker;
-  if(alreadyNonSmoker){quitEl.checked=false;quitNote.textContent='すでに非喫煙です';}
+  if(alreadyNonSmoker){quitEl.checked=false;quitNote.textContent=s.smoking==='past'?'すでに禁煙済みです':'すでに非喫煙です';}
   else{quitNote.textContent='';}
 
   const alreadyActive=s.exerciseHours>=3;
@@ -3479,11 +3535,12 @@ function updateAll(){
   const improveTitle=document.getElementById('improveTitle');
   const improveSub=document.getElementById('improveSub');
   if(improveTitle)improveTitle.textContent=isLifeMode
-    ? '今から生活習慣を改善したら、健康寿命はどれだけ変わるか'
-    : '今から生活習慣を改善したら、健康資産はどれだけ変わるか';
+    ? 'もし明日から生活習慣を変えたら、取り戻せる健康寿命は？'
+    : 'もし明日から生活習慣を変えたら、守れる健康資産は？';
   if(improveSub)improveSub.textContent=isLifeMode
-    ? '禁煙・運動・減量の条件を選ぶと、健康で自立して過ごせる年数の差をすぐに表示します。'
-    : '気になる項目にチェックを入れると、改善後の資産推移をグラフに緑の線で追加表示します。';
+    ? '「禁煙」「運動」「減量」を試すと、元気に動ける年数の差がその場で変わります。'
+    : '「禁煙」「運動」「減量」を試すと、80歳時点で守れる金額がその場で変わります。';
+  renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,hasImprovement,isLifeMode});
   // 健康寿命モードでは、改善後の年数をメイン結果にも同時表示する
   renderLifespan(s,altState);
 
@@ -3992,6 +4049,28 @@ document.getElementById('runBtn').addEventListener('click', () => {
   });
 });
 
+// 結果直後の「この変化を試す」から、推奨された改善条件を一押しで反映する
+(function(){
+  const btn=document.getElementById('tryImproveBtn');
+  if(!btn)return;
+  btn.addEventListener('click',()=>{
+    const action=btn.dataset.improveAction;
+    if(action==='quit'){
+      const el=document.getElementById('impQuitSmoke');
+      if(!el.disabled){el.checked=true;document.getElementById('impQuitSmokeWrap').classList.add('checked');}
+    } else if(action==='exercise'){
+      const el=document.getElementById('impExercise');
+      if(!el.disabled){el.checked=true;document.getElementById('impExerciseWrap').classList.add('checked');}
+    } else if(action==='weight'){
+      document.getElementById('impWeightLoss').value='3';
+    } else {
+      return;
+    }
+    fwTrack('improve_try_click',{action});
+    updateAll();
+  });
+})();
+
 // 減量スライダー：ドラッグ中も即座に反映（触って試せるように）
 document.getElementById('impWeightLoss').addEventListener('input',()=>{
   updateAll();
@@ -4263,14 +4342,15 @@ function resetForm(){
   if((p.has('demo')||p.has('present'))&&d) d.style.display='';
 })();
 
-// 結果の読み順：結論 → 改善した場合の差 → 根拠となるリスク詳細
+// 結果の読み順：結論 → 未来を動かす試算 → グラフ・根拠
 (function prioritizeResultFlow(){
   const age80=document.getElementById('age80box');
   const graph=document.querySelector('.graph-wrap');
   if(age80&&graph)age80.before(graph);
   const improve=document.getElementById('improveBox');
-  const riskTitle=document.getElementById('riskTitle');
-  if(improve&&riskTitle)riskTitle.before(improve);
+  const lifeResult=document.getElementById('lifespanResult');
+  if(improve&&age80)age80.after(improve);
+  else if(improve&&lifeResult)lifeResult.after(improve);
 })();
 
 // 初期化

@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const {parse}=require('../assets/health-ocr.js');
+assert.deepEqual(parse('身長 170.5 cm').height.values,['170.5']);
+assert.equal(parse('HbA1c (NGSP) 5.8 %').hba1c.values[0],'5.8');
+assert.equal(parse('LDL 120 基準 60-119').ldl.ambiguous,true);
+assert.equal(parse('体重 68 65').weight.ambiguous,true);
+assert.equal(parse('身長 170\n身長 168').height.ambiguous,true);
+assert.equal(parse('随時血糖 120').glucose,undefined);
+assert.equal(parse('LDL 120 HDL 55').hdl.values[0],'55');
+assert.equal(parse('基準値 身長 170').height.ambiguous,true);
+assert.equal(Object.keys(parse('名前 TEST')).length,0);
+assert.equal(parse('身 長 １７０．５ cm').height.values[0],'170.5');
+assert.equal(parse('体重 150 lbs').weight.ambiguous,true);
+assert.equal(parse('空腹時血糖 5.6 mmol/L').glucose.ambiguous,true);
+assert.equal(parse('AST(GOT) 22 U/L').ast.values[0],'22');
+assert.equal(parse('γ-GTP 35 U/L').ggt.values[0],'35');
+console.log('14 OCR parser checks passed');

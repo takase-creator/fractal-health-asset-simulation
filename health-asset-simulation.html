@@ -1367,8 +1367,7 @@ a.sc-btn{display:block;text-decoration:none;}
   <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">1</span><span class="sn-label">情報入力</span></a>
   <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">2</span><span class="sn-label">健診結果</span></a>
   <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">3</span><span class="sn-label">結果</span></a>
-  <a class="step-nav-item" href="#step4" data-step="4"><span class="sn-num">4</span><span class="sn-label">対策</span></a>
-  <a class="step-nav-item" href="#step5" data-step="5"><span class="sn-num">5</span><span class="sn-label">相談</span></a>
+  <a class="step-nav-item" href="#step5" data-step="5"><span class="sn-num">参考</span><span class="sn-label">相談</span></a>
 </nav>
 
 <div class="layout" id="layout">
@@ -1757,27 +1756,6 @@ a.sc-btn{display:block;text-decoration:none;}
 
     </div><!-- /pr-c -->
 
-    <div class="step-sec-head" id="step4"><span class="ph-step">STEP 4</span>結果を、明日の予定に変える</div>
-
-    <section class="tomorrow-action" id="tomorrowAction" aria-labelledby="tomorrowTitle">
-      <div class="tomorrow-kicker">DON'T LEAVE THIS AS A NUMBER</div>
-      <h2 class="tomorrow-title" id="tomorrowTitle">この結果を見て終わりにしない。明日、1つだけ決める。</h2>
-      <div class="tomorrow-grid">
-        <div>
-          <div class="tomorrow-label">明日すること</div>
-          <div class="tomorrow-task" id="tomorrowTask">あなたに合う最初の一歩を表示します</div>
-          <p class="tomorrow-desc" id="tomorrowDesc"></p>
-        </div>
-        <div class="tomorrow-commit" aria-label="明日の予定を決める">
-          <div class="tomorrow-field"><span class="tomorrow-label">実行する日</span><div class="tomorrow-date" id="tomorrowDate">明日</div></div>
-          <div class="tomorrow-field"><label for="tomorrowTiming">いつ行う？</label><select id="tomorrowTiming"><option value="朝">朝</option><option value="昼休み">昼休み</option><option value="帰宅後">帰宅後</option><option value="時間を決めずに">時間を決めずに</option></select></div>
-          <button type="button" class="tomorrow-btn" id="tomorrowBtn" data-tomorrow-action="improve" aria-pressed="false">明日の予定として決める</button>
-        </div>
-        <p class="tomorrow-commit-status" id="tomorrowCommitStatus" role="status">実行する時間まで決めると、行動に移しやすくなります。</p>
-      </div>
-      <p class="tomorrow-note" id="tomorrowNote">医学的な診断・緊急性の判断ではありません。気になる症状や数値がある場合は、医療機関へご相談ください。</p>
-    </section>
-
     <!-- 主行動を決めた後に、必要な人だけが見られる詳細な道筋 -->
     <details class="next-plan" id="nextPlan">
       <summary class="next-plan-summary"><span><span class="next-plan-summary-kicker">OPTIONAL ROADMAP</span><span class="next-plan-summary-title">その後の進め方（3ステップ）を見る</span></span><span class="next-plan-summary-arrow" aria-hidden="true">＋</span></summary>
@@ -1882,7 +1860,7 @@ a.sc-btn{display:block;text-decoration:none;}
     <!-- 印刷専用フッター免責 -->
     <p class="print-disclaimer">※本シミュレーションはBODY PALETTEが独自に開発した試算ツールです。医学的診断・投資助言ではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。気になる数値がある場合は必ず二次健診を受診してください。｜出力日：<span id="printDate"></span></p>
 
-    <div class="step-sec-head" id="step5"><span class="ph-step">STEP 5</span>続ける仕組みをつくる</div>
+    <div class="step-sec-head" id="step5"><span class="ph-step">参考</span>続ける仕組みをつくる</div>
 
     <!-- STEP5＝サービス紹介。押したら開く（既定は閉じておく） -->
     <button type="button" class="step5-toggle" id="step5Toggle" aria-expanded="false" aria-controls="step5Body">
@@ -3352,60 +3330,6 @@ function computeAlertFlags(s){
 }
 
 // 結果を「いつか改善する」ではなく、明日できる一つの行動に落とし込む。
-function renderTomorrowPlan(s,alertFlags){
-  const task=document.getElementById('tomorrowTask');
-  const desc=document.getElementById('tomorrowDesc');
-  const btn=document.getElementById('tomorrowBtn');
-  const note=document.getElementById('tomorrowNote');
-  const dateEl=document.getElementById('tomorrowDate');
-  const timing=document.getElementById('tomorrowTiming');
-  const status=document.getElementById('tomorrowCommitStatus');
-  if(!task||!desc||!btn||!dateEl||!timing||!status)return;
-  const lifeMode=_lsMode==='lifespan';
-  let plan;
-  if(alertFlags.length>=2){
-    plan={task:'健診の案内を開き、受診先を一つ確認する',desc:'明日5分だけ、会社または健康保険組合の案内を確認します。数値の意味や受診の要否は自己判断せず、医療機関で相談しましょう。',next:'二次健診の流れを見る →',action:'exam'};
-  }else if(s.smoking==='current'){
-    plan={task:'禁煙を始める日を、明日決める',desc:'まずは開始日をカレンダーに書き、改善後に守れる'+(lifeMode?'健康年数':'健康資産')+'を確認します。',next:'改善後の数字を見る →',action:'improve'};
-  }else if(s.exerciseHours<1){
-    plan={task:'10分歩く時間を、明日の予定に入れる',desc:'最初から完璧を目指さず、続けられる時間を一つ決めます。次に、運動を続けた場合の差を確かめましょう。',next:'運動で変わる数字を見る →',action:'improve'};
-  }else if(s.exerciseHours<3){
-    plan={task:'次の運動30分を、明日までに予定に入れる',desc:'今ある習慣に、無理のない一回を足します。続けた場合に守れる'+(lifeMode?'健康年数':'健康資産')+'を確認できます。',next:'改善後の数字を見る →',action:'improve'};
-  }else{
-    plan=lifeMode
-      ? {task:'今週の運動予定を一つ、先に確定する',desc:'良い状態を保つことも立派な予防です。続けやすい予定のつくり方を、必要に応じて専門家と整理できます。',next:'続ける計画を相談する →',action:'support'}
-      : {task:'今週の運動予定を一つ、先に確定する',desc:'良い状態を保つことも立派な予防です。次の健診で比較できるよう、今の結果も保存しておきましょう。',next:'結果を保存する →',action:'save'};
-  }
-  const tomorrow=new Date();
-  tomorrow.setDate(tomorrow.getDate()+1);
-  const dateLabel=`${tomorrow.getMonth()+1}月${tomorrow.getDate()}日`;
-  const planKey=`${_lsMode}:${plan.action}:${plan.task}:${dateLabel}`;
-  const saved=lsGet('fw_tomorrow_commitment');
-  let committed=null;
-  try{ committed=saved?JSON.parse(saved):null; }catch(e){}
-  task.textContent=plan.task;
-  desc.textContent=plan.desc;
-  dateEl.textContent=`明日 ${dateLabel}`;
-  btn.dataset.tomorrowAction=plan.action;
-  btn.dataset.tomorrowPlanKey=planKey;
-  btn.dataset.tomorrowNext=plan.next;
-  if(committed&&committed.key===planKey){
-    timing.value=committed.timing||'朝';
-    btn.dataset.committed='true';
-    btn.textContent=plan.next;
-    btn.classList.add('done');
-    btn.setAttribute('aria-pressed','true');
-    status.textContent=`${dateLabel}（${committed.timing||'朝'}）に予定として決めました。次に、行動で変わる差を確認しましょう。`;
-  }else{
-    btn.dataset.committed='false';
-    btn.textContent='明日の予定として決める';
-    btn.classList.remove('done');
-    btn.setAttribute('aria-pressed','false');
-    status.textContent='実行する時間まで決めると、行動に移しやすくなります。';
-  }
-  if(note)note.textContent='小さな行動を続けることが、将来の'+(lifeMode?'健康寿命':'健康資産')+'を守る第一歩です。気になる症状や数値がある場合は、医療機関へご相談ください。';
-}
-
 // 結果を「数字」だけで終わらせないための出口。医療診断ではなく、入力に応じて最初の行動を示す。
 function renderNextPlan(s,alertFlags){
   const sub=document.getElementById('nextPlanSub');
@@ -3501,7 +3425,6 @@ function updateAll(){
   } else {
     alertBox.style.display='none';
   }
-  renderTomorrowPlan(s,alertFlags);
   renderNextPlan(s,alertFlags);
   if(_consentGiven) saveAnonRecord(s, sim);
 
@@ -3722,7 +3645,7 @@ const panels=[document.getElementById('p0'),document.getElementById('p1')];
       return;
     }
     let cur=1;
-    targets.forEach((el,i)=>{ if(el.getBoundingClientRect().top+window.scrollY<=y) cur=i+1; });
+    targets.forEach((el,i)=>{ if(el.getBoundingClientRect().top+window.scrollY<=y) cur=Number(navItems[i].dataset.step); });
     setActive(cur);
   }
   window.addEventListener('scroll', onScroll, {passive:true});
@@ -4183,27 +4106,6 @@ function goToPlanAction(action,source){
 document.querySelectorAll('[data-next-action]').forEach(btn=>{
   btn.addEventListener('click',()=>goToPlanAction(btn.dataset.nextAction,'next_plan'));
 });
-const tomorrowBtn=document.getElementById('tomorrowBtn');
-if(tomorrowBtn)tomorrowBtn.addEventListener('click',()=>{
-  const action=tomorrowBtn.dataset.tomorrowAction;
-  if(tomorrowBtn.dataset.committed==='true'){
-    goToPlanAction(action,'tomorrow_action_next');
-    return;
-  }
-  const timing=document.getElementById('tomorrowTiming');
-  const status=document.getElementById('tomorrowCommitStatus');
-  const date=document.getElementById('tomorrowDate');
-  const when=timing?timing.value:'朝';
-  const planKey=tomorrowBtn.dataset.tomorrowPlanKey||'';
-  lsSet('fw_tomorrow_commitment',JSON.stringify({key:planKey,timing:when,createdAt:Date.now()}));
-  tomorrowBtn.dataset.committed='true';
-  tomorrowBtn.classList.add('done');
-  tomorrowBtn.setAttribute('aria-pressed','true');
-  tomorrowBtn.textContent=tomorrowBtn.dataset.tomorrowNext||'次の一歩を見る →';
-  if(status)status.textContent=`${date?date.textContent:'明日'}（${when}）に予定として決めました。次に、行動で変わる差を確認しましょう。`;
-  fwTrack('tomorrow_commitment',{action,timing:when});
-});
-
 // フォーム到達計測
 document.getElementById('formOverlay').addEventListener('transitionend', function() {
   if(this.classList.contains('open')) {

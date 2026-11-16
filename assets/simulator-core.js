@@ -46,46 +46,6 @@ for(let a=20;a<=79;a++){
   ageEl.appendChild(o);
 }
 
-const SYMPTOMS=[
-  ['ft','疲れやすい'],['hd','頭痛・めまい'],['ns','肩こり・首こり'],['bp','腰痛'],
-  ['kn','膝・関節の痛み'],['sw','むくみ'],['pf','息切れ・動悸'],['af','食後の眠気'],
-  ['sl','睡眠の質が悪い'],['dr','飲酒頻度が高い'],['st','ストレスが多い'],['fc','集中力の低下'],
-  ['no','特にない']
-];
-SYMPTOMS.forEach(([k,l])=>{
-  const div=document.createElement('div');
-  div.className='chk';
-  const uid='chk-'+k;
-  const cb=document.createElement('input');
-  cb.type='checkbox';
-  cb.id=uid;
-  cb.dataset.s=k;
-  cb.addEventListener('change',()=>{
-    div.classList.toggle('checked',cb.checked);
-    // 「特にない」を選んだら他を全解除
-    if(k==='no'&&cb.checked){
-      document.querySelectorAll('#symptoms input[type=checkbox]').forEach(c=>{
-        if(c.dataset.s!=='no'){c.checked=false;c.closest('.chk').classList.remove('checked');}
-      });
-    } else if(k!=='no'&&cb.checked){
-      const noEl=document.querySelector('#symptoms input[data-s="no"]');
-      if(noEl){noEl.checked=false;noEl.closest('.chk').classList.remove('checked');}
-    }
-  });
-  const lb=document.createElement('label');
-  lb.setAttribute('for',uid);
-  const icon=document.createElement('span');
-  icon.className='check-icon';
-  const txt=document.createElement('span');
-  txt.textContent=l;
-  lb.appendChild(icon);
-  lb.appendChild(txt);
-  div.appendChild(cb);
-  div.appendChild(lb);
-  document.getElementById('symptoms').appendChild(div);
-});
-
-
 // ═══════════════════════════════════════════════════
 // 3. バリデーション
 // ═══════════════════════════════════════════════════
@@ -128,7 +88,8 @@ function validateAll(){
  return ok;
 }
 
-function syms(){return Array.from(document.querySelectorAll('[data-s]:checked')).map(e=>e.dataset.s);}
+// Symptom selection was removed; checkup/lifestyle inputs remain the model inputs.
+function syms(){return [];}
 
 // ═══════════════════════════════════════════════════
 // 3.5 運動頻度（週の回数）の用量反応モデル
@@ -1833,7 +1794,6 @@ function resetForm(){
   if(f('gender'))f('gender').value='male'; if(f('age'))f('age').value='40';
   if(f('habit'))f('habit').value='none'; if(f('smoking'))f('smoking').value='never';
   ['cigCount','income','assets','height','weight','waist','sbp','dbp','ldl','hdl','tg','glucose','hba1c','ast','alt','ggt'].forEach(id=>{ if(f(id)) f(id).value=''; });
-  document.querySelectorAll('#symptoms input[type=checkbox]').forEach(c=>c.checked=false);
   const adv=f('advancedInputs'); if(adv && adv.style.display!=='none'){ f('advToggle').click(); }
   try{ if(typeof updateCigCountVisibility==='function') updateCigCountVisibility(); }catch(e){}
   try{ if(typeof updateMetsBanner==='function') updateMetsBanner(); }catch(e){}

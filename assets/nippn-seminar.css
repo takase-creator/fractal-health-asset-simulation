@@ -36,3 +36,14 @@ body[data-mode="unselected"] #step2Section,body.pre-run #supplementalSupport,bod
 #examCta .exam-reason-image{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;border-radius:6px;margin:0 0 13px;background:#f3f7ee}
 #examCta .exam-reasons{align-items:stretch}
 @media(max-width:640px){#examCta .exam-reason-image{max-height:none}}
+
+/* Desktop workspace uses the available screen width. Mobile and A4 output retain their layouts. */
+@media screen and (min-width:1024px){
+ .page{width:calc(100% - 48px);max-width:none;padding-top:20px}
+ .brand-header,.hero,.layout,.step-nav,.review-label,#supplementalSupport{width:100%;max-width:none}
+ .hero-copy{padding:26px 32px}
+ .step-accordion-body>.pb,.simulation-section .step2-inputs{padding:28px}
+ .ph{padding-left:28px}
+ .hero p,.model-note,.risk-reference{max-width:85ch}
+ .disclaimer{width:100%;max-width:none}
+}

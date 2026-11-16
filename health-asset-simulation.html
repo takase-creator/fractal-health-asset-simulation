@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>健診結果を、これからの選択へ｜健康寿命・健康資産シミュレーション | BODY PALETTE</title>
+<title>健康寿命・健康資産シミュレーション | BODY PALETTE</title>
 <link rel="icon" type="image/png" href="assets/images/embedded-brand-0.png"/>
 <link rel="apple-touch-icon" href="assets/images/embedded-brand-0.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
-<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=f8cf785ab0">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=d2c858a8cb">
 </head>
 <body>
 
@@ -205,21 +205,12 @@
 </header>
 <section class="hero" aria-label="このシミュレーションについて">
   <div class="hero-copy">
-    <div class="hero-tag">HEALTH × LIFE × ASSET</div>
-    <h1>健診結果を、<br><span class="hero-h1-nowrap">これからの選択へ。</span></h1>
-    <p>健康とお金のこれからを、健診結果から考える。今の習慣と、少し変えた未来を比べてみませんか。</p>
-    <div class="ui-hero-actions"><a class="ui-start" href="#step1">シミュレーションをはじめる<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a></div>
+    <div class="hero-tag">健康と暮らしを考える</div>
+    <h1>健康寿命・健康資産<span>シミュレーション</span></h1>
+    <p>健診結果と生活習慣から、将来の変化を試算します。条件を変えて、今の生活と比べてみましょう。</p>
   </div>
-  <div class="hero-visual">
-    <img src="./assets/images/hero-cover.webp" alt="明るい職場で会話する人々のイメージ" width="1600" height="900" fetchpriority="high">
-    <div class="ui-photo-caption"><span>BODY PALETTE</span><strong>健康を、これからの力に。</strong></div>
-  </div>
+  <div class="hero-aside"><span class="hero-aside-label">ご利用にあたって</span><p>健診票があれば、写真から入力できます。<br>入力した健診値・資産額は端末内で処理します。</p><a class="ui-start" href="#step1">テーマを選んではじめる <span aria-hidden="true">→</span></a></div>
 </section>
-<div class="ui-reassurance">
- <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/></svg>入力した健診値は端末内で処理</span>
- <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 12h18"/></svg>健診票の写真から入力</span>
- <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16h17M8 15l4-5 4 3 5-7"/></svg>習慣を変えた未来を比較</span>
-</div>
 
 
 
@@ -239,7 +230,7 @@
   <div class="pb">
 
     <div class="mode-select" id="modeSelect">
-      <div class="mode-select-q">まず、あなたが<strong>守りたいもの</strong>を選んでください</div>
+      <div class="mode-select-q">試算するテーマを選んでください</div>
       <div class="mode-cards">
         <button type="button" class="mode-card" data-mode="asset" id="modeAsset" aria-pressed="false">
           <span class="mode-ico">💰</span>
@@ -854,6 +845,6 @@
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
 <script src="assets/min/seminar-survey.js?v=0cdd1ca505"></script>
 <script src="assets/min/step-accordion.js?v=edd8f7dc01"></script>
-<script src="assets/min/body-palette-ui.js?v=42652f87a7"></script>
+<script src="assets/min/body-palette-ui.js?v=1590b8a75b"></script>
 </body>
 </html>

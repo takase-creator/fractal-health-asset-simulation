@@ -6,6 +6,7 @@
  function setOpen(record,open){
   if(open)for(const other of records.values())if(other!==record){other.body.hidden=true;other.button.setAttribute('aria-expanded','false');other.indicator.textContent='＋ 開く';}
   record.body.hidden=!open;record.button.setAttribute('aria-expanded',String(open));record.indicator.textContent=open?'− 閉じる':'＋ 開く';
+  if(open&&record.panel.id==='step2Section'&&!document.body.classList.contains('pre-run'))requestAnimationFrame(()=>{if(typeof redrawChart==='function')redrawChart();});
  }
  function initialize(){
   for(const [id,labelId,anchor] of specs){

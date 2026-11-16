@@ -48,3 +48,5 @@
  .report-a4-wrap{display:block!important;width:210mm!important;margin:0!important}
  #reportA4{width:210mm!important;min-height:296mm!important}
 }
+/* Match the refreshed application palette without changing report geometry. */
+#reportA4{color:#203e49}.ra-title,.ra-sec-t{color:#203e49}.ra-hero{background:#183b45;border-color:#183b45}.ra-report-kicker{color:#a5dcd5}.rf-v.good{color:#a9e2d6}.rf-v.bad{color:#f1a6c1}

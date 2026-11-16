@@ -929,6 +929,10 @@ function lifetimeMedTable(gender,medScore){
 // ═══════════════════════════════════════════════════
 // 10. Canvas グラフ描画（HiDPI対応）
 // ═══════════════════════════════════════════════════
+function chartDomain(values){
+ const low=Math.min(...values),high=Math.max(...values),span=Math.max(high-low,1);
+ return {min:low-span*0.08,max:high+span*0.08};
+}
 function drawChart(ages,blueArr,redArr,startAge,greenArr){
   const cv=document.getElementById('chart');
   const wrap=cv.parentElement;
@@ -947,14 +951,14 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
 
   const pad={l:52,r:14,t:12,b:28};
   const all=[...blueArr,...redArr,...(greenArr||[])];
-  const minV=Math.min(...all)*0.88;
-  const maxV=Math.max(...all)*1.06;
+  const domain=chartDomain(all);
+  const minV=domain.min,maxV=domain.max;
   const n=ages.length;
   const xFn=i=>pad.l+(W-pad.l-pad.r)*(i/(n-1));
   const yFn=v=>H-pad.b-(H-pad.t-pad.b)*((v-minV)/(maxV-minV));
 
   // Grid
-  ctx.strokeStyle='#e6e3dc';ctx.lineWidth=1;
+  ctx.strokeStyle='#e4ecef';ctx.lineWidth=1;
   const steps=4;
   for(let i=0;i<=steps;i++){
     const y=pad.t+(H-pad.t-pad.b)*(i/steps);
@@ -1015,9 +1019,9 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
       }
     });
   }
-  drawLine(redArr,'#e24c5e');
+  drawLine(redArr,'#d46f8e');
   if(greenArr)drawLine(greenArr,'#0a807c',[5,3]);
-  drawLine(blueArr,'#5e8582');
+  drawLine(blueArr,'#638fa7');
 
   // X axis labels
   ctx.fillStyle='#60738f';
@@ -1029,106 +1033,8 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     }
   });
 
-  // ── Age annotation callouts (40 / 50 / 60 / 70歳) ──
-  function fmtC(v){
-    if(v<0) return '-'+fmtC(-v);
-    if(v>=10000) return (v/10000).toFixed(1)+'億';
-    return Math.round(v).toLocaleString()+'万';  // 丸めなし（1万単位）
-  }
+  // Exact comparison values are shown below the chart; keep plot lines unobstructed.
 
-  // 幅が狭い（モバイル）ときは注釈ボックスが重なって潰れるため非表示にし、線をすっきり見せる
-  const annAges = W>=560 ? [40,50,60,70] : [];
-  annAges.forEach(tAge=>{
-    if(tAge<startAge) return;
-    const idx=ages.indexOf(tAge);
-    if(idx<0) return;
-
-    const x=xFn(idx);
-    const bVal=blueArr[idx];
-    const rVal=redArr[idx];
-    const gap=bVal-rVal;
-    const bY=yFn(bVal);
-    const rY=yFn(rVal);
-
-    // 縦のガイドライン（60歳は既存マーカーがあるためスキップ）
-    if(tAge!==60){
-      ctx.save();
-      ctx.strokeStyle='rgba(160,175,185,.38)';
-      ctx.lineWidth=1;ctx.setLineDash([2,3]);
-      ctx.beginPath();ctx.moveTo(x,pad.t+2);ctx.lineTo(x,H-pad.b-2);ctx.stroke();
-      ctx.setLineDash([]);ctx.restore();
-    }
-
-    // 交差点の強調ドット
-    ctx.fillStyle='#5e8582';
-    ctx.beginPath();ctx.arc(x,bY,5,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#e24c5e';
-    ctx.beginPath();ctx.arc(x,rY,5,0,Math.PI*2);ctx.fill();
-
-    // ギャップブラケット（2点間を線で繋ぐ）
-    if(gap>50){
-      const bx=x+8;
-      ctx.strokeStyle='rgba(200,100,100,.55)';ctx.lineWidth=1.5;
-      ctx.beginPath();ctx.moveTo(bx,bY);ctx.lineTo(bx,rY);ctx.stroke();
-      [bY,rY].forEach(ty=>{
-        ctx.beginPath();ctx.moveTo(bx-3,ty);ctx.lineTo(bx+4,ty);ctx.stroke();
-      });
-    }
-
-    // アノテーションボックス
-    const lines=[
-      {t:`${tAge}歳`,  c:'rgba(111,208,204,.95)'},
-      {t:`● ${fmtC(bVal)}`, c:'#7fd4d0'},
-      {t:`● ${fmtC(rVal)}`, c:'#f2a8bf'},
-      ...(gap>50?[{t:`差 -${fmtC(gap)}`, c:'#ff8fae'}]:[])
-    ];
-    const lh=13, bw=90, bh=lines.length*lh+8;
-
-    // 40・50歳はライン上に（中央揃え）、60・70歳はライン右に
-    const placeAbove=tAge<=50;
-    let bxP, byP;
-    if(placeAbove){
-      bxP=Math.max(pad.l, Math.min(x-bw/2, W-pad.r-bw));
-      byP=Math.max(pad.t+2, bY-bh-16);
-      // コネクタ（ボックス下端→青ドット）
-      ctx.strokeStyle='rgba(111,208,204,.28)';ctx.lineWidth=0.8;ctx.setLineDash([2,2]);
-      ctx.beginPath();ctx.moveTo(x,byP+bh+1);ctx.lineTo(x,bY-6);ctx.stroke();
-      ctx.setLineDash([]);
-    } else {
-      const flipL=(tAge>=70)||(x+bw+18>W-pad.r);
-      bxP=flipL?x-bw-10:x+14;
-      byP=Math.max(pad.t+2,Math.min(yFn(Math.max(bVal,rVal))-4, H-pad.b-bh));
-    }
-
-    ctx.fillStyle='rgba(18,26,28,.9)';
-    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(bxP,byP,bw,bh,4);ctx.fill();}
-    else{ctx.fillRect(bxP,byP,bw,bh);}
-    ctx.strokeStyle='rgba(111,208,204,.22)';ctx.lineWidth=0.5;
-    if(ctx.roundRect){ctx.beginPath();ctx.roundRect(bxP,byP,bw,bh,4);ctx.stroke();}
-    else{ctx.strokeRect(bxP,byP,bw,bh);}
-
-    lines.forEach((ln,i)=>{
-      ctx.fillStyle=ln.c;
-      ctx.font=`300 ${_cl(fs-1,10,12)}px ${CF}`;
-      ctx.fillText(ln.t, bxP+5, byP+13+i*lh);
-    });
-  });
-
-  // Callout at age 80
-  const lastX=xFn(n-1);
-  const bY=yFn(blueArr[n-1]);
-  const rY=yFn(redArr[n-1]);
-  const diffVal=blueArr[n-1]-redArr[n-1];
-  if(diffVal>0&&lastX>80){
-    ctx.fillStyle='rgba(49,65,69,.92)';
-    const lbl=`-${Math.round(diffVal/100)*100>0?Math.round(diffVal/100)*100:Math.round(diffVal)}万`;
-    const tw=ctx.measureText(lbl).width;
-    const bx=lastX-tw-10;
-    const by=(bY+rY)/2-10;
-    ctx.beginPath();ctx.roundRect(bx-4,by,tw+8,18,5);ctx.fill();
-    ctx.fillStyle='white';ctx.font=`bold ${fs}px ${CF}`;
-    ctx.fillText(lbl,bx,by+13);
-  }
 }
 
 // ═══════════════════════════════════════════════════

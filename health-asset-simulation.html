@@ -12,12 +12,13 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
 <link rel="stylesheet" href="assets/min/simulator-base.css?v=a578f9ddb7">
 <link rel="stylesheet" href="assets/min/health-ocr.css?v=1e25c49013">
-<link rel="stylesheet" href="assets/min/nippn-seminar.css?v=47736c03f4">
+<link rel="stylesheet" href="assets/min/nippn-seminar.css?v=b7460c2b3c">
 <link rel="stylesheet" href="assets/min/simulation-experience.css?v=5cb45d55f8">
-<link rel="stylesheet" href="assets/min/report-tone.css?v=ad8135db8a">
+<link rel="stylesheet" href="assets/min/report-tone.css?v=1577a4a69f">
 <link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=f8cf785ab0">
 </head>
 <body>
 
@@ -199,36 +200,33 @@
 </div>
 
 <header class="brand-header">
-  <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ">
-
-    <img class="brand-logo__full" src="./assets/images/bp-logo.png" alt="BODY PALETTE">
-  </a>
+  <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ"><img class="brand-logo__full" src="./assets/images/bp-logo.png" alt="BODY PALETTE" width="230" height="172"></a>
+  <div class="ui-brand-context"><span class="ui-status-dot"></span><span>健康寿命・健康資産シミュレーション</span></div>
 </header>
-
-
-
 <section class="hero" aria-label="このシミュレーションについて">
   <div class="hero-copy">
-    <div class="hero-tag">BODY PALETTE HEALTH CHECK</div>
-    <h1>健診結果を、<span class="hero-h1-nowrap">これからの選択へ。</span></h1>
-    <p>①テーマを選ぶ → ②健診結果と条件を入力して結果を見る → ③生活習慣の条件を変えて比較する。数値の意味を知り、無理なく続く習慣を考えましょう。</p>
-    <div class="hero-qr">
-      <img src="./assets/images/qr-tool.png" alt="このツールのQRコード" width="82" height="82">
-      <div class="hero-qr-txt"><strong>スマホでも試せます</strong><span>このQRコードを読み取って、お手元の端末で入力してください。</span></div>
-    </div>
+    <div class="hero-tag">HEALTH × LIFE × ASSET</div>
+    <h1>健診結果を、<br><span class="hero-h1-nowrap">これからの選択へ。</span></h1>
+    <p>健康とお金のこれからを、健診結果から考える。今の習慣と、少し変えた未来を比べてみませんか。</p>
+    <div class="ui-hero-actions"><a class="ui-start" href="#step1">シミュレーションをはじめる<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a></div>
   </div>
   <div class="hero-visual">
-
-    <img src="./assets/images/hero-cover.webp" alt="健康シミュレーション">
+    <img src="./assets/images/hero-cover.webp" alt="明るい職場で会話する人々のイメージ" width="1600" height="900" fetchpriority="high">
+    <div class="ui-photo-caption"><span>BODY PALETTE</span><strong>健康を、これからの力に。</strong></div>
   </div>
 </section>
+<div class="ui-reassurance">
+ <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/></svg>入力した健診値は端末内で処理</span>
+ <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 12h18"/></svg>健診票の写真から入力</span>
+ <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16h17M8 15l4-5 4 3 5-7"/></svg>習慣を変えた未来を比較</span>
+</div>
 
 
 
 <nav class="step-nav" id="stepNav">
   <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">1</span><span class="sn-label">テーマ選択</span></a>
   <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">2</span><span class="sn-label">入力・結果</span></a>
-  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">3</span><span class="sn-label">条件変更・比較</span></a>
+  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">3</span><span class="sn-label">条件比較</span></a>
   <a class="step-nav-item" href="#nextPlan" data-step="4"><span class="sn-num">4</span><span class="sn-label">社内施策</span></a>
   <a class="step-nav-item" href="#seminarSurvey" data-step="5"><span class="sn-num">5</span><span class="sn-label">アンケート</span></a>
 </nav>
@@ -445,10 +443,10 @@
     <div class="graph-wrap mode-asset-only">
       <div class="graph-title">健康資産の推移（現在〜80歳）</div>
       <div class="graph-sub">青：追加負担なしの比較基準　赤：現在の条件を続ける想定</div>
-      <canvas id="chart"></canvas>
+      <canvas id="chart" role="img" aria-label="現在から80歳までの健康資産推移を比較する参考グラフ。金額と計算条件はグラフ下の比較対象で確認できます。"></canvas>
       <div class="g-legend">
-        <div><span class="g-dot" style="background:#5e8582"></span>比較基準（追加負担なし）</div>
-        <div><span class="g-dot" style="background:#e24c5e"></span>現在の条件</div>
+        <div><span class="g-dot" style="background:#638fa7"></span>比較基準（追加負担なし）</div>
+        <div><span class="g-dot" style="background:#d46f8e"></span>現在の条件</div>
         <div id="legendImproved" style="display:none"><span class="g-dot" style="background:#0a807c"></span>生活習慣を改善した場合</div>
         <div><span class="g-dot" style="background:#c6d6d3;width:14px;height:2px;border-radius:0;margin-top:4px;"></span>60歳（定年・再雇用）</div>
         <div><span class="g-dot" style="background:#0fa8a3;width:14px;height:3px;border-radius:0;margin-top:3px;"></span>65歳（年金移行）</div>
@@ -710,10 +708,10 @@
     <div class="share-actions">
       <div class="save-btn-row">
         <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
-          <span class="pdf-btn-icon">📷</span> 画像で保存する
+          <span class="ui-output-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg></span> 画像で保存する
         </button>
         <button type="button" class="pdf-btn" id="pdfBtn">
-          <span class="pdf-btn-icon">🖨</span> PDFで保存・印刷
+          <span class="ui-output-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7zM16 11h1"/></svg></span> PDFで保存・印刷
         </button>
       </div>
       <p class="pdf-note" id="shareImgNote">スマホはそのまま画像として保存・共有できます（PCはPDF印刷も可）。</p>
@@ -848,13 +846,14 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=c8283f3f0a"></script>
+<script src="assets/min/simulator-core.js?v=a8eb626881"></script>
 <script src="assets/min/health-ocr.js?v=1589dcec69"></script>
 <script src="assets/min/research-evidence.js?v=8021b56464"></script>
-<script src="assets/min/nippn-seminar.js?v=03bdbafa46"></script>
+<script src="assets/min/nippn-seminar.js?v=50f77e01e0"></script>
 <script src="assets/min/simulation-experience.js?v=c348e2133b"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
 <script src="assets/min/seminar-survey.js?v=0cdd1ca505"></script>
-<script src="assets/min/step-accordion.js?v=4c1fa4b8a5"></script>
+<script src="assets/min/step-accordion.js?v=edd8f7dc01"></script>
+<script src="assets/min/body-palette-ui.js?v=edcb42408b"></script>
 </body>
 </html>

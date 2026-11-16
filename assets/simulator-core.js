@@ -1859,7 +1859,7 @@ async function saveResultAsImage(btn, note){
     link.href=canvas.toDataURL('image/png');
     link.click();
     fwTrack('save_image_success');
-    if(note) note.textContent='画像を保存しました。スマホでは写真アプリに保存されます。';
+    if(note) note.textContent='画像を作成しました。ダウンロード先はブラウザ・端末の設定をご確認ください。';
   }catch(e){
     if(note) note.textContent='画像の生成に失敗しました。しばらくしてから再度お試しください。';
   }finally{

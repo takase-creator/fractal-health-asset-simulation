@@ -9,7 +9,7 @@
   for(const [id,r] of Object.entries(rules)){
    const raw=values[id];if(raw==null||raw===''||!Number.isFinite(Number(raw))){items[id]={id,...r,value:null,level:'unknown'};continue;}
    const value=Number(raw);let guide=r.guide;
-   if(r.fasting){if(!['fasting','nonfasting'].includes(fasting)){items[id]={id,...r,value,level:'unknown',note:'採血条件を確認してください。'};continue;}guide=fasting==='nonfasting'?175:150;}
+   if(r.fasting){if(!['fasting','nonfasting'].includes(fasting)){items[id]={id,...r,value,level:value>=r.refer?'high':'unknown',conditionUnknown:true,note:'採血条件を確認してください。'};continue;}guide=fasting==='nonfasting'?175:150;}
    const level=r.lower?(value<guide?'mid':'low'):(r.refer!==null&&value>=r.refer?'high':value>=guide?'mid':'low');
    items[id]={id,...r,guide,value,level};
   }

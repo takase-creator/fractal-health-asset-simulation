@@ -236,7 +236,7 @@ function renderReportInputs(){
   const L=(k,id,u,lo,hi,ref)=>{const x=num(id),item=computeRisk().checks.items[id];if(x!==null)labs.push({k,v:val(id),u,ref,warn:['mid','high'].includes(item.level)});};
   L('LDL','ldl','mg/dL',null,119.999,'保健指導判定値 ≥120');
   L('HDL','hdl','mg/dL',40,null,'保健指導判定値 <40');
-  const tg=BPClinical.evaluate({tg:num('tg')},document.getElementById('tgFasting')?.value||'unknown').items.tg;if(tg.value!==null)labs.push({k:'中性脂肪',v:val('tg'),u:'mg/dL',ref:tg.level==='unknown'?'採血条件未確認':'保健指導判定値 ≥'+tg.guide,warn:['mid','high'].includes(tg.level)});
+  const tg=BPClinical.evaluate({tg:num('tg')},document.getElementById('tgFasting')?.value||'unknown').items.tg;if(tg.value!==null)labs.push({k:'中性脂肪',v:val('tg'),u:'mg/dL',ref:tg.conditionUnknown?(tg.level==='high'?'受診勧奨判定値 ≥300（採血条件未確認）':'採血条件未確認'):'保健指導判定値 ≥'+tg.guide,warn:['mid','high'].includes(tg.level)});
   L('空腹時血糖','glucose','mg/dL',null,99,'保健指導判定値 ≥100');
   L('HbA1c','hba1c','%',null,5.5,'保健指導判定値 ≥5.6');
   L('AST','ast','U/L',null,30,'保健指導判定値 ≥31');
@@ -420,7 +420,7 @@ function updateAll(){
  RISK_LABELS.forEach(([label,key])=>{const area=s.checks.areas[key],row=document.createElement('div');row.className='risk-row';
  const title=document.createElement('h3');title.className='risk-name';title.textContent=label;
  const status=document.createElement('p');status.className='clinical-status';status.dataset.level=area.level;status.textContent=area.label;
- const data=document.createElement('p');data.className='clinical-values';data.textContent=area.total?area.items.filter(i=>i.value!==null).map(i=>i.label+' '+i.value+' '+i.unit+(i.level==='unknown'?'（採血条件未確認）':'')).join(' ／ ')||'検査値を入力すると照合できます。':key==='kidney'?'eGFR・尿蛋白などの検査を扱っていないため、評価しません。':'診察・身体機能の検査を行っていないため、数値評価しません。';
+ const data=document.createElement('p');data.className='clinical-values';data.textContent=area.total?area.items.filter(i=>i.value!==null).map(i=>i.label+' '+i.value+' '+i.unit+(i.conditionUnknown?'（採血条件未確認）':'')).join(' ／ ')||'検査値を入力すると照合できます。':key==='kidney'?'eGFR・尿蛋白などの検査を扱っていないため、評価しません。':'診察・身体機能の検査を行っていないため、数値評価しません。';
  row.append(title,status,data);
  if(area.partial&&area.entered){const note=document.createElement('p');note.className='clinical-partial';note.textContent=area.entered+'/'+area.total+'項目を照合。残りの項目は未確認です。';row.append(note);}rEl.append(row);
  });

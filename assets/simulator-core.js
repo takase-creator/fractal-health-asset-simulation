@@ -705,7 +705,7 @@ function setMode(m){
     if(consentLocal)consentLocal.innerHTML='入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）';
   }
   const step1Title=document.getElementById('step1Title');
-  if(step1Title)step1Title.textContent='確認したいテーマを選ぶ';
+  if(step1Title)step1Title.textContent='テーマを選ぶ';
   const assetInfo=document.getElementById('assetInfoBox');
   if(assetInfo)assetInfo.setAttribute('aria-hidden',String(_lsMode==='lifespan'));
   const preRun=document.body.classList.contains('pre-run');
@@ -738,7 +738,7 @@ function clearMode(){
   const modeFlow=document.getElementById('modeFlow');
   if(modeFlow)modeFlow.hidden=true;
   const step1Title=document.getElementById('step1Title');
-  if(step1Title)step1Title.textContent='確認したいテーマを選ぶ';
+  if(step1Title)step1Title.textContent='テーマを選ぶ';
   window.dispatchEvent(new Event('scroll'));
 }
 ['modeAsset','modeLife'].forEach(id=>{
@@ -1084,7 +1084,7 @@ function computeAlertFlags(s){
 // 結果を「いつか改善する」ではなく、明日できる一つの行動に落とし込む。
 // 結果を「数字」だけで終わらせないための出口。医療診断ではなく、入力に応じて最初の行動を示す。
 function renderNextPlan(s,alertFlags){
- document.getElementById('nextPlanTitle').textContent='その後のステップ';
+ document.getElementById('nextPlanTitle').textContent='社内の施策・受診案内を見る';
  document.getElementById('nextPlanSub').textContent='社内の施策についてご説明させていただきます。';
 }
 

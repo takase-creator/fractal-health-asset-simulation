@@ -4,7 +4,7 @@
  // STEP 2 is one section from assumptions through results.
  const step2Header=$('step2');const stage2=document.createElement('section');stage2.id='step2Section';stage2.className='panel simulation-section';stage2.setAttribute('aria-labelledby','step2Title');
  const inputBody=document.createElement('div');inputBody.className='pb step2-inputs';while(step2Header.nextSibling)inputBody.append(step2Header.nextSibling);
- step2Header.className='ph';step2Header.innerHTML='<span class="ph-step">STEP 2</span><h2 id="step2Title">健診結果と条件を入力して、結果を見る</h2>';
+ step2Header.className='ph';step2Header.innerHTML='<span class="ph-step">STEP 2</span><h2 id="step2Title">入力して、試算結果を見る</h2>';
  stage2.append(step2Header,inputBody,$('p1'));inputBody.prepend($('modeFlow'));$('p0').after(stage2);
  // Start with lifestyle/asset fields, then checkup photos/manual values.
  const lifestyleStart=$('gender').closest('.fg2').previousElementSibling;const assetEnd=$('assetInfoBox');const lifestyle=document.createDocumentFragment();let cursor=lifestyleStart;
@@ -12,7 +12,7 @@
  ['ocrFile','ocrCamera'].forEach(id=>$(id).addEventListener('change',()=>{$('ocrFileName').textContent=$(id).files[0]?.name||'未選択';}));
  $('resetFormBtn').addEventListener('click',()=>{$('ocrFileName').textContent='未選択';});
  // STEP 3 is the separate scenario comparison section.
- const comparison=document.createElement('section');comparison.id='step3';comparison.className='panel improvement-section';comparison.setAttribute('aria-labelledby','step3Title');comparison.innerHTML='<div class="ph"><span class="ph-step">STEP 3</span><h2 id="step3Title">生活習慣の条件を変えて、比較する</h2></div><div class="pb"></div>';
+ const comparison=document.createElement('section');comparison.id='step3';comparison.className='panel improvement-section';comparison.setAttribute('aria-labelledby','step3Title');comparison.innerHTML='<div class="ph"><span class="ph-step">STEP 3</span><h2 id="step3Title">生活習慣を変えて、結果を比べる</h2></div><div class="pb"></div>';
  comparison.querySelector('.pb').append($('improveBox'),$('roiBlock'));stage2.after(comparison);
  // STEP 4 follows scenario comparison; STEP 5 follows STEP 4.
  const aftercare=$('nextPlan');if(aftercare){comparison.after(aftercare);const saves=document.querySelector('.share-actions');if(saves)aftercare.querySelector('.pb').insertBefore(saves,aftercare.querySelector('.aftercare-next'));}

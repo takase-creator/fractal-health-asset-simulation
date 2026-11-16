@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
-<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=d2c858a8cb">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=44b37b100a">
 </head>
 <body>
 
@@ -205,28 +205,31 @@
 </header>
 <section class="hero" aria-label="このシミュレーションについて">
   <div class="hero-copy">
-    <div class="hero-tag">健康と暮らしを考える</div>
+    <div class="hero-tag">健診結果を、これからの暮らしへ</div>
     <h1>健康寿命・健康資産<span>シミュレーション</span></h1>
-    <p>健診結果と生活習慣から、将来の変化を試算します。条件を変えて、今の生活と比べてみましょう。</p>
+    <p>健診結果と生活習慣から、将来の変化を試算。<br>運動などの条件を変えて、今の生活と比べられます。</p>
+    <a class="ui-start" href="#step1">STEP 1 テーマを選んではじめる <span aria-hidden="true">→</span></a>
+    <p class="hero-input-note">健診票の写真・手入力に対応。健診値・資産額は端末内で処理します。</p>
   </div>
-  <div class="hero-aside"><span class="hero-aside-label">ご利用にあたって</span><p>健診票があれば、写真から入力できます。<br>入力した健診値・資産額は端末内で処理します。</p><a class="ui-start" href="#step1">テーマを選んではじめる <span aria-hidden="true">→</span></a></div>
+  <figure class="hero-photo"><img src="assets/images/health-check-hero-v1.webp" srcset="assets/images/health-check-hero-v1-768.webp 768w, assets/images/health-check-hero-v1.webp 1536w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 1124px) 55vw, 590px" alt="健診票とスマートフォンを見ながら、健康について確認する二人のイメージ" width="1536" height="1024" fetchpriority="high" decoding="async"></figure>
 </section>
+<div class="steps-intro"><h2>5つのSTEPで進めます</h2><p>見たいSTEPを押すと開きます。はじめての方はSTEP 1から。</p></div>
 
 
 
 <nav class="step-nav" id="stepNav">
-  <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">1</span><span class="sn-label">テーマ選択</span></a>
-  <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">2</span><span class="sn-label">入力・結果</span></a>
-  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">3</span><span class="sn-label">条件比較</span></a>
-  <a class="step-nav-item" href="#nextPlan" data-step="4"><span class="sn-num">4</span><span class="sn-label">社内施策</span></a>
-  <a class="step-nav-item" href="#seminarSurvey" data-step="5"><span class="sn-num">5</span><span class="sn-label">アンケート</span></a>
+  <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">STEP 1</span><span class="sn-label">テーマ選択</span></a>
+  <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">STEP 2</span><span class="sn-label">入力・結果</span></a>
+  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">STEP 3</span><span class="sn-label">条件比較</span></a>
+  <a class="step-nav-item" href="#nextPlan" data-step="4"><span class="sn-num">STEP 4</span><span class="sn-label">社内施策</span></a>
+  <a class="step-nav-item" href="#seminarSurvey" data-step="5"><span class="sn-num">STEP 5</span><span class="sn-label">アンケート</span></a>
 </nav>
 
 <div class="layout" id="layout">
 
 
 <div class="panel" id="p0">
-  <div class="ph" id="step1"><span class="ph-step">STEP 1</span><span id="step1Title">確認したいテーマを選ぶ</span></div>
+  <div class="ph" id="step1"><span class="ph-step">STEP 1</span><span id="step1Title">テーマを選ぶ</span></div>
   <div class="pb">
 
     <div class="mode-select" id="modeSelect">
@@ -633,7 +636,7 @@
       </div>
 
     <section class="panel aftercare-section" id="nextPlan" aria-labelledby="nextPlanTitle">
-      <div class="ph"><span class="ph-step">STEP 4</span><h2 id="nextPlanTitle">その後のステップ</h2></div>
+      <div class="ph"><span class="ph-step">STEP 4</span><h2 id="nextPlanTitle">社内の施策・受診案内を見る</h2></div>
       <div class="pb">
         <p class="aftercare-intro" id="nextPlanSub">社内の施策についてご説明させていただきます。</p>
     <div class="exam-cta" id="examCta">
@@ -837,14 +840,14 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=ca5ea25d1e"></script>
+<script src="assets/min/simulator-core.js?v=5f9cd96e06"></script>
 <script src="assets/min/health-ocr.js?v=1589dcec69"></script>
 <script src="assets/min/research-evidence.js?v=8021b56464"></script>
-<script src="assets/min/nippn-seminar.js?v=50f77e01e0"></script>
+<script src="assets/min/nippn-seminar.js?v=cbb40e183f"></script>
 <script src="assets/min/simulation-experience.js?v=c348e2133b"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
-<script src="assets/min/seminar-survey.js?v=0cdd1ca505"></script>
+<script src="assets/min/seminar-survey.js?v=ff9f5b73c0"></script>
 <script src="assets/min/step-accordion.js?v=edd8f7dc01"></script>
-<script src="assets/min/body-palette-ui.js?v=1590b8a75b"></script>
+<script src="assets/min/body-palette-ui.js?v=d94b97b8ae"></script>
 </body>
 </html>

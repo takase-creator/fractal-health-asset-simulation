@@ -3,7 +3,7 @@
  'use strict';
  if(document.getElementById('seminarSurvey'))return;
  const survey=document.createElement('section');survey.id='seminarSurvey';survey.className='panel seminar-survey';survey.setAttribute('aria-labelledby','surveyTitle');
- survey.innerHTML=`<div class="ph"><span class="ph-step">STEP 5</span><span id="surveyTitle">アンケートにご回答ください</span></div>
+ survey.innerHTML=`<div class="ph"><span class="ph-step">STEP 5</span><span id="surveyTitle">アンケートに答える</span></div>
  <div class="pb"><p class="survey-lead">今後の改善のため、体験した感想をお聞かせください。全4問、約1分です。</p>
  <p class="survey-preview-note">確認用の画面です。回答は送信・保存されません。氏名・連絡先の入力はありません。</p>
  <form id="seminarSurveyForm">

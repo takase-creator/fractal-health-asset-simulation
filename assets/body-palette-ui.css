@@ -82,3 +82,16 @@
 
 @media screen{body.pre-run #resultReadingOrder,body[data-mode="unselected"] #resultReadingOrder{display:none!important}.page>#resultReadingOrder{margin:14px 0 0;padding:16px 0 0;border-top:1px solid #d9dfdd}}
 @media print{#resultReadingOrder{display:none!important}}
+
+/* Result values lead the visual hierarchy; methods and calculation are unchanged. */
+@media screen{
+ #a80diffBig[data-value-kind="number"],#lifeLostBig[data-value-kind="number"]{font-family:inherit!important;font-size:clamp(56px,7vw,80px)!important;font-weight:700;line-height:1.18;letter-spacing:-.035em;font-variant-numeric:tabular-nums;margin:10px 0 12px;overflow-wrap:anywhere}
+ #a80diffBig[data-value-kind="number"]{color:#a13750}#lifeLostBig[data-value-kind="number"]{color:#005e55}
+ #a80diffBig[data-value-kind="message"],#lifeLostBig[data-value-kind="message"]{font-size:clamp(26px,3vw,34px)!important;font-weight:600;line-height:1.5;letter-spacing:0}
+ .a80-main-label,.life-main-label{font-size:14px;line-height:1.8;color:#344e41}.age80-box,.life-result{border-left-width:4px}.a80-main-sub{font-size:12px;color:#536c5d}
+ #roiProtect[data-value-kind="number"]{font-family:inherit;font-size:clamp(40px,5.5vw,62px);font-weight:700;line-height:1.2;letter-spacing:-.025em;color:#005e55;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+ #roiProtect[data-value-kind="message"]{font-size:26px;font-weight:600;line-height:1.5}.change-outcome{font-size:28px!important;font-weight:700;line-height:1.6;color:#005e55}#impGood,#impDiff{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums}
+}
+@media screen and (max-width:700px){
+ #a80diffBig[data-value-kind="number"],#lifeLostBig[data-value-kind="number"]{font-size:clamp(38px,11vw,52px)!important;line-height:1.25;letter-spacing:-.04em}#a80diffBig[data-value-kind="message"],#lifeLostBig[data-value-kind="message"]{font-size:26px!important}.a80-main-label,.life-main-label{font-size:13px}#roiProtect[data-value-kind="number"]{font-size:clamp(34px,10vw,46px)}.change-outcome{font-size:23px!important}#impGood,#impDiff{font-size:28px}
+}

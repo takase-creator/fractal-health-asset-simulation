@@ -9,5 +9,5 @@
  [['ocrCameraButton','camera'],['ocrFile','file']].forEach(([id,name])=>{const el=$(id),label=id==='ocrFile'?el?.closest('label'):el;if(label){const mark=document.createElement('span');mark.className='ui-control-icon';mark.innerHTML=svg(name);label.prepend(mark);}});
  document.querySelectorAll('.exam-reason .er-ico').forEach(el=>el.hidden=true);
  // The logo is a navigation affordance; text remains visible to screen readers.
- document.body.classList.add('ui-refreshed');
+ document.body.classList.add('ui-refreshed');requestAnimationFrame(()=>window.dispatchEvent(new Event('scroll')));
 })();

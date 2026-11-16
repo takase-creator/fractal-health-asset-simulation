@@ -1351,7 +1351,7 @@ const panels=[document.getElementById('p0'),document.getElementById('p1')];
 (function(){
   const navItems=Array.from(document.querySelectorAll('.step-nav-item'));
   function setActive(step){
-    navItems.forEach(a=>a.classList.toggle('on', a.dataset.step===String(step)));
+    navItems.forEach(a=>{const active=a.dataset.step===String(step);a.classList.toggle('on',active);if(active)a.setAttribute('aria-current','step');else a.removeAttribute('aria-current');});
   }
   function syncAvailableSteps(){
     const isPreRun=document.body.classList.contains('pre-run');
@@ -1368,7 +1368,7 @@ const panels=[document.getElementById('p0'),document.getElementById('p1')];
     syncAvailableSteps();
     const y=window.scrollY + 110;
     let cur=1;
-    navItems.forEach(a=>{const el=document.querySelector(a.getAttribute('href'));if(el&&el.getBoundingClientRect().top+window.scrollY<=y)cur=Number(a.dataset.step);});
+    navItems.forEach(a=>{const el=document.querySelector(a.getAttribute('href'));if(el&&el.getClientRects().length>0&&el.getBoundingClientRect().top+window.scrollY<=y)cur=Number(a.dataset.step);});
     setActive(cur);
   }
   window.addEventListener('scroll', onScroll, {passive:true});

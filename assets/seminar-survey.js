@@ -4,13 +4,13 @@
  if(document.getElementById('seminarSurvey'))return;
  const survey=document.createElement('section');survey.id='seminarSurvey';survey.className='panel seminar-survey';survey.setAttribute('aria-labelledby','surveyTitle');
  survey.innerHTML=`<div class="ph"><span class="ph-step">STEP 5</span><span id="surveyTitle">アンケートに答える</span></div>
- <div class="pb"><p class="survey-lead">今後の改善のため、体験した感想をお聞かせください。全4問、約1分です。</p>
+ <div class="pb"><p class="survey-lead">画面の使いやすさと、今後取り組みたいことを教えてください。全4問、約1分です。</p>
  <p class="survey-preview-note">確認用の画面です。回答は送信・保存されません。氏名・連絡先の入力はありません。</p>
  <form id="seminarSurveyForm">
  <div class="survey-field"><label for="surveyEase">1. シミュレーションの画面操作は分かりやすかったですか。<span class="survey-required">必須</span></label>
  <select id="surveyEase" name="ease" required><option value="">選んでください</option><option value="5">とても分かりやすかった</option><option value="4">分かりやすかった</option><option value="3">どちらともいえない</option><option value="2">やや分かりにくかった</option><option value="1">分かりにくかった</option></select></div>
- <div class="survey-field"><label for="surveyUnderstanding">2. 健診結果を今後の行動にどう活かすか、イメージできましたか。<span class="survey-required">必須</span></label>
- <select id="surveyUnderstanding" name="understanding" required><option value="">選んでください</option><option value="5">具体的にイメージできた</option><option value="4">ある程度イメージできた</option><option value="3">どちらともいえない</option><option value="2">あまりイメージできなかった</option><option value="1">イメージできなかった</option></select></div>
+ <div class="survey-field"><label for="surveyUnderstanding">2. 健診結果を受けて何をするか、具体的に考えられましたか。<span class="survey-required">必須</span></label>
+ <select id="surveyUnderstanding" name="understanding" required><option value="">選んでください</option><option value="5">具体的に考えられた</option><option value="4">ある程度考えられた</option><option value="3">どちらともいえない</option><option value="2">あまり考えられなかった</option><option value="1">考えられなかった</option></select></div>
  <fieldset class="survey-field survey-actions"><legend>3. これから取り組んでみたいことを教えてください。<span class="survey-optional">任意・複数選択可</span></legend>
  <div class="survey-options">
  <label><input type="checkbox" name="actions" value="exercise">運動習慣を見直す</label>
@@ -48,7 +48,7 @@
   event.preventDefault();if(!form.reportValidity())return;
   const ease=document.getElementById('surveyEase'),understanding=document.getElementById('surveyUnderstanding');
   const selectedActions=actions.filter(el=>el.checked).map(el=>el.closest('label').textContent.trim());
-  const pairs=[['画面操作の分かりやすさ',ease.selectedOptions[0].textContent],['今後の行動のイメージ',understanding.selectedOptions[0].textContent],['取り組んでみたいこと',selectedActions.join(' ／ ')||'回答なし'],['ご意見',document.getElementById('surveyComment').value.trim()||'回答なし']];
+  const pairs=[['画面操作の分かりやすさ',ease.selectedOptions[0].textContent],['今後取り組むこと',understanding.selectedOptions[0].textContent],['取り組んでみたいこと',selectedActions.join(' ／ ')||'回答なし'],['ご意見',document.getElementById('surveyComment').value.trim()||'回答なし']];
   const summary=document.getElementById('surveyAnswerSummary');summary.replaceChildren();
   for(const [question,answer] of pairs){const dt=document.createElement('dt');dt.textContent=question;const dd=document.createElement('dd');dd.textContent=answer;summary.append(dt,dd);}
   form.hidden=true;confirmation.hidden=false;document.getElementById('surveyConfirmationTitle').focus();

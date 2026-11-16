@@ -30,7 +30,7 @@ if(typeof module!=='undefined'&&module.exports){module.exports={describeScenario
  $('improveToggles').after(summary);
  const reset=document.createElement('button');reset.type='button';reset.id='resetScenario';reset.className='scenario-reset';reset.textContent='変更条件をすべて解除';summary.after(reset);
  reset.addEventListener('click',()=>{['impQuitSmoke','impExercise'].forEach(id=>{$(id).checked=false;$(id+'Wrap').classList.remove('checked');});$('impWeightLoss').value='0';updateAll();});
- const caution=document.createElement('p');caution.className='scenario-caution';caution.textContent='選んだ習慣を長期間継続する仮定で再計算します。明日すぐに変わる結果や、個人への効果の保証ではありません。減量・治療・運動量の変更を勧める判定ではありません。';reset.after(caution);
+ const caution=document.createElement('p');caution.className='scenario-caution';caution.textContent='選んだ習慣を長期間継続する仮定で再計算します。実際の効果や、変化にかかる期間を示すものではありません。減量・治療・運動量の変更を勧める判定ではありません。';reset.after(caution);
  $('impWeightLoss').setAttribute('aria-label','試算する体重の減少量');$('impWeightLoss').setAttribute('aria-describedby','impWeightNote');
  // Update the UI only from the same state used for the chart and the result.
  window.renderExperience=function(state,sim,alt,overrides){
@@ -41,13 +41,17 @@ if(typeof module!=='undefined'&&module.exports){module.exports={describeScenario
    const pairs=[['年齢と期間',`${state.age}歳から80歳まで（${80-state.age}年間）`],['年収',n('income')!==null?`${n('income')}万円（入力値）`:'未入力：年齢・性別別の平均に基づく仮定'],['現在の総資産',n('assets')!==null?`${n('assets')}万円（入力値）`:'未入力：0万円として試算'],['運用利回り','年率3%（独自の仮定・保証なし）'],['モデル医療費の本人負担',`${n('medicalShare')??30}%（仮定）`],['健康による収入減',`${n('incomeLossAssumption')||0}%（仮定）`],['退職・年金','60歳で再雇用・65歳で年金移行を仮定']];
    $('resultAssumptionValues').replaceChildren();for(const [k,v] of pairs){const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;$('resultAssumptionValues').append(dt,dd);}
    const changes=describeScenarioChanges(state,overrides,n('weight'));const holder=$('selectedChanges');holder.replaceChildren();
-   const heading=document.createElement('strong');heading.textContent=changes.length?'今回変更した条件':'変更条件はまだ選ばれていません';holder.append(heading);
+   const heading=document.createElement('strong');heading.textContent=changes.length?'今回変更した条件':'条件を選ぶと、比較結果を表示します。';holder.append(heading);
    for(const text of changes){const chip=document.createElement('span');chip.className='change-chip';chip.textContent=text;holder.append(chip);}
    if(changes.length&&alt){
      const text=document.createElement('p');text.className='change-outcome';
+     const label=document.createElement('span');label.className='change-outcome-label';
+     const value=document.createElement('strong');value.className='change-outcome-value';
+     const note=document.createElement('span');note.className='change-outcome-note';
      if(document.body.dataset.mode==='lifespan'){
-       const before=computeLifespan(state),after=computeLifespan(alt);text.textContent=`現在の条件との年数差：+${Math.max(0,after.neglectRemain-before.neglectRemain).toFixed(1)}年（独自試算）`;
-     }else{const after=projectImproved(alt);const d=after.val80-sim.red80;text.textContent=`現在の条件との資産差額：${d<0?'−':'+'}${fmt(Math.abs(d))}（80歳時点・独自試算）`;}
+       const before=computeLifespan(state),after=computeLifespan(alt);label.textContent='現在の条件との年数差';value.textContent=`+${Math.max(0,after.neglectRemain-before.neglectRemain).toFixed(1)}年`;note.textContent='独自モデルによる参考試算';
+     }else{const after=projectImproved(alt);const d=after.val80-sim.red80;label.textContent='現在の条件との資産差額';value.textContent=`${d<0?'−':'+'}${fmt(Math.abs(d))}`;note.textContent='80歳時点・独自モデルによる参考試算';}
+     text.append(label,value,note);
      holder.append(text);
    }
    $('resetScenario').disabled=changes.length===0;

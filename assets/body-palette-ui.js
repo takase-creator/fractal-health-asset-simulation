@@ -11,7 +11,7 @@
  [['ocrCameraButton','camera'],['ocrFile','file']].forEach(([id,name])=>{const el=$(id),label=id==='ocrFile'?el?.closest('label'):el;if(label){const mark=document.createElement('span');mark.className='ui-control-icon';mark.innerHTML=svg(name);label.prepend(mark);}});
  document.querySelectorAll('.exam-reason .er-ico').forEach(el=>el.hidden=true);
  // Enlarge actual result values; keep empty-state messages at reading size.
- ['a80diffBig','lifeLostBig','roiProtect'].forEach(id=>{const el=$(id);if(!el)return;const mark=()=>{el.dataset.valueKind=/[0-9０-９]/.test(el.textContent)?'number':'message';};mark();new MutationObserver(mark).observe(el,{childList:true,subtree:true,characterData:true});});
+ ['a80diffBig','lifeLostBig','roiProtect','roiSessionValue'].forEach(id=>{const el=$(id);if(!el)return;const mark=()=>{el.dataset.valueKind=/[0-9０-９]/.test(el.textContent)?'number':'message';};mark();new MutationObserver(mark).observe(el,{childList:true,subtree:true,characterData:true});});
  // The logo is a navigation affordance; text remains visible to screen readers.
  document.body.classList.add('ui-refreshed');requestAnimationFrame(()=>window.dispatchEvent(new Event('scroll')));
 })();

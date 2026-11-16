@@ -592,7 +592,7 @@ function renderLifespan(s,improvedState){
   const topAction=life.actions[0]?.label||'今の生活習慣を続ける';
   const visionTitle=document.getElementById('lifeVisionTitle');
   const visionSub=document.getElementById('lifeVisionSub');
-  if(visionTitle)visionTitle.textContent='条件の違いを、生活習慣を考えるきっかけに。';
+  if(visionTitle)visionTitle.textContent='生活習慣による試算の違いを確認します。';
   if(visionSub)visionSub.textContent='年数は独自の参考モデルによる値です。実際の健康状態や受診の判断は、健診の判定・医療機関の案内を確認してください。';
   set('lifeDays', life.loss>=1?days.toLocaleString():'0');
   window._lifeTarget=life.loss;
@@ -605,7 +605,7 @@ function renderLifespan(s,improvedState){
   if(lbB)lbB.style.width=gp+'%';
   set('lbGoodAge', life.maintainAge+'歳');
   set('lbBadAge', life.neglectAge+'歳');
-  set('lbGap', `この差 約${life.loss}年 が「失う健康年数」`);
+  set('lbGap', `比較基準との年数差：約${life.loss}年（参考値）`);
   const la=document.getElementById('lifeActions');
   if(la){
     if(life.actions.length){
@@ -613,7 +613,7 @@ function renderLifespan(s,improvedState){
         + life.actions.map(a=>`<div class="la-row"><span class="la-l">${a.label}</span><span class="la-y">+${a.years}年</span></div>`).join('')
         + `<div class="la-row la-total"><span class="la-l">すべての改善条件を設定した場合</span><span class="la-y">最大 +約${life.loss}年</span></div>`;
     } else {
-      la.innerHTML='<div class="la-h">現在の生活習慣は良好です。この状態を維持しましょう。</div>';
+      la.innerHTML='<div class="la-h">現在の入力条件では、追加の変更項目はありません。</div>';
     }
   }
   // 改善トグルで選んだ条件を、健康寿命の主結果にも即時反映する
@@ -636,7 +636,7 @@ function renderLifespan(s,improvedState){
   }
   const teaser=document.getElementById('lifeTeaser');
   if(teaser){
-    teaser.innerHTML='ちなみに「健康資産」モードでは、この健康リスクを放置した場合に <strong>80歳までに失う推定資産額</strong> も試算できます。上の「健康資産を守る」を選ぶと切り替わります。';
+    teaser.innerHTML='「健康資産を比べる」を選ぶと、80歳時点の資産差額も確認できます。';
   }
   const h=document.getElementById('simulationResults');
   if(h) h.textContent=(_lsMode==='lifespan'?'あなたの健康寿命シミュレーション結果':'あなたの健康資産シミュレーション結果');
@@ -672,16 +672,16 @@ function setMode(m){
   const preRun=document.body.classList.contains('pre-run');
   const rb=document.getElementById('runBtn');
   if(rb)rb.textContent = preRun
-    ? (_lsMode==='lifespan'?'健康寿命への影響を見る':'80歳までの影響を見る')
+    ? (_lsMode==='lifespan'?'健康年数を試算する':'80歳までの資産を試算する')
     : 'もう一度シミュレーションする';
   // 実行前プレースホルダをモード連動＝"これから出る答え"を予告
   const pmT=document.querySelector('#prerunMsg .pm-t'), pmS=document.querySelector('#prerunMsg .pm-s');
-  if(pmT) pmT.textContent = _lsMode==='lifespan' ? '今の習慣で、元気に動ける時間がどれだけ変わるか' : '今の習慣を変えない場合、80歳までに失い得る金額';
-  if(pmS) pmS.innerHTML = '基本4項目だけで、あなた向けの影響と<br>明日からの一歩を表示します。';
+  if(pmT) pmT.textContent = _lsMode==='lifespan' ? '生活習慣の条件による健康年数の差' : '現在の条件と比較基準の、80歳時点の資産差額';
+  if(pmS) pmS.innerHTML = '基本情報だけでも試算できます。<br>健診結果を入力すると、確認できる項目が増えます。';
   const pmNext=document.getElementById('pmNext');
   if(pmNext) pmNext.textContent = _lsMode==='lifespan'
-    ? '入力後、健康で動ける時間を守るための一歩を表示します'
-    : '入力後、将来の健康資産を守るための一歩を表示します';
+    ? '試算後は、生活習慣による年数差を比較できます。'
+    : '試算後は、運動などの条件を変えて比較できます。';
   try{ updateAll(); }catch(e){}
   // 実行済みならモード切替でもう一方の結果へ誘導＋山場を再演出
   if(!preRun){
@@ -724,16 +724,16 @@ function renderReportA4(s,sim,life){
   renderReportTrend(s);
   if(_lsMode==='lifespan'){
     set('raTitle','健康寿命シミュレーション結果');
-    set('raHeroLabel','独自モデルによる健康年数のシナリオ比較');
+    set('raHeroLabel','独自モデルによる健康年数の条件比較');
     set('raFmLL','健康維持の比較基準'); set('raFmLV', '0年');
     set('raFmRL','現在条件の参考差'); set('raFmRV', life.loss+'年'); set('raFmOp','−');
-    set('raFmDL','シナリオ間の年数差'); set('raFmDV', life.loss+'年');
+    set('raFmDL','条件による年数差'); set('raFmDV', life.loss+'年');
     set('raDetailT','改善条件を設定した場合の年数差（参考）');
     g('raDetail').innerHTML = life.actions.length
       ? life.actions.slice(0,4).map(a=>`<div class="li"><span>${a.label}</span><span class="y">+${a.years}年</span></div>`).join('')
         + `<div class="li tot"><span>すべての改善条件を設定した場合</span><span class="y">最大 +約${life.loss}年</span></div>`
-      : '<div class="li"><span>現在の生活習慣は良好です。この状態を維持しましょう。</span></div>';
-    g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>専門家の知見のもと継続的な運動習慣</strong>で健康寿命を守りましょう。';
+      : '<div class="li"><span>現在の入力条件では、追加の変更項目はありません。</span></div>';
+    g('raMsg').innerHTML='健診結果の判定と受診案内を確認してください。運動について医師の指示がある場合は、その指示に従ってください。';
     g('raFoot').textContent='独自の参考モデル。個人の寿命・発症年齢を予測する妥当性は検証されていません。年数差は仮定による計算で、個人への効果や誤差範囲を保証しません。研究例：Li et al., BMJ 2020 https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/';
   } else {
     set('raTitle','健康資産シミュレーション結果');
@@ -741,16 +741,16 @@ function renderReportA4(s,sim,life){
     set('raFmLL','比較基準：追加負担なし'); set('raFmLV', fmt(sim.blue80));
     if(sim.red80 < 0){ set('raFmRL','現在の条件を続ける想定'); set('raFmRV', '−'+fmt(-sim.red80)); set('raFmOp','＋'); }
     else { set('raFmRL','現在の条件を続ける想定'); set('raFmRV', fmt(sim.red80)); set('raFmOp','−'); }
-    set('raFmDL','80歳時点のシナリオ差額（独自試算）'); set('raFmDV', fmt(sim.diff80));
-    set('raDetailT','健康リスク放置による推定損失（〜80歳）');
+    set('raFmDL','80歳時点の資産差額（独自試算）'); set('raFmDV', fmt(sim.diff80));
+    set('raDetailT','80歳までの試算差額の内訳');
     const tot=Math.max(0,sim.diff80);
     g('raDetail').innerHTML=
       `<div class="li"><span>設定した仮定による累積収入減</span><span class="y">-${fmt(sim.cumulativePT)}</span></div>`
      +`<div class="li"><span>設定した負担割合による累積医療費</span><span class="y">-${fmt(sim.cumulativeMed)}</span></div>`
-     +`<div class="li"><span>投資複利 機会損失（3%換算）</span><span class="y">-${fmt(sim.compoundLoss)}</span></div>`
-     +`<div class="li tot"><span>80歳時点のシナリオ差額（試算）</span><span class="y">-${fmt(tot)}</span></div>`
-     +`<div class="ra-detail-note">※上部は資産推移（複利込み）で比較した80歳時点のシナリオ差額です。項目ごとに算定範囲が異なります。単純合計はできません。</div>`;
-    g('raMsg').innerHTML='健康診断は“ふるい分け”の簡易検査です。気になる数値があれば<strong>二次健診で正確に確認</strong>し、<strong>継続的な運動習慣</strong>で将来の資産を守りましょう。';
+     +`<div class="li"><span>運用益の差（年率3%の仮定）</span><span class="y">-${fmt(sim.compoundLoss)}</span></div>`
+     +`<div class="li tot"><span>80歳時点の資産差額（試算）</span><span class="y">-${fmt(tot)}</span></div>`
+     +`<div class="ra-detail-note">※上部は資産推移（複利込み）で比較した80歳時点の資産差額です。項目ごとに算定範囲が異なります。単純合計はできません。</div>`;
+    g('raMsg').innerHTML='健診結果の判定と受診案内を確認してください。運動条件を変えた場合の試算は、画面のSTEP 3で確認できます。';
     g('raFoot').textContent=`独自の参考モデル。本人負担の仮定${n('medicalShare')??30}%、収入減の仮定${n('incomeLossAssumption')||0}%、年率3%。高額療養費・付加給付・通院交通費・時間価値・運動費用は自動反映しません。個人の将来資産や疾病を予測するものではありません。`;
   }
   renderReportInputs();
@@ -822,11 +822,11 @@ function renderReportSteps(s){
   let flags=[]; try{ flags=computeAlertFlags(s)||[]; }catch(e){}
   const steps=[];
   if(flags.length) steps.push(`基準を外れた項目（${flags.length}つ）を<b>二次健診で精密検査</b>し、医師に相談する`);
-  else steps.push(`気になる数値は<b>二次健診で正確に確認</b>する（健診はふるい分けの簡易検査です）`);
-  if(s.exerciseHours>=2.5) steps.push(`今の<b>運動習慣を継続</b>する（週150分以上でCVD死亡リスク約29%減）`);
-  else steps.push(`<b>運動習慣を身につける</b>（まずは週2〜3回・1回30分から。将来の資産を守る一番割のいい対策）`);
-  if(s.smoking==='current') steps.push(`<b>禁煙</b>に取り組む（本数を減らすだけでもリスクは下がります）`);
-  if(s.bmi!==null&&s.bmi>=25) steps.push(`<b>減量</b>する（まずは現体重の3〜5%を目標に）`);
+  else steps.push(`気になる数値は<b>二次健診で正確に確認</b>する（健診結果の判定と受診案内に従ってください）`);
+  if(s.exerciseHours>=2.5) steps.push(`今の<b>運動習慣を継続</b>する（体調や医師の指示に合わせて調整）`);
+  else steps.push(`<b>運動習慣を身につける</b>（まずは週2〜3回・1回30分から。体調や医師の指示に合わせて調整）`);
+  if(s.smoking==='current') steps.push(`<b>禁煙</b>に取り組む（相談先や支援制度を確認）`);
+  if(s.bmi!==null&&s.bmi>=25) steps.push(`<b>体重について相談</b>する（減量の必要性や方法を医師・管理栄養士に確認）`);
   ol.innerHTML = steps.slice(0,4).map(t=>`<li>${t}</li>`).join('');
 }
 
@@ -849,13 +849,15 @@ function protectedAssetsMan(s, sim, targetHours){
 function renderExerciseROI(s,sim){
  const box=document.getElementById('roiBlock');if(!box)return;
  const v=computeExerciseValue(s,sim);
- box.querySelector('.roi-step-tag').textContent='運動を続ける価値を、試算で考える';
- box.querySelector('.roi-title').textContent=v?'30分の運動1回に換算すると、'+fmtYen(v.perSessionYen)+'に相当':'今の運動習慣を、無理なく続ける';
- box.querySelector('.roi-lead').textContent=v?'30分×週3回を80歳まで続ける想定と、現在の運動習慣を続ける想定。その資産差額を、予定する運動回数で割った参考値です。':'30分×週3回は、続け方を考える一つの例です。すでに同じ運動量がある場合は、この設定で追加の差額を表示しません。';
- document.getElementById('roiProtect').textContent=v?fmt(v.diff):'追加試算なし';
- box.querySelector('.rh-label').textContent='現在から80歳までの運動シナリオ差額';
- document.getElementById('roiProtectSub').textContent=v?`${v.yearsLeft}年間 × 52週 × 3回 = ${v.totalSessions.toLocaleString('ja-JP')}回で換算`:'運動の強度や体調に合わせて調整してください';
- box.querySelector('.roi-note').textContent='※運動1回でこの金額が増えるという実証値ではありません。独自の資産モデルによる試算差を配分した値で、運動にかかる費用は未控除です。治療中・痛みのある方は、主治医等の指示に従ってください。';
+ box.querySelector('.roi-step-tag').textContent='運動の条件による比較';
+ box.querySelector('.roi-title').textContent='30分×週3回の運動を続けた場合';
+ box.querySelector('.roi-lead').textContent=v?'現在の運動習慣を続ける場合と、80歳時点の資産を比べています。':'この入力条件では、週90分の運動を加えた場合の資産差額はありません。';
+ const session=box.querySelector('.roi-per-session');if(session)session.hidden=!v;
+ const amount=document.getElementById('roiSessionValue');if(amount)amount.textContent=v?fmtYen(v.perSessionYen):'—';
+ document.getElementById('roiProtect').textContent=v?fmt(v.diff):'追加の差額なし';
+ box.querySelector('.rh-label').textContent='80歳まで続けた場合の資産差額';
+ document.getElementById('roiProtectSub').textContent=v?`${v.yearsLeft}年間 × 年52週 × 週3回 = ${v.totalSessions.toLocaleString('ja-JP')}回で換算`:'運動量をすでに満たしている場合も、追加の差額は表示しません。';
+ box.querySelector('.roi-note').textContent='※1回の運動でこの金額が増えるという意味ではありません。長期の試算差額を運動回数で割った値です。運動費用は含みません。治療中・痛みのある方は、主治医等の指示に従ってください。';
  box.style.display='';
 }
 
@@ -1046,7 +1048,7 @@ function computeAlertFlags(s){
 // 結果を「数字」だけで終わらせないための出口。医療診断ではなく、入力に応じて最初の行動を示す。
 function renderNextPlan(s,alertFlags){
  document.getElementById('nextPlanTitle').textContent='社内の施策・受診案内を見る';
- document.getElementById('nextPlanSub').textContent='社内の施策についてご説明させていただきます。';
+ document.getElementById('nextPlanSub').textContent='社内の健康施策と、健診後の受診案内をご紹介します。';
 }
 
 // 結果を「読む」だけで終わらせず、最も効果が見込める変化を一押しで試せるようにする
@@ -1062,29 +1064,29 @@ function renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,ha
   let action='';
   if(!alreadyNonSmoker){
     action='quit';
-    title.textContent='もし明日から、禁煙したら？';
+    title.textContent='禁煙を続ける場合を試算する';
     desc.textContent=isLifeMode
-      ? '禁煙後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
-      : '禁煙後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+      ? '禁煙を続ける条件で、現在との年数差を表示します。'
+      : '禁煙を続ける条件で、80歳時点の資産差額を表示します。';
   } else if(!alreadyActive){
     action='exercise';
-    title.textContent='もし明日から、運動を週3回にしたら？';
+    title.textContent='30分×週3回の運動を続ける場合を試算する';
     desc.textContent=isLifeMode
-      ? '運動を足した後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
-      : '運動を足した後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+      ? '運動を週90分続ける条件で、現在との年数差を表示します。'
+      : '運動を週90分続ける条件で、80歳時点の資産差額を表示します。';
   } else if(canSimulateWeight && s.bmi>=25){
     action='weight';
-    title.textContent='もし体重を3kg減らせたら？';
+    title.textContent='体重を3kg減らした条件で試算する';
     desc.textContent=isLifeMode
-      ? '減量後に取り戻せる「元気に動ける年数」を、いまの結果と比べて表示します。'
-      : '減量後に80歳時点で守れる健康資産を、いまの結果と比べて表示します。';
+      ? '体重を3kg減らした条件で、現在との年数差を表示します。'
+      : '体重を3kg減らした条件で、80歳時点の資産差額を表示します。';
   }
 
   tryBox.style.display=action?'':'none';
   if(!action)return;
   button.dataset.improveAction=action;
   button.disabled=hasImprovement;
-  button.textContent=hasImprovement?'改善後の数字を表示中 ✓':'この変化を試す →';
+  button.textContent=hasImprovement?'選んだ条件を反映しています':'この条件で比べる →';
 }
 
 let simulationUpdateFrame=0;
@@ -1149,7 +1151,7 @@ function updateAll(){
   if(!canSimulateWeight){
     wlEl.value=0;
     document.getElementById('impWeightVal').textContent='0kg';
-    weightNote.textContent='身長・体重を入力すると、減量後の疾患リスクをシミュレーションできます。';
+    weightNote.textContent='減量した条件で比べるには、身長と体重を入力してください。';
   } else {
     weightNote.textContent=`現在の体重${n('weight')}kg → ${(n('weight')-Number(wlEl.value))}kg（目安の試算値。腹囲の変化は考慮していません）`;
   }
@@ -1170,8 +1172,8 @@ function updateAll(){
     ? '生活習慣の条件を変えると、健康年数の試算は？'
     : '生活習慣の条件を変えると、80歳時点の資産は？';
   if(improveSub)improveSub.textContent=isLifeMode
-    ? '「禁煙」「運動」「減量」を試すと、元気に動ける年数の差がその場で変わります。'
-    : '「禁煙」「運動」「減量」を試すと、80歳時点で守れる金額がその場で変わります。';
+    ? '禁煙・運動・減量から条件を選び、健康年数の差を確認します。'
+    : '禁煙・運動・減量から条件を選び、80歳時点の資産差額を確認します。';
   renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,hasImprovement,isLifeMode});
   // 健康寿命モードでは、改善後の年数をメイン結果にも同時表示する
   renderLifespan(s,altState);
@@ -1210,8 +1212,8 @@ function updateAll(){
   // Age 80 callout（差額を主役に簡略表示）
   document.getElementById('a80good').textContent=fmt(sim.blue80);
   { const _bad=document.getElementById('a80bad'), _op=document.getElementById('a80op'), _lbl=document.getElementById('a80badLabel');
-    if(sim.red80 < 0){ if(_bad)_bad.textContent=fmt(-sim.red80); if(_op)_op.textContent='＋'; if(_lbl)_lbl.textContent='現状放置なら（赤字）'; }
-    else { if(_bad)_bad.textContent=fmt(sim.red80); if(_op)_op.textContent='−'; if(_lbl)_lbl.textContent='現状放置なら'; } }
+    if(sim.red80 < 0){ if(_bad)_bad.textContent=fmt(-sim.red80); if(_op)_op.textContent='＋'; if(_lbl)_lbl.textContent='現在の条件の場合（マイナス）'; }
+    else { if(_bad)_bad.textContent=fmt(sim.red80); if(_op)_op.textContent='−'; if(_lbl)_lbl.textContent='現在の条件の場合'; } }
   const _a80dc=document.getElementById('a80diffCalc');
   if(_a80dc) _a80dc.textContent=fmt(Math.max(0,Math.round(sim.diff80)));
   const a80big=document.getElementById('a80diffBig');
@@ -1225,8 +1227,8 @@ function updateAll(){
     window._a80target=sim.diff80;
   } else {
     a80big.classList.add('good');
-    a80label.textContent='入力条件とモデルの範囲で、80歳時点の差額は';
-    a80big.textContent='小さい試算です';
+    a80label.textContent='入力した条件での、80歳時点の資産差額';
+    a80big.textContent='ほぼ差額なし';
     a80sub.textContent='このモデルで差が小さくても、健康上の問題がないとは限りません';
     window._a80target=0;
   }
@@ -1286,19 +1288,19 @@ function updateAll(){
   const scSub=document.getElementById('scHlSub');
   const exVal=computeExerciseValue(s,sim);
   if(sim.diff80>=10){
-    scPre.textContent='現状放置すると、80歳で';
+    scPre.textContent='現在の条件と比較基準の、80歳時点の差額';
     scNum.className='sc-hl-num bad';
     scNum.textContent=`−${fmt(sim.diff80)}`;
     let sub=`健康維持なら <b class="good">${fmt(sim.blue80)}</b>`;
     if(exVal) sub+=` ／ 30分の運動 1回で <b class="teal">${fmtYen(exVal.perSessionYen)}</b> を守れる計算です`;
     else if(s.exerciseHours>=1.5) sub+=` ／ すでに30分×週3回の運動習慣が将来の資産を守っています`;
-    else sub+=` ／ 運動習慣が将来の資産を守ります`;
+    else sub+=` ／ 運動条件を変えた試算も確認できます`;
     scSub.innerHTML=sub;
   } else {
     scPre.textContent='今の状態なら、80歳の資産への影響は';
     scNum.className='sc-hl-num good';
     scNum.textContent='ほとんど差なし';
-    scSub.innerHTML='このモデルで差が小さくても、健康上の問題がないとは限りません。運動習慣が将来のリスク上昇を防ぐ一番のお守りです。';
+    scSub.innerHTML='このモデルで差が小さくても、健康上の問題がないとは限りません。生活習慣による違いは、条件を変えて確認してください。';
   }
 
 }

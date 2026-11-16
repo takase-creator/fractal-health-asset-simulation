@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
-<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=f4fdcfd0bd">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=0b3a2ced88">
 </head>
 <body>
 
@@ -48,7 +48,6 @@
         <li id="consentLocal">入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）</li>
         <li>氏名・連絡先を入力せずに利用できます。入力した健診値・資産額は勤務先へ送信しません</li>
         <li>この画面単体では、アンケートや集計情報を外部へ送信しません</li>
-        <li>シミュレーション自体に氏名・連絡先は不要です</li>
         <li>結果は参考試算値であり、医療診断・投資助言ではありません</li>
       </ul>
       <p style="margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;">提供：FRACTAL WORKOUT株式会社</p>
@@ -205,9 +204,9 @@
 </header>
 <section class="hero" aria-label="このシミュレーションについて">
   <div class="hero-copy">
-    <div class="hero-tag">健診結果を、これからの暮らしへ</div>
+    <div class="hero-tag">健診結果と生活習慣の確認</div>
     <h1>健康寿命・健康資産<span>シミュレーション</span></h1>
-    <p>健診結果と生活習慣から、将来の変化を試算。<br>運動などの条件を変えて、今の生活と比べられます。</p>
+    <p>健診結果と生活習慣をもとに試算します。<br>運動などの条件を変えて、結果を比べられます。</p>
     <a class="ui-start" href="#step1">シミュレーションをはじめる <span aria-hidden="true">→</span></a>
     <p class="hero-input-note">健診票の写真・手入力に対応。健診値・資産額は端末内で処理します。</p>
   </div>
@@ -237,13 +236,13 @@
       <div class="mode-cards">
         <button type="button" class="mode-card" data-mode="asset" id="modeAsset" aria-pressed="false">
           <span class="mode-ico">💰</span>
-          <span class="mode-t">健康資産を守る</span>
-          <span class="mode-d">今の習慣を変えない場合、80歳までに失い得る金額を確かめる</span>
+          <span class="mode-t">健康資産を比べる</span>
+          <span class="mode-d">現在の生活習慣と比較基準で、80歳時点の資産差額を確認します。</span>
         </button>
         <button type="button" class="mode-card" data-mode="lifespan" id="modeLife">
           <span class="mode-ico">🌱</span>
-          <span class="mode-t">健康寿命を守る</span>
-          <span class="mode-d">今の習慣と改善で、元気に動ける年数がどう変わるかを確かめる</span>
+          <span class="mode-t">健康寿命を比べる</span>
+          <span class="mode-d">生活習慣の条件を変えた場合の、健康年数の差を確認します。</span>
         </button>
       </div>
     </div>
@@ -284,15 +283,15 @@
 
     <div class="precision-meter" id="precisionMeter">
       <div class="pm-head">
-        <span class="pm-label">入力カバー率</span>
+        <span class="pm-label">健診結果の入力状況</span>
         <span class="pm-level" id="pmLevel" data-lv="簡易">簡易</span>
       </div>
       <div class="pm-bar"><div class="pm-fill" id="pmFill"></div></div>
-      <div class="pm-note" id="pmNote">健診結果を入れるほど、<strong>判定に使える項目</strong>が増えます（簡易→標準→詳細）。分かる項目だけでOK。</div>
+      <div class="pm-note" id="pmNote">健診結果を入れるほど、<strong>判定に使える項目</strong>が増えます（簡易→標準→詳細）。分かる項目だけ入力してください。</div>
     </div>
 
     <div id="advancedInputs" style="display:none">
-    <div class="sec-title">健診データ（13項目・任意・空欄OK）</div>
+    <div class="sec-title">健診結果（13項目・任意）</div>
     <div class="subnote">今回の健診結果と単位を確認して入力してください。入力は任意です。未入力の項目や、この画面で扱わない検査は評価できません。</div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/></svg>体格</div>
@@ -375,7 +374,7 @@
     <div class="field cig-count-field" id="cigCountField" style="display:none">
       <label for="cigCount">1日の本数（本）</label>
       <input id="cigCount" type="number" inputmode="numeric" min="1" max="60" placeholder="未入力の場合は1日20本として試算します">
-      <span class="subnote" style="margin:6px 0 0;">本数に応じて疾患リスクへの影響を連続的に調整します（1本でも影響は大きく、20本でほぼ頭打ちになります）</span>
+      <span class="subnote" style="margin:6px 0 0;">本数に応じてモデル内の参考スコアが変わります。実際の発症確率を示すものではありません。</span>
     </div>
 
     <div class="sec-title mode-asset-only" id="assetInfoTitle">資産情報</div>
@@ -405,8 +404,8 @@
       <button type="button" id="demoFillBtn" style="display:none">▶ デモ用サンプルを入力</button>
     </div>
     <button class="cta-btn" id="runBtn">健康資産をシミュレーションする</button>
-    <div class="input-reassurance" aria-label="シミュレーションについて"><span>約1分</span><span>個人情報は不要</span><span>入力はこの画面で試算</span></div>
-    <p class="privacy-note">入力内容はこのページ内で試算に使用され、個人情報の入力は不要です。</p>
+    <div class="input-reassurance" aria-label="シミュレーションについて"><span>約1分</span><span>氏名入力なし</span><span>入力はこの画面で試算</span></div>
+    <p class="privacy-note">入力内容はこのページ内で試算に使用され、氏名・連絡先は入力しません。</p>
     </div>
   </div>
 </div>
@@ -414,22 +413,22 @@
 
 <div class="panel" id="p1">
   <div id="prerunMsg" aria-live="polite">
-    <div class="pm-kicker">RESULT PREVIEW</div>
+    <div class="pm-kicker">試算結果について</div>
     <div class="pm-ico" aria-hidden="true">📊</div>
     <div class="pm-t">結果はここに表示されます</div>
-    <div class="pm-s">上の情報を入力して「シミュレーションする」を押すと、<br>あなたの結果がここに表示されます。</div>
+    <div class="pm-s">入力後に実行ボタンを押すと、ここに試算結果を表示します。</div>
     <div class="pm-promises">
       <div class="pm-promise"><b>今の状態</b><span>気になる数値・習慣を整理</span></div>
-      <div class="pm-promise"><b>将来への影響</b><span>健康資産／健康寿命を見える化</span></div>
-      <div class="pm-promise"><b>次の一歩</b><span>あなた向けの行動を提案</span></div>
+      <div class="pm-promise"><b>将来への影響</b><span>資産・健康年数の差を確認</span></div>
+      <div class="pm-promise"><b>条件の比較</b><span>条件を変えて比較</span></div>
     </div>
-    <div class="pm-next" id="pmNext">入力後、すぐにあなた用の結果を表示します</div>
+    <div class="pm-next" id="pmNext">入力後に試算結果を表示します</div>
   </div>
   <div class="ph result-section-heading" id="simulationResults">あなたの健康資産シミュレーション結果</div>
   <div class="pb">
 
 
-    <div class="print-title">健康リスク × 将来資産シミュレーション ｜ 結果レポート</div>
+    <div class="print-title">健康資産シミュレーション｜参考試算結果</div>
 
 
     <div class="graph-wrap mode-asset-only">
@@ -465,41 +464,41 @@
       <div class="a80-calc">
         <div class="a80-c-cell"><span class="cl">健康維持なら</span><span class="cv good" id="a80good">--</span></div>
         <span class="a80-c-op" id="a80op">−</span>
-        <div class="a80-c-cell"><span class="cl" id="a80badLabel">現状放置なら</span><span class="cv bad" id="a80bad">--</span></div>
+        <div class="a80-c-cell"><span class="cl" id="a80badLabel">現在の条件の場合</span><span class="cv bad" id="a80bad">--</span></div>
         <span class="a80-c-op">＝</span>
-        <div class="a80-c-cell res"><span class="cl">放置で少なくなる額</span><span class="cv diff" id="a80diffCalc">--</span></div>
+        <div class="a80-c-cell res"><span class="cl">比較基準との差額</span><span class="cv diff" id="a80diffCalc">--</span></div>
       </div>
     </div>
 
 
     <div class="life-result mode-life-only" id="lifespanResult">
       <div class="life-main">
-        <div class="life-main-label">現在と健康維持の仮定を比べた、健康年数の差は</div>
+        <div class="life-main-label">現在の条件と比較基準の健康年数差</div>
       <div class="life-main-num" id="lifeLostBig">--</div>
       <div class="life-main-sub" id="lifeLostSub">独自の仮定による年数差です。個人の寿命の予測ではありません。</div>
     </div>
     <div class="life-vision">
       <div class="life-vision-copy">
-        <div class="life-vision-kicker">THE YEARS YOU WANT TO KEEP</div>
-        <div class="life-vision-title" id="lifeVisionTitle">これからの時間を、自分らしく歩くために。</div>
-        <div class="life-vision-sub" id="lifeVisionSub">今の生活習慣を少しずつ見直すことが、未来の選択肢を守ります。</div>
+        <div class="life-vision-kicker">健康年数の比較</div>
+        <div class="life-vision-title" id="lifeVisionTitle">生活習慣の条件を変えて比較できます。</div>
+        <div class="life-vision-sub" id="lifeVisionSub">表示する年数は独自モデルの参考値です。個人の寿命を予測するものではありません。</div>
         <div class="life-days"><strong id="lifeDays">--</strong><span>日分の「元気に自立して過ごす時間」の目安</span></div>
       </div>
     </div>
     <div class="life-compare">
         <div class="life-mini">
-          <span class="life-mini-lbl">健康維持なら 約</span>
+          <span class="life-mini-lbl">比較基準：約</span>
           <span class="life-mini-val good" id="lifeMaintainAge">--</span>
-          <span class="life-mini-u">歳まで元気に</span>
+          <span class="life-mini-u">歳（参考値）</span>
         </div>
         <div class="life-mini">
-          <span class="life-mini-lbl">現状放置なら 約</span>
+          <span class="life-mini-lbl">現在の条件：約</span>
           <span class="life-mini-val bad" id="lifeNeglectAge">--</span>
           <span class="life-mini-u">歳まで</span>
         </div>
       </div>
       <div class="life-bar" id="lifeBar">
-        <div class="lb-cap-row"><span>現在</span><span>元気に自立して過ごせる年齢</span></div>
+        <div class="lb-cap-row"><span>現在</span><span>モデル上の年齢比較</span></div>
         <div class="lb-row">
           <span class="lb-cap good">健康維持</span>
           <div class="lb-track"><div class="lb-fill good" id="lbGood"></div><span class="lb-age" id="lbGoodAge">--歳</span></div>
@@ -508,7 +507,7 @@
           <span class="lb-cap bad">現在の条件</span>
           <div class="lb-track"><div class="lb-fill bad" id="lbBad"></div><span class="lb-age" id="lbBadAge">--歳</span></div>
         </div>
-        <div class="lb-gap" id="lbGap">この差が「失う健康年数」です</div>
+        <div class="lb-gap" id="lbGap">比較基準と現在の条件による年数差です</div>
       </div>
       <div class="life-actions" id="lifeActions"></div>
       <div class="life-live-change" id="lifeLiveChange" hidden aria-live="polite">
@@ -540,15 +539,15 @@
     <div class="pr-b">
 
     <div class="improve-box" id="improveBox">
-      <div class="improve-title" id="improveTitle">もし明日から生活習慣を変えたら、何を取り戻せるか</div>
-      <div class="improve-sub" id="improveSub">まず1つ、未来を動かしてみてください。改善後の数字がすぐに表示されます。</div>
+      <div class="improve-title" id="improveTitle">生活習慣を変えた場合の試算</div>
+      <div class="improve-sub" id="improveSub">変更する条件を選ぶと、比較結果を表示します。</div>
       <div class="improve-try" id="improveTry">
         <div>
-          <div class="improve-try-kicker">まず、未来を1つ動かしてみる</div>
-          <div class="improve-try-title" id="improveTryTitle">もし明日から、運動を週3回にしたら？</div>
-          <div class="improve-try-desc" id="improveTryDesc">改善後に守れる数字を、いまの結果と比べて確認できます。</div>
+          <div class="improve-try-kicker">変更する条件の例</div>
+          <div class="improve-try-title" id="improveTryTitle">30分×週3回の運動を続ける場合を試算する</div>
+          <div class="improve-try-desc" id="improveTryDesc">選んだ条件と、現在の条件を比べます。</div>
         </div>
-        <button type="button" class="try-improve-btn" id="tryImproveBtn" data-improve-action="exercise">この変化を試す →</button>
+        <button type="button" class="try-improve-btn" id="tryImproveBtn" data-improve-action="exercise">この条件で比べる →</button>
       </div>
       <div class="improve-toggles" id="improveToggles">
         <label class="improve-chk" for="impQuitSmoke" id="impQuitSmokeWrap">
@@ -584,7 +583,7 @@
           <div class="ir-val" id="impGood">--</div>
         </div>
         <div class="ir-item">
-          <div class="ir-label" id="impDiffLabel">現状放置との差（取り戻せる金額）</div>
+          <div class="ir-label" id="impDiffLabel">現在の条件との差額</div>
           <div class="ir-val" id="impDiff">--</div>
         </div>
       </div>
@@ -610,7 +609,7 @@
         </div>
       </div>
       <div class="loss-total">
-        <div class="lt-label">80歳時点のシナリオ差額（試算）</div>
+        <div class="lt-label">80歳時点の資産差額（試算）</div>
         <div class="lt-val" id="lossTotal">--</div>
         <div class="lt-sub">※試算値。実際は個人の状況により異なります。</div>
       </div>
@@ -620,14 +619,14 @@
 
 
       <div class="roi-block" id="roiBlock">
-        <span class="roi-step-tag">受診のあと、いちばん大切なこと</span>
-        <h2 class="roi-title">二次健診で数値を知ったら、次は<span class="hl">「運動習慣」で資産を守る</span>番です。</h2>
-        <p class="roi-lead">健康診断は"現在地の確認"にすぎません。将来の資産を実際に守るのは、その後の——「継続的な健康習慣」です。運動習慣を身につけると、あなたの場合——</p>
+        <span class="roi-step-tag">運動の条件による比較</span>
+        <h2 class="roi-title">30分×週3回の運動を続けた場合</h2>
+        <p class="roi-lead">現在の運動習慣を続ける場合と、80歳時点の資産を比べます。</p>
 
         <div class="roi-headline-num">
-          <div class="rh-label">運動習慣で守れる、あなたの生涯資産（80歳まで）</div>
+          <div class="rh-label">80歳まで続けた場合の資産差額</div>
           <div class="rh-val" id="roiProtect">--</div>
-          <div class="rh-sub" id="roiProtectSub">現状放置のシナリオと比べた差額（試算値）</div>
+          <div class="rh-sub" id="roiProtectSub">現在の条件との差額（参考試算）</div>
         </div>
 
         <p class="roi-note">※現在の年齢から80歳まで、継続的な運動習慣を実践した場合の試算値です。金額は入力値からの試算であり、効果を保証するものではありません。まずは二次健診の受診を。</p>
@@ -636,14 +635,14 @@
     <section class="panel aftercare-section" id="nextPlan" aria-labelledby="nextPlanTitle">
       <div class="ph"><span class="ph-step">STEP 4</span><h2 id="nextPlanTitle">社内の施策・受診案内を見る</h2></div>
       <div class="pb">
-        <p class="aftercare-intro" id="nextPlanSub">社内の施策についてご説明させていただきます。</p>
+        <p class="aftercare-intro" id="nextPlanSub">社内の健康施策と、健診後の受診案内をご紹介します。</p>
     <div class="exam-cta" id="examCta">
-      <span class="exam-cta-tag">健診の案内を確認しましょう</span>
-      <h2>気になる数値は、<span class="hl">自己判断せず確認</span>する。</h2>
-      <p class="exam-cta-lead">この結果は試算です。健診値に気になる点があるときは、二次健診で現在の状態を正確に確認しましょう。</p>
+      <span class="exam-cta-tag">健診後の受診案内</span>
+      <h2>健診結果に気になる数値があれば、<span class="hl">受診案内を確認</span>してください。</h2>
+      <p class="exam-cta-lead">この結果は参考試算です。受診が必要かどうかは、健診結果の判定と受診案内を確認してください。</p>
 
       <details class="exam-details" id="examDetails" open>
-        <summary>二次健診が大切な理由と、受診までの流れを見る</summary>
+        <summary>二次健診の確認事項と受診の流れ</summary>
         <div class="exam-details-inner">
       <div class="exam-reasons">
         <div class="exam-reason">
@@ -653,12 +652,12 @@
         </div>
         <div class="exam-reason">
           <img class="exam-reason-image" src="assets/images/checkup-benefits-ai-v1.webp" srcset="assets/images/checkup-benefits-ai-v1-640.webp 640w, assets/images/checkup-benefits-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="会社の費用補助の案内を担当者と確認する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
-          <div class="er-t">費用負担は少なめ</div>
+          <div class="er-t">費用補助の有無を確認する</div>
           <div class="er-d">補助の有無・対象・自己負担は会社や健康保険組合の制度によって異なります。案内を確認してください。</div>
         </div>
         <div class="exam-reason">
           <img class="exam-reason-image" src="assets/images/checkup-booking-ai-v1.webp" srcset="assets/images/checkup-booking-ai-v1-640.webp 640w, assets/images/checkup-booking-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="案内を見ながらスマートフォンで受診予約する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
-          <div class="er-t">予約は数分で完了</div>
+          <div class="er-t">予約方法を確認する</div>
           <div class="er-d">会社の健診案内から受診先・予約方法・必要書類を確認してください。</div>
         </div>
       </div>
@@ -691,7 +690,7 @@
         <span class="sc-card-risk-badge" id="scRiskBadge">--</span>
       </div>
       <div class="sc-headline">
-        <span class="sc-hl-pre" id="scHlPre">現状放置すると、80歳で</span>
+        <span class="sc-hl-pre" id="scHlPre">現在の条件と比較基準の、80歳時点の差額</span>
         <span class="sc-hl-num bad" id="scHlNum">--</span>
       </div>
       <div class="sc-hl-sub" id="scHlSub">--</div>
@@ -728,32 +727,32 @@
     <div class="service-cta-section">
 
 
-      <div class="service-cta-label">だから、運動習慣づくりを BODY PALETTE がサポートします</div>
+      <div class="service-cta-label">BODY PALETTEの運動指導サービス</div>
       <div class="service-cta-grid">
 
         <div class="service-card">
           <span class="sc-badge">場所を選ばない</span>
           <div class="sc-title">オンライン<br>パーソナルトレーニング</div>
-          <div class="sc-desc">自宅・出張先どこからでも。プロトレーナーと1対1でトレーニング継続をサポート。</div>
+          <div class="sc-desc">自宅・出張先どこからでも。トレーナーが1対1で運動を指導します。</div>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4274609" target="_blank" rel="noopener noreferrer" data-reserve="online">予約・体験する →</a>
         </div>
 
         <div class="service-card">
-          <span class="sc-badge">原宿通い ｜ 男性・女性</span>
-          <div class="sc-title">医療費控除対象<br>パーソナルトレーニング</div>
-          <div class="sc-desc">健康保険適用外ながら医療費控除の対象となるプラン。予防医療・健康経営に。</div>
+          <span class="sc-badge">原宿の店舗で実施</span>
+          <div class="sc-title">メディカルフィットネス<br>パーソナルトレーニング</div>
+          <div class="sc-desc">利用条件や医療費控除の扱いは、サービス案内でご確認ください。</div>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/2847212" target="_blank" rel="noopener noreferrer" data-reserve="harajuku-pt">予約・体験する →</a>
         </div>
 
         <div class="service-card">
-          <span class="sc-badge">原宿通い ｜ 女性向け</span>
+          <span class="sc-badge">原宿の店舗で実施・女性向け</span>
           <div class="sc-title">ピラティス<br>（女性専門コース）</div>
           <div class="sc-desc">体幹・姿勢・コンディショニングを重視した女性専門のピラティスプログラム。</div>
           <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4897576" target="_blank" rel="noopener noreferrer" data-reserve="pilates">予約・体験する →</a>
         </div>
 
       </div>
-      <p class="service-note">初回カウンセリングは無料・予約不要。オンライン対応可。</p>
+      <p class="service-note">利用方法や料金は、各サービスの予約ページでご確認ください。</p>
     </div>
     </div>
 
@@ -784,14 +783,14 @@
       <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
     </div>
     <div class="ra-hero">
-      <div class="ra-report-kicker">BODY PALETTE · SIMULATION REPORT</div>
+      <div class="ra-report-kicker">BODY PALETTE｜参考試算</div>
       <div class="ra-hero-label" id="raHeroLabel">現在の条件が続く想定では、80歳時点で</div>
       <div class="ra-formula">
         <div class="rf-cell"><span class="rf-l" id="raFmLL">健康維持なら</span><span class="rf-v good" id="raFmLV">--</span></div>
         <span class="rf-op" id="raFmOp">−</span>
-        <div class="rf-cell"><span class="rf-l" id="raFmRL">現状放置なら</span><span class="rf-v bad" id="raFmRV">--</span></div>
+        <div class="rf-cell"><span class="rf-l" id="raFmRL">現在の条件の場合</span><span class="rf-v bad" id="raFmRV">--</span></div>
         <span class="rf-op">＝</span>
-        <div class="rf-cell res"><span class="rf-l" id="raFmDL">資産損失の可能性</span><span class="rf-v diff" id="raFmDV">--</span></div>
+        <div class="rf-cell res"><span class="rf-l" id="raFmDL">比較基準との差額（試算）</span><span class="rf-v diff" id="raFmDV">--</span></div>
       </div>
     </div>
     <div class="ra-input">
@@ -806,7 +805,7 @@
       <div>
         <div class="ra-sec-t">研究で報告された関連を知る</div>
         <div class="ra-trend" id="raTrend"></div>
-        <div class="ra-cvd-note">※CVD＝心血管疾患。心筋梗塞・脳卒中など、心臓と血管の病気の総称です。数値は集団平均・相対リスクに基づく試算です。</div>
+        <div class="ra-cvd-note">※CVDは心血管疾患の略です。研究の割合・HRと、独自モデルの試算は別の指標です。</div>
       </div>
     </div>
     <div class="ra-basis">
@@ -820,8 +819,8 @@
       </div>
       <div class="ra-next">
         <div class="ra-step-label">STEP 4</div>
-        <div class="ra-sec-t">その後のステップ</div>
-        <p>社内の施策についてご説明させていただきます。</p>
+        <div class="ra-sec-t">社内の施策・受診案内</div>
+        <p>社内の健康施策と、健診後の受診案内をご紹介します。</p>
       </div>
     </div>
     <div class="ra-msg" id="raMsg"></div>
@@ -838,14 +837,14 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=5cc5736f85"></script>
-<script src="assets/min/health-ocr.js?v=1589dcec69"></script>
+<script src="assets/min/simulator-core.js?v=4b9e91abcb"></script>
+<script src="assets/min/health-ocr.js?v=5bb2791f29"></script>
 <script src="assets/min/research-evidence.js?v=8021b56464"></script>
-<script src="assets/min/nippn-seminar.js?v=2d6af5718a"></script>
-<script src="assets/min/simulation-experience.js?v=23fe33a1a0"></script>
+<script src="assets/min/nippn-seminar.js?v=fa64088bef"></script>
+<script src="assets/min/simulation-experience.js?v=5252c56384"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
-<script src="assets/min/seminar-survey.js?v=ff9f5b73c0"></script>
+<script src="assets/min/seminar-survey.js?v=3983e7f015"></script>
 <script src="assets/min/step-accordion.js?v=edd8f7dc01"></script>
-<script src="assets/min/body-palette-ui.js?v=240c4ff360"></script>
+<script src="assets/min/body-palette-ui.js?v=5dd3f77a34"></script>
 </body>
 </html>

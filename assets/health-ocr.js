@@ -64,7 +64,7 @@ function showReview(text){
  if(!$('ocrReviewLayout')){
   const layout=document.createElement('div');layout.id='ocrReviewLayout';layout.className='ocr-review-layout';
   const aside=document.createElement('aside');aside.className='ocr-photo-panel';
-  const title=document.createElement('strong');title.textContent='写真と今回の結果を照合';
+  const title=document.createElement('strong');title.textContent='写真の数値を確認';
   const photo=document.createElement('img');photo.id='ocrReviewPhoto';photo.alt='選択した健診結果。入力候補と照合してください';
   const zoom=document.createElement('button');zoom.type='button';zoom.textContent='写真を拡大して確認';
   const dialog=document.createElement('dialog');dialog.id='ocrPhotoDialog';dialog.setAttribute('aria-label','健診結果の写真を拡大');
@@ -75,7 +75,7 @@ function showReview(text){
  }
  $('ocrReviewPhoto').src=$('ocrPreview').src;$('ocrPreview').hidden=true;
 
- const defs=[['review','確認が必要','複数の候補・基準値・範囲外の可能性があります。写真の今回値を入力してください。'],['read','読み取り候補あり','数値の候補を入力済みです。写真の今回値と単位を必ず照合してください。'],['unread','未読の項目','必要な項目だけ手入力できます。空欄なら入力済みの値は変更しません。']];
+ const defs=[['review','確認が必要','複数の候補・基準値・範囲外の可能性があります。写真の今回の結果を入力してください。'],['read','読み取り候補あり','数値の候補を入力済みです。写真の今回の結果と単位を確認してください。'],['unread','未読の項目','必要な項目だけ手入力できます。空欄なら入力済みの値は変更しません。']];
  const groups={};const counts={read:0,review:0,unread:0};
  const summary=document.createElement('p');summary.className='ocr-summary';summary.id='ocrSummary';summary.setAttribute('role','status');$('ocrRows').append(summary);
  for(const [key,title,help] of defs){
@@ -96,7 +96,7 @@ function showReview(text){
   input.addEventListener('input',()=>{
    $('ocrConfirm').checked=false;
    const invalid=input.value!==''&&!input.checkValidity();input.setAttribute('aria-invalid',String(invalid));
-   edit.textContent=invalid?`入力できる範囲は${target.min}〜${target.max} ${unit}です。数値・単位を確認してください。`:input.value!==''?'入力・修正済み。写真の今回値と照合してください。':'空欄：この項目は反映しません。';
+   edit.textContent=invalid?`入力できる範囲は${target.min}〜${target.max} ${unit}です。数値・単位を確認してください。`:input.value!==''?'入力・修正済み。写真の今回の結果と照合してください。':'空欄：この項目は反映しません。';
    updateReviewSummary();
   });
   row.append(labelEl,input,source,edit);groups[kind].append(row);

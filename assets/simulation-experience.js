@@ -14,8 +14,10 @@ if(typeof module!=='undefined'&&module.exports){module.exports={describeScenario
  box.innerHTML='<p class="result-summary-note">独自モデルによる参考試算です。比較対象・計算条件を確かめてから、生活習慣の条件を変えてみてください。</p><details id="comparisonDetails"><summary>比較対象を確認する</summary><div id="comparisonValues" class="comparison-values"></div><p>比較基準は、モデルの追加医療費・収入減をゼロとした仮定です。健康な人の実際の将来資産や、生活習慣を改善した結果を保証する基準ではありません。</p></details><details id="resultAssumptions"><summary>計算条件と、含めていないものを確認する</summary><dl id="resultAssumptionValues" class="assumption-values"></dl><p>疾病の進行・医療費・生活費・複数疾患の補正は独自の仮定です。高額療養費、健保の付加給付、税、通院交通費、待ち時間、運動費用は自動反映していません。</p><button type="button" id="editAssumptions">試算条件を変更する</button></details>';
  $('age80box').after(box);
  const oldNote=box.nextElementSibling;if(oldNote?.classList.contains('model-note'))oldNote.hidden=true;
+ // Keep detailed model disclosures at the end of the page.
+ document.querySelector('.disclaimer').after(box);
  const loss=document.querySelector('.loss-summary');if(loss){box.append(loss);loss.querySelector('summary').textContent='詳しい損失内訳を見る';}
- $('editAssumptions').addEventListener('click',()=>{$('economicAssumptions').open=true;$('economicAssumptions').scrollIntoView({behavior:'smooth',block:'center'});$('medicalShare').focus({preventScroll:true});});
+ $('editAssumptions').addEventListener('click',()=>{const toggle=$('step2')?.querySelector('.step-accordion-toggle');if(toggle?.getAttribute('aria-expanded')==='false')toggle.click();$('economicAssumptions').open=true;requestAnimationFrame(()=>{$('economicAssumptions').scrollIntoView({behavior:'smooth',block:'center'});$('medicalShare').focus({preventScroll:true});});});
  const title=$('riskTitle');const tag=document.createElement('span');tag.className='basis-tag score';tag.textContent='独自スコア';title.prepend(tag);
  const trend=document.querySelector('.trend-box');if(trend){const b=document.createElement('p');b.className='basis-heading';b.innerHTML='<span class="basis-tag study">研究データ</span>研究対象の集団で報告された割合・比較指標';trend.prepend(b);}
  const model=document.createElement('span');model.className='basis-tag model';model.textContent='独自の資産モデル';$('age80box').prepend(model);

@@ -75,7 +75,7 @@ function updatePrecisionMeter(){
  const keys=Object.keys(RULES);const entered=keys.filter(id=>n(id)!==null).length;
  const lvl=document.getElementById('pmLevel');if(lvl){lvl.textContent=`${entered}/${keys.length}項目`;lvl.dataset.lv='入力状況';}
  const fill=document.getElementById('pmFill');if(fill)fill.style.width=(entered/keys.length*100)+'%';
- const note=document.getElementById('pmNote');if(note)note.textContent='入力数の表示です。全項目を入力しても、医学的な診断・個人予測の精度を保証するものではありません。';
+ const note=document.getElementById('pmNote');if(note)note.textContent='未入力の検査項目は評価できません。入力数は診断や予測の精度を示すものではありません。';
 }
 Object.keys(RULES).forEach(id=>{
   const el=document.getElementById(id);
@@ -84,7 +84,7 @@ Object.keys(RULES).forEach(id=>{
 updatePrecisionMeter();
 function validateAll(){
  let ok=true;Object.keys(RULES).forEach(id=>{if(!validateField(id))ok=false;});
- ['income','assets','medicalShare','incomeLossAssumption'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const bad=!el.checkValidity();el.classList.toggle('err',bad);el.setAttribute('aria-invalid',String(bad));if(bad){el.reportValidity();ok=false;}});
+ ['income','assets','medicalShare','incomeLossAssumption'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const bad=!el.checkValidity();if(bad){const details=el.closest('details');if(details)details.open=true;}el.classList.toggle('err',bad);el.setAttribute('aria-invalid',String(bad));if(bad){el.reportValidity();ok=false;}});
  return ok;
 }
 
@@ -677,7 +677,7 @@ function setMode(m){
   // 実行前プレースホルダをモード連動＝"これから出る答え"を予告
   const pmT=document.querySelector('#prerunMsg .pm-t'), pmS=document.querySelector('#prerunMsg .pm-s');
   if(pmT) pmT.textContent = _lsMode==='lifespan' ? '生活習慣の条件による健康年数の差' : '現在の条件と比較基準の、80歳時点の資産差額';
-  if(pmS) pmS.innerHTML = '基本情報だけでも試算できます。<br>健診結果を入力すると、確認できる項目が増えます。';
+  if(pmS) pmS.textContent = '入力後に実行ボタンを押すと、ここに表示されます。';
   const pmNext=document.getElementById('pmNext');
   if(pmNext) pmNext.textContent = _lsMode==='lifespan'
     ? '試算後は、生活習慣による年数差を比較できます。'

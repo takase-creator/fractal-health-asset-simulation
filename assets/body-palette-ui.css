@@ -139,3 +139,50 @@
 @media screen and (max-width:700px){.selected-changes .change-outcome-value{font-size:clamp(30px,10vw,44px)}}
 @media screen{#step3 .step-accordion-body>.pb{padding-bottom:12px}#roiBlock.roi-block{padding-bottom:0;margin-bottom:0}}
 @media screen{body[data-mode="lifespan"] #resultReadingOrder{display:none!important}}
+
+/* Compact input flow: select an entry method, keep optional finance out of the way. */
+@media screen{
+ [hidden]{display:none!important}
+ #step2Section .step2-inputs{padding-top:20px}
+ .checkup-method{border-top:1px solid #d9dfdd;padding-top:18px;margin-top:20px}
+ .checkup-method h3{font-size:17px;line-height:1.6;margin:0 0 12px;color:#173e36}
+ .checkup-method h3>span,.optional-assets summary>span{font-size:11px;font-weight:400;color:#597166;margin-left:10px}
+ .checkup-method-buttons{display:flex;gap:8px;margin-bottom:14px}
+ .checkup-method-buttons button{flex:1;min-height:46px;border:1px solid #9bb6aa;border-radius:3px;background:#fff;color:#23564b;font-family:inherit;font-weight:600;font-size:14px;line-height:1.5;padding:11px 14px;cursor:pointer}
+ .checkup-method-buttons button[aria-pressed="true"]{background:#17645c;border-color:#17645c;color:#fff}
+ .checkup-method-buttons button:hover:not(:disabled){border-color:#083e35;box-shadow:inset 0 0 0 1px #083e35}
+ .checkup-method-buttons button:focus-visible,.optional-assets summary:focus-visible{outline:3px solid #278e82;outline-offset:3px}
+ .checkup-method-buttons button:disabled{opacity:.5;cursor:wait}
+ #step2Section .ocr-box{margin:0;padding:0 0 16px;border:0;background:none}
+ #step2Section #ocrTitle,#step2Section #advancedInputs>.sec-title{display:none}
+ #step2Section .ocr-box>p{margin:8px 0;font-size:12px;line-height:1.75}
+ #step2Section .ocr-capture-actions{margin:12px 0 8px}
+ #step2Section #ocrFileName{font-size:11px;color:#597166}
+ #step2Section .ocr-privacy-details{font-size:11px;line-height:1.75;margin:8px 0}
+ #step2Section #precisionMeter{margin:12px 0;padding:11px 14px}
+ #step2Section .pm-note{font-size:11px;line-height:1.75;margin-top:6px}
+ #step2Section #advancedInputs{margin:8px 0 16px}
+ #step2Section #advancedInputs>.subnote{margin:0 0 12px;font-size:12px;line-height:1.75}
+ .optional-assets{border-top:1px solid #d9dfdd;border-bottom:1px solid #d9dfdd;margin:18px 0 0}
+ .optional-assets>summary{font-size:14px;font-weight:600;color:#23564b;padding:13px 2px;cursor:pointer}
+ .optional-assets .optional-defaults{font-size:11px;line-height:1.75;margin:0 0 10px;color:#597166}
+ #step2Section .optional-assets #assetInfoBox{margin:0 0 14px;padding:14px;background:#f5f8f6;border:0}
+ #step2Section .asset-hint{font-size:11px;line-height:1.75}
+ #step2Section #prerunMsg{padding:18px 16px;min-height:0;border:1px dashed #b5c7be;background:#fafcfb;text-align:center}
+ #step2Section #prerunMsg .pm-t{font-size:16px;margin:0 0 5px}
+ #step2Section #prerunMsg .pm-s{font-size:12px;margin:0;line-height:1.75}
+ .ui-section-heading h2{font-size:21px;line-height:1.5}
+ .step-accordion-body .sec-title{font-size:17px;line-height:1.6;margin-top:20px;margin-bottom:12px}
+ .step-accordion-body .field>label{font-size:13px;line-height:1.6;margin-bottom:6px}
+ .step-accordion-body .subnote{line-height:1.75}
+}
+@media screen and (max-width:600px){
+ .checkup-method-buttons button{padding:11px 8px;font-size:13px}
+ .checkup-method{margin-top:16px;padding-top:16px}
+ .ui-section-heading h2{font-size:18px}
+ #step2Section .step2-inputs{padding-top:16px}
+}
+
+@media screen{#step2Section #modeContext,#step2Section .input-reassurance,#step2Section .privacy-note{display:none}.checkup-method h3>span{display:inline-block}.optional-assets{margin-bottom:0}}
+
+@media screen{#step2Section .ocr-capture-actions label{min-height:46px}#impWeightLoss{appearance:none;-webkit-appearance:none;height:4px;background:#dce7e2;border:0;outline-offset:5px}#impWeightLoss::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#278e82;border:2px solid #fff;box-shadow:0 0 0 1px #278e82}#impWeightLoss::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#278e82;border:2px solid #fff}}

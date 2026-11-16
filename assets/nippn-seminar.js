@@ -9,7 +9,7 @@
  // Start with lifestyle/asset fields, then checkup photos/manual values.
  const lifestyleStart=$('gender').closest('.fg2').previousElementSibling;const assetEnd=$('assetInfoBox');const lifestyle=document.createDocumentFragment();let cursor=lifestyleStart;
  while(cursor){const next=cursor.nextSibling;lifestyle.append(cursor);if(cursor===assetEnd)break;cursor=next;}inputBody.insertBefore(lifestyle,$('modeFlow'));
- ['ocrFile','ocrCamera'].forEach(id=>$(id).addEventListener('change',()=>{$('ocrFileName').textContent=$(id).files[0]?.name||'未選択';}));
+ ['ocrFile','ocrCamera'].forEach(id=>$(id).addEventListener('change',()=>{if($(id).files[0])$('ocrFileName').textContent=$(id).files[0].name;}));
  $('resetFormBtn').addEventListener('click',()=>{$('ocrFileName').textContent='未選択';});
  // STEP 3 is the separate scenario comparison section.
  const comparison=document.createElement('section');comparison.id='step3';comparison.className='panel improvement-section';comparison.setAttribute('aria-labelledby','step3Title');comparison.innerHTML='<div class="ph"><span class="ph-step">STEP 3</span><h2 id="step3Title">生活習慣を変えて比べる</h2></div><div class="pb"></div>';
@@ -21,7 +21,7 @@
  const label=document.createElement('div');label.className='review-label';label.textContent='健診結果を振り返るための参考試算です。個人の寿命・発症・資産を予測するものではありません。';document.querySelector('.disclaimer').append(label);label.classList.add('ui-model-footnote');
  const riskNote=document.createElement('p');riskNote.className='risk-reference';riskNote.innerHTML='6項目は独自ルールで整理した参考スコアです。<strong>発症確率（%）や研究の倍率ではありません。</strong>腎機能など、この入力だけでは判断できない項目もあります。';$('riskRows').before(riskNote);
  const studyLink=document.createElement('p');studyLink.className='risk-reference';studyLink.innerHTML='<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4390315/" target="_blank" rel="noopener">出典：Kawahara et al., PLoS ONE 2015・表1</a>。比較対象・期間・集団が異なる研究の数値を、そのままあなたの発症確率や倍率には変換できません。';$('trendSrc').after(studyLink);
- const note=document.createElement('div');note.className='model-note';note.innerHTML='<strong>この結果の読み方</strong>大規模研究の関連と独自の仮定を使った条件を変えた比較です。個人の寿命・発症年齢・将来資産の予測ではありません。青線は医療費等による追加負担をゼロとした比較用の想定です。年率3%の運用・所得の変化等を仮定し、運動費用、交通費・待ち時間の金銭換算は含めていません。';$('age80box').after(note);
+ const note=document.createElement('div');note.className='model-note';note.innerHTML='<strong>この結果の読み方</strong>独自の仮定に基づく条件比較です。個人の寿命・発症年齢・将来資産の予測ではありません。青線は医療費等による追加負担をゼロとした比較用の想定です。年率3%の運用・所得の変化等を仮定し、運動費用、交通費・待ち時間の金銭換算は含めていません。';$('age80box').after(note);
  const lifeNote=note.cloneNode(false);lifeNote.className='model-note mode-life-only';lifeNote.innerHTML='<strong>健康年数は参考値です</strong>あなたの死亡年齢や病気になる年齢を算出するものではありません。集団の傾向を個人へ当てはめた独自の計算で、個人予測としての妥当性は検証されていません。';$('lifespanResult').after(lifeNote);
  note.classList.add('mode-asset-only');
  const roi=$('roiBlock');roi.classList.add('mode-asset-only');

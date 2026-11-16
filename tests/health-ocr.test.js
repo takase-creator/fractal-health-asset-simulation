@@ -14,4 +14,7 @@ assert.equal(parse('体重 150 lbs').weight.ambiguous,true);
 assert.equal(parse('空腹時血糖 5.6 mmol/L').glucose.ambiguous,true);
 assert.equal(parse('AST(GOT) 22 U/L').ast.values[0],'22');
 assert.equal(parse('γ-GTP 35 U/L').ggt.values[0],'35');
-console.log('14 OCR parser checks passed');
+assert.equal(parse('ァ-GTP 45 U/L').ggt.values[0],'45');
+assert.equal(parse('ガンマ-GTP 45 U/L').ggt.values[0],'45');
+assert.equal(parse('マ-GTP 45 U/L').ggt,undefined);
+console.log('17 OCR parser checks passed');

@@ -12,6 +12,32 @@
  document.querySelectorAll('.exam-reason .er-ico').forEach(el=>el.hidden=true);
  // Enlarge actual result values; keep empty-state messages at reading size.
  ['a80diffBig','lifeLostBig','roiProtect','roiSessionValue'].forEach(id=>{const el=$(id);if(!el)return;const mark=()=>{el.dataset.valueKind=/[0-9０-９]/.test(el.textContent)?'number':'message';};mark();new MutationObserver(mark).observe(el,{childList:true,subtree:true,characterData:true});});
+ // Keep optional inputs compact while retaining every calculator ID.
+ const assetBox=$('assetInfoBox');
+ if(assetBox){
+  const details=document.createElement('details');details.id='optionalAssets';details.className='mode-asset-only optional-assets';
+  details.innerHTML='<summary>年収・資産を入力する<span>任意</span></summary><p class="optional-defaults">未入力の場合：年収は年齢・性別の平均値、総資産は0万円として試算します。</p>';
+  assetBox.before(details);details.append(assetBox);$('assetInfoTitle').hidden=true;
+ }
+ const photo=document.querySelector('.ocr-box'),manual=$('advancedInputs'),legacy=$('advToggle');
+ if(photo&&manual&&legacy){
+  const chooser=document.createElement('div');chooser.className='checkup-method';chooser.setAttribute('role','group');chooser.setAttribute('aria-label','健診結果の入力方法');
+  chooser.innerHTML='<h3>健診結果を入力する<span>任意</span></h3><div class="checkup-method-buttons"><button type="button" id="choosePhoto" aria-pressed="true" aria-controls="ocrEntry">写真から読み取る</button><button type="button" id="chooseManual" aria-pressed="false" aria-controls="advancedInputs">数値を手入力する</button></div>';
+  photo.id='ocrEntry';photo.before(chooser);legacy.hidden=true;
+  const select=(method,focus=false)=>{
+   const isManual=method==='manual';
+   if(manual.style.display==='none'&&isManual||manual.style.display!=='none'&&!isManual)legacy.click();
+   photo.hidden=isManual;$('choosePhoto').setAttribute('aria-pressed',String(!isManual));$('chooseManual').setAttribute('aria-pressed',String(isManual));
+   if(focus)manual.querySelector('input')?.focus();
+  };
+  $('choosePhoto').addEventListener('click',()=>select('photo'));
+  $('chooseManual').addEventListener('click',()=>select('manual'));
+  // Validation/demo/legacy controls may open the manual fields directly.
+  new MutationObserver(()=>{const open=manual.style.display!=='none';photo.hidden=open;$('choosePhoto').setAttribute('aria-pressed',String(!open));$('chooseManual').setAttribute('aria-pressed',String(open));}).observe(manual,{attributes:true,attributeFilter:['style']});
+  document.addEventListener('bp:ocr-applied',()=>select('manual'));
+  const progress=$('ocrProgress');new MutationObserver(()=>{const busy=!progress.hidden;$('choosePhoto').disabled=busy;$('chooseManual').disabled=busy;}).observe(progress,{attributes:true,attributeFilter:['hidden']});
+  $('resetFormBtn').addEventListener('click',()=>select('photo'));
+ }
  // The logo is a navigation affordance; text remains visible to screen readers.
  document.body.classList.add('ui-refreshed');requestAnimationFrame(()=>window.dispatchEvent(new Event('scroll')));
 })();

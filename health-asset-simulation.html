@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
-<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=0b3a2ced88">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=e59cdc8551">
 </head>
 <body>
 
@@ -254,7 +254,7 @@
 
     <section class="ocr-box" aria-labelledby="ocrTitle">
       <h3 id="ocrTitle">健診結果を写真から入力</h3>
-      <p>今回の健診結果が見える写真を選び、読み取り後に数値を確認してください。</p>
+      <p>今回の健診結果を読み取り、写真と照合して反映します。</p>
       <div class="ocr-capture-actions">
         <label class="ocr-camera-control" id="ocrCameraButton" for="ocrCamera">写真を撮って読み取る<input id="ocrCamera" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="写真を撮って読み取る" aria-describedby="ocrCameraHelp ocrPrivacy ocrStatus"></label>
         <label class="ocr-file-control" for="ocrFile">ファイルを選択<input id="ocrFile" type="file" accept="image/jpeg,image/png,image/webp" aria-label="健診結果のファイルを選択" aria-describedby="ocrCameraHelp ocrPrivacy ocrStatus"></label>
@@ -263,7 +263,7 @@
       <p id="ocrCameraHelp">JPEG・PNG・WebP／15MBまで。PDFはスクリーンショットをご利用ください。</p>
       <p id="ocrPrivacy">画像は送信・保存せず、ブラウザ内で読み取ります。</p>
       <details class="ocr-privacy-details"><summary>画像の扱い・撮影について</summary><p>撮影できない場合は「ファイルを選択」をご利用ください。撮影写真の端末への保存はOS・カメラの仕様によります。読取エンジンの取得には通信が必要な場合があります。</p></details>
-      <p id="ocrStatus" role="status" aria-live="polite">写真を選ぶと、数値の候補を表示します。</p>
+      <p id="ocrStatus" role="status" aria-live="polite">写真を選んでください。</p>
       <progress id="ocrProgress" max="1" aria-label="画像の読み取り進捗" hidden></progress>
       <button type="button" id="ocrCancel" hidden>読み取りを中止</button>
       <img id="ocrPreview" class="ocr-preview" alt="選択した健診結果。今回の結果と単位を確認してください" hidden>
@@ -292,7 +292,7 @@
 
     <div id="advancedInputs" style="display:none">
     <div class="sec-title">健診結果（13項目・任意）</div>
-    <div class="subnote">今回の健診結果と単位を確認して入力してください。入力は任意です。未入力の項目や、この画面で扱わない検査は評価できません。</div>
+    <div class="subnote">分かる項目だけ、今回の健診結果と単位を確認して入力してください。</div>
 
     <div class="hd-group-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/></svg>体格</div>
     <div class="fg2">
@@ -404,7 +404,7 @@
       <button type="button" id="demoFillBtn" style="display:none">▶ デモ用サンプルを入力</button>
     </div>
     <button class="cta-btn" id="runBtn">健康資産をシミュレーションする</button>
-    <div class="input-reassurance" aria-label="シミュレーションについて"><span>約1分</span><span>氏名入力なし</span><span>入力はこの画面で試算</span></div>
+    <div class="input-reassurance" aria-label="シミュレーションについて"><span>氏名入力なし</span><span>入力はこの画面で試算</span></div>
     <p class="privacy-note">入力内容はこのページ内で試算に使用され、氏名・連絡先は入力しません。</p>
     </div>
   </div>
@@ -413,16 +413,8 @@
 
 <div class="panel" id="p1">
   <div id="prerunMsg" aria-live="polite">
-    <div class="pm-kicker">試算結果について</div>
-    <div class="pm-ico" aria-hidden="true">📊</div>
-    <div class="pm-t">結果はここに表示されます</div>
-    <div class="pm-s">入力後に実行ボタンを押すと、ここに試算結果を表示します。</div>
-    <div class="pm-promises">
-      <div class="pm-promise"><b>今の状態</b><span>気になる数値・習慣を整理</span></div>
-      <div class="pm-promise"><b>将来への影響</b><span>資産・健康年数の差を確認</span></div>
-      <div class="pm-promise"><b>条件の比較</b><span>条件を変えて比較</span></div>
-    </div>
-    <div class="pm-next" id="pmNext">入力後に試算結果を表示します</div>
+    <div class="pm-t">試算結果</div>
+    <div class="pm-s">入力後に実行ボタンを押すと、ここに表示されます。</div>
   </div>
   <div class="ph result-section-heading" id="simulationResults">あなたの健康資産シミュレーション結果</div>
   <div class="pb">
@@ -837,14 +829,14 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=4b9e91abcb"></script>
-<script src="assets/min/health-ocr.js?v=5bb2791f29"></script>
+<script src="assets/min/simulator-core.js?v=58998385c6"></script>
+<script src="assets/min/health-ocr.js?v=d1be79dac8"></script>
 <script src="assets/min/research-evidence.js?v=8021b56464"></script>
-<script src="assets/min/nippn-seminar.js?v=fa64088bef"></script>
+<script src="assets/min/nippn-seminar.js?v=3a3de1e866"></script>
 <script src="assets/min/simulation-experience.js?v=5252c56384"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
 <script src="assets/min/seminar-survey.js?v=3983e7f015"></script>
 <script src="assets/min/step-accordion.js?v=edd8f7dc01"></script>
-<script src="assets/min/body-palette-ui.js?v=5dd3f77a34"></script>
+<script src="assets/min/body-palette-ui.js?v=5db3503786"></script>
 </body>
 </html>

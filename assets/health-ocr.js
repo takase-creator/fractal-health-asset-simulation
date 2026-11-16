@@ -11,7 +11,7 @@ const fields=[
  ['hba1c','HbA1c','%',/Hb\s*A\s*1\s*c(?:\s*\(?NGSP\)?)?/i],
  ['ast','AST','U/L',/\bAST\b(?:\s*\(?GOT\)?)?|\bGOT\b/i],
  ['alt','ALT','U/L',/\bALT\b(?:\s*\(?GPT\)?)?|\bGPT\b/i],
- ['ggt','γ-GTP','U/L',/[γyYガンマ]\s*[-ー]?\s*GTP|\bGGT\b/i]
+ ['ggt','γ-GTP','U/L',/(?:γ|Γ|y|ガンマ|ァ)\s*[-ー]?\s*GTP|\bGGT\b/i]
 ];
 function parse(text){
  const found={};
@@ -116,6 +116,7 @@ function showReview(text){
 }
 async function handleImageSelection(){
  const file=this.files[0];this.value='';if(!file)return;
+ if($('ocrFileName'))$('ocrFileName').textContent=file.name;
  stop();clearReview();releaseImage();
  if(!/^image\/(jpeg|png|webp)$/.test(file.type)){status('JPEG・PNG・WebPの画像を選んでください。PDFやHEICは画像に変換するか、スクリーンショットを使ってください。');return;}
  if(file.size>15*1024*1024){status('画像は15MB以下にしてください。今回の結果がある部分だけ切り抜くと読み取りやすくなります。');return;}
@@ -151,6 +152,7 @@ $('ocrApply').addEventListener('click',()=>{
  if($('advancedInputs').style.display==='none')$('advToggle').click();
  for(const input of inputs){const target=$(input.dataset.target);target.value=input.value;target.dispatchEvent(new Event('input',{bubbles:true}));target.dispatchEvent(new Event('change',{bubbles:true}));}
  const count=inputs.length;clearReview();releaseImage();status(count+'項目を入力欄へ反映しました。読み取れなかった項目は手入力できます。');
+ document.dispatchEvent(new Event('bp:ocr-applied'));
  $(inputs[0].dataset.target).focus();
 });
 $('ocrDiscard').addEventListener('click',()=>{clearReview();releaseImage();status('読み取り結果を破棄しました。入力欄は変更していません。');});

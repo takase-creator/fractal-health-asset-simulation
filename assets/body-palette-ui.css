@@ -110,3 +110,16 @@
  #age80box #a80diffBig[data-value-kind="number"]{font-size:clamp(40px,12vw,60px)!important;margin:7px 0 8px;line-height:1.12}
  #age80box #a80diffBig[data-value-kind="message"]{font-size:26px!important}#age80box .a80-main-sub{font-size:10px;line-height:1.7}
 }
+/* Match STEP 3's exercise value to the centered STEP 2 result. */
+@media screen{
+ #roiBlock .roi-headline-num{display:block;text-align:center;padding:16px 20px;margin:12px 0 10px;background:#eff5f1;border:0;border-top:2px solid #17645c;border-radius:0;box-shadow:none}
+ #roiBlock .roi-headline-num .rh-label{max-width:54em;margin:0 auto;font-size:13px;line-height:1.65;color:#395646}
+ #roiBlock #roiProtect[data-value-kind="number"]{font-family:inherit;font-size:clamp(64px,8vw,92px);font-weight:700;line-height:1.08;letter-spacing:-.04em;margin:7px 0 8px;color:#005e55;overflow-wrap:anywhere}
+ #roiBlock #roiProtect[data-value-kind="message"]{font-size:30px;line-height:1.4;margin:8px 0}
+ #roiBlock .roi-headline-num .rh-sub{max-width:52em;margin:0 auto;font-size:11px;line-height:1.7;color:#536c5d}
+ #roiBlock .roi-note{margin-top:10px}#roiBlock.roi-block{margin-top:18px;padding-top:16px}
+}
+@media screen and (max-width:700px){
+ #roiBlock .roi-headline-num{padding:14px 12px}#roiBlock .roi-headline-num .rh-label{font-size:12px;line-height:1.7}
+ #roiBlock #roiProtect[data-value-kind="number"]{font-size:clamp(40px,12vw,60px);margin:7px 0 8px;line-height:1.12}#roiBlock #roiProtect[data-value-kind="message"]{font-size:26px}#roiBlock .roi-headline-num .rh-sub{font-size:10px;line-height:1.7}
+}

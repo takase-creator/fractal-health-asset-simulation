@@ -35,13 +35,20 @@ function parse(text){
  for(const f of Object.values(found)){f.values=[...new Set(f.values)];f.ambiguous ||= f.values.length!==1;}
  return found;
 }
-if(typeof module!=='undefined'&&module.exports){module.exports={parse,fields};return;}
+// Separate unambiguous, ambiguous/out-of-range, and missing candidates.
+function classifyCandidate(candidate,min,max){
+ if(!candidate||!candidate.values.length)return 'unread';
+ const value=Number(candidate.values[0]);
+ return candidate.ambiguous||!Number.isFinite(value)||(min!==''&&value<Number(min))||(max!==''&&value>Number(max))?'review':'read';
+}
+if(typeof module!=='undefined'&&module.exports){module.exports={parse,fields,classifyCandidate};return;}
 const $=id=>document.getElementById(id);
 let worker=null, generation=0, busy=false, previewURL=null, loadPromise=null;
 function status(s){$('ocrStatus').textContent=s;}
-function clearReview(){ $('ocrRows').replaceChildren();$('ocrText').textContent='';$('ocrReview').hidden=true; $('ocrConfirm').checked=false; }
-function releaseImage(){if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('ocrPreview').removeAttribute('src');$('ocrPreview').hidden=true;}
-function stop(){generation++;if(worker){worker.terminate().catch(()=>{});worker=null;}busy=false;$('ocrFile').disabled=false;$('ocrCancel').hidden=true;$('ocrProgress').hidden=true;}
+function clearReview(){ document.getElementById('ocrPhotoDialog')?.close(); document.getElementById('ocrReviewPhoto')?.removeAttribute('src'); $('ocrRows').replaceChildren();$('ocrText').textContent='';$('ocrReview').hidden=true; $('ocrConfirm').checked=false; $('ocrApply').disabled=false; }
+function releaseImage(){document.getElementById('ocrPhotoDialog')?.close();document.getElementById('ocrReviewPhoto')?.removeAttribute('src');document.getElementById('ocrLargePhoto')?.removeAttribute('src');if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('ocrPreview').removeAttribute('src');$('ocrPreview').hidden=true;}
+function setInputsDisabled(disabled){['ocrFile','ocrCamera'].forEach(id=>{if($(id))$(id).disabled=disabled;});}
+function stop(){generation++;if(worker){worker.terminate().catch(()=>{});worker=null;}busy=false;setInputsDisabled(false);$('ocrCancel').hidden=true;$('ocrProgress').hidden=true;}
 function load(){
  if(root.Tesseract)return Promise.resolve();
  if(loadPromise)return loadPromise;
@@ -54,28 +61,65 @@ function load(){
 }
 function showReview(text){
  const result=parse(text);clearReview();$('ocrText').textContent=text;
+ if(!$('ocrReviewLayout')){
+  const layout=document.createElement('div');layout.id='ocrReviewLayout';layout.className='ocr-review-layout';
+  const aside=document.createElement('aside');aside.className='ocr-photo-panel';
+  const title=document.createElement('strong');title.textContent='写真と今回の結果を照合';
+  const photo=document.createElement('img');photo.id='ocrReviewPhoto';photo.alt='選択した健診結果。入力候補と照合してください';
+  const zoom=document.createElement('button');zoom.type='button';zoom.textContent='写真を拡大して確認';
+  const dialog=document.createElement('dialog');dialog.id='ocrPhotoDialog';dialog.setAttribute('aria-label','健診結果の写真を拡大');
+  const close=document.createElement('button');close.type='button';close.textContent='写真を閉じる';close.addEventListener('click',()=>dialog.close());
+  const large=document.createElement('img');large.id='ocrLargePhoto';large.alt='拡大した健診結果';dialog.append(close,large);document.body.append(dialog);
+  zoom.addEventListener('click',()=>{large.src=photo.src;dialog.showModal();});
+  aside.append(title,photo,zoom);$('ocrRows').before(layout);layout.append(aside,$('ocrRows'));
+ }
+ $('ocrReviewPhoto').src=$('ocrPreview').src;$('ocrPreview').hidden=true;
+
+ const defs=[['review','確認が必要','複数の候補・基準値・範囲外の可能性があります。写真の今回値を入力してください。'],['read','読み取り候補あり','数値の候補を入力済みです。写真の今回値と単位を必ず照合してください。'],['unread','未読の項目','必要な項目だけ手入力できます。空欄なら入力済みの値は変更しません。']];
+ const groups={};const counts={read:0,review:0,unread:0};
+ const summary=document.createElement('p');summary.className='ocr-summary';summary.id='ocrSummary';summary.setAttribute('role','status');$('ocrRows').append(summary);
+ for(const [key,title,help] of defs){
+  const group=document.createElement('fieldset');group.className='ocr-group';group.dataset.category=key;
+  const legend=document.createElement('legend');legend.textContent=title;
+  const hint=document.createElement('p');hint.textContent=help;group.append(legend,hint);$('ocrRows').append(group);groups[key]=group;
+ }
  for(const [id,label,unit] of fields){
-  const f=result[id]||{values:[],lines:[],ambiguous:true};
-  const target=$(id), row=document.createElement('div');row.className='ocr-row';
+  const f=result[id];const target=$(id);const kind=classifyCandidate(f,target.min,target.max);counts[kind]++;
+  const row=document.createElement('div');row.className='ocr-row';row.dataset.category=kind;
   const labelEl=document.createElement('label');labelEl.htmlFor='ocr-'+id;labelEl.textContent=label+' ('+unit+')';
   const input=document.createElement('input');input.type='number';input.inputMode='decimal';input.step='any';input.id='ocr-'+id;input.dataset.target=id;input.min=target.min;input.max=target.max;
-  input.value=f.ambiguous?'':f.values[0];input.setAttribute('aria-describedby','ocr-source-'+id);
+  input.value=kind==='read'?f.values[0]:'';input.setAttribute('aria-describedby','ocr-source-'+id+' ocr-edit-'+id);
   const source=document.createElement('p');source.id='ocr-source-'+id;source.className='ocr-source';
-  source.textContent=!f.lines.length?'読み取り候補なし。写真の結果を手入力するか、空欄のままにしてください。':(f.ambiguous?'複数の数値・基準値の可能性があります。今回の結果を入力してください。 ':'')+'読取：'+f.lines.join(' ／ ')+(target.value?' ／ 入力済み：'+target.value+'（反映すると置き換わります）':'');
-  if(!f.lines.length&&target.value)source.textContent+=' 入力済み：'+target.value+'（空欄なら変更しません）';
-  row.append(labelEl,input,source);$('ocrRows').append(row);
+  source.textContent=f?.lines.length?'読取原文：'+f.lines.join(' ／ '):'読み取り候補なし';
+  if(target.value)source.textContent+=' ／ 入力済み：'+target.value+'（空欄なら保持）';
+  const edit=document.createElement('p');edit.id='ocr-edit-'+id;edit.className='ocr-edit-status';edit.setAttribute('aria-live','polite');
+  input.addEventListener('input',()=>{
+   $('ocrConfirm').checked=false;
+   const invalid=input.value!==''&&!input.checkValidity();input.setAttribute('aria-invalid',String(invalid));
+   edit.textContent=invalid?`入力できる範囲は${target.min}〜${target.max} ${unit}です。数値・単位を確認してください。`:input.value!==''?'入力・修正済み。写真の今回値と照合してください。':'空欄：この項目は反映しません。';
+   updateReviewSummary();
+  });
+  row.append(labelEl,input,source,edit);groups[kind].append(row);
  }
- const count=Object.keys(result).length;
- if(!count){releaseImage();status('項目を見つけられませんでした。今回の結果と項目名が見える範囲を切り抜いて、明るく正面から撮り直してください。手入力もできます。');return;}
- $('ocrReview').hidden=false; status(count+'項目の候補を読み取りました。写真と照合し、今回の結果・単位を確認してください。空欄の項目は反映しません。');
- $('ocrConfirm').focus();
+ for(const [key,title] of defs){groups[key].querySelector('legend').textContent=title+' '+counts[key]+'項目';groups[key].hidden=counts[key]===0;}
+ function updateReviewSummary(){
+  const all=[...$('ocrRows').querySelectorAll('input')];const entered=all.filter(el=>el.value!=='').length;
+  const errors=all.filter(el=>el.value!==''&&!el.checkValidity()).length;
+  summary.textContent=`候補あり ${counts.read} ／ 要確認 ${counts.review} ／ 未読 ${counts.unread} ｜ 反映予定 ${entered}項目`+(errors?`（範囲外 ${errors}項目）`:'');
+  $('ocrApply').disabled=entered===0||errors>0;
+ }
+ updateReviewSummary();$('ocrReview').hidden=false;
+ status(`読み取り候補あり${counts.read}項目・確認が必要${counts.review}項目・未読${counts.unread}項目。写真と照合してから反映してください。`);
+ // Keep the image available even when nothing could be parsed.
+ const focus=counts.review?groups.review:counts.read?groups.read:groups.unread;
+ focus.querySelector('input')?.focus();
 }
-$('ocrFile').addEventListener('change',async function(){
+async function handleImageSelection(){
  const file=this.files[0];this.value='';if(!file)return;
  stop();clearReview();releaseImage();
  if(!/^image\/(jpeg|png|webp)$/.test(file.type)){status('JPEG・PNG・WebPの画像を選んでください。PDFやHEICは画像に変換するか、スクリーンショットを使ってください。');return;}
  if(file.size>15*1024*1024){status('画像は15MB以下にしてください。今回の結果がある部分だけ切り抜くと読み取りやすくなります。');return;}
- const gen=generation;busy=true;this.disabled=true;$('ocrCancel').hidden=false;$('ocrProgress').hidden=false;$('ocrProgress').removeAttribute('value');
+ const gen=generation;busy=true;setInputsDisabled(true);$('ocrCancel').hidden=false;$('ocrProgress').hidden=false;$('ocrProgress').removeAttribute('value');
  previewURL=URL.createObjectURL(file);$('ocrPreview').src=previewURL;$('ocrPreview').hidden=false;
  status('読取エンジンを準備中です。初回は通信と時間が必要です。画像は送信しません。');
  let localWorker;let timer;
@@ -95,7 +139,9 @@ $('ocrFile').addEventListener('change',async function(){
   await Promise.race([operation,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('timeout')),180000);})]);
  }catch(e){if(gen===generation){status('読み取りを完了できませんでした。通信環境と画像形式を確認して、もう一度お試しください。手入力もできます。');releaseImage();}}
  finally{clearTimeout(timer);if(gen===generation)stop();}
-});
+}
+$('ocrFile').addEventListener('change',handleImageSelection);
+$('ocrCamera')?.addEventListener('change',handleImageSelection);
 $('ocrCancel').addEventListener('click',()=>{stop();clearReview();releaseImage();status('読み取りを中止しました。画像を選び直すか、手入力してください。');});
 $('ocrApply').addEventListener('click',()=>{
  if(!$('ocrConfirm').checked){status('写真の今回の結果と単位を確認し、確認欄にチェックを入れてください。');$('ocrConfirm').focus();return;}
@@ -108,6 +154,6 @@ $('ocrApply').addEventListener('click',()=>{
  $(inputs[0].dataset.target).focus();
 });
 $('ocrDiscard').addEventListener('click',()=>{clearReview();releaseImage();status('読み取り結果を破棄しました。入力欄は変更していません。');});
-$('resetFormBtn').addEventListener('click',()=>{stop();clearReview();releaseImage();status('健診結果の写真を選ぶと、数値の入力候補を作成します。');});
+$('resetFormBtn').addEventListener('click',()=>{stop();clearReview();releaseImage();status('写真を選ぶと、数値の候補を表示します。');});
 root.addEventListener('pagehide',()=>{stop();releaseImage();});
 })(typeof window==='undefined'?globalThis:window);

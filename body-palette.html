@@ -431,9 +431,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
 <body>
 <div class="page">
 
-<!-- ══════════════════════════════════════
-     CONSENT MODAL（シミュレーション前同意）
-══════════════════════════════════════ -->
+
 <div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
   <div class="consent-modal">
     <div class="consent-head">
@@ -459,9 +457,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     CONSULT FORM MODAL（相談フォーム）
-══════════════════════════════════════ -->
+
 <div class="form-overlay" id="formOverlay" role="dialog" aria-modal="true" aria-labelledby="formTitle">
   <div class="form-modal">
     <div class="form-modal-head">
@@ -471,14 +467,14 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
     </div>
     <div class="form-modal-body">
 
-      <!-- 成功メッセージ -->
+      
       <div class="form-success" id="formSuccess">
         <div class="fs-icon">✅</div>
         <h4>送信が完了しました</h4>
         <p>ご相談内容を受け付けました。<br>担当スタッフより2営業日以内にご連絡いたします。</p>
       </div>
 
-      <!-- フォーム本体 -->
+      
       <form id="consultForm" novalidate>
 
         <div class="form-disclaimer">
@@ -486,7 +482,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
           本カウンセリングは、運動・コンディショニングに関するご相談をお伺いするものです。医療行為、診断、治療、処方を行うものではありません。既往歴や医師からの運動制限がある場合は、事前にその内容をご共有ください。
         </div>
 
-        <!-- 必須項目 -->
+        
         <div class="form-sec">
           <div class="form-sec-title">必須項目</div>
           <div class="fg2">
@@ -531,7 +527,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
           </div>
         </div>
 
-        <!-- 任意項目 -->
+        
         <div class="form-sec">
           <div class="form-sec-title">任意項目（より適切なご提案のために）</div>
           <div class="field" style="margin-bottom:10px;">
@@ -604,13 +600,13 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </a>
 </header>
 
-<!-- TOP CTA STRIP -->
+
 <div class="top-cta-strip" id="topCta">
   <p>健診で気になる数値が出た方へ — まずは無料でご相談ください<span>FRACTAL WORKOUT ｜ 特定保健指導・二次検診サポート対応</span></p>
   <button class="cta-inline" data-cta-pos="top">FRACTAL WORKOUTに相談する</button>
 </div>
 
-<!-- HERO -->
+
 <section class="hero">
   <div class="hero-copy">
     <div class="hero-tag">健診で引っかかった方へ</div>
@@ -631,14 +627,14 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </div>
 </section>
 
-<!-- STEPS -->
+
 <section class="steps">
   <div class="step"><div class="step-num">01</div><div class="step-text"><strong>基本情報・資産入力</strong><span>性別・年齢・年収・総資産</span></div></div>
   <div class="step"><div class="step-num">02</div><div class="step-text"><strong>健診データ入力</strong><span>健診票の数値をそのまま入力</span></div></div>
   <div class="step"><div class="step-num">03</div><div class="step-text"><strong>リスクと将来資産を確認</strong><span>80歳までの推移と損失額</span></div></div>
 </section>
 
-<!-- MID CTA -->
+
 <div class="mid-cta" id="midCta">
   <div class="mid-cta-text">
     <strong>健診結果をプロと一緒に読み解く</strong>
@@ -647,7 +643,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   <button class="cta-inline" data-cta-pos="middle">FRACTAL WORKOUTに相談する</button>
 </div>
 
-<!-- MOBILE TABS -->
+
 <div class="mobile-tabs" id="mtabs">
   <button class="mtab on" data-p="0">① 入力</button>
   <button class="mtab" data-p="1">② 結果</button>
@@ -655,7 +651,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
 
 <div class="layout" id="layout">
 
-<!-- PANEL 1: INPUT -->
+
 <div class="panel active-panel" id="p0">
   <div class="ph">STEP 1–2 ｜ 情報入力</div>
   <div class="pb">
@@ -727,7 +723,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       <div class="field"><label for="ua">尿酸値 (mg/dL)</label><input id="ua" type="number" inputmode="decimal" step="0.1" placeholder="5.5" min="1" max="15"><span class="ferr" id="e-ua">1〜15で入力</span></div>
     </div>
 
-    <!-- MetS自動判定バナー -->
+    
     <div class="mets-banner" id="metsBanner" style="display:none">
       <div class="mets-icon">⚠</div>
       <div class="mets-body">
@@ -747,12 +743,12 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </div>
 </div>
 
-<!-- PANEL 2: RESULTS -->
+
 <div class="panel" id="p1">
   <div class="ph">STEP 3 ｜ あなたの健康資産シミュレーション</div>
   <div class="pb">
 
-    <!-- Risk bars -->
+    
     <div class="sec-title">6つの疾患リスク評価</div>
     <div class="subnote" id="precDetail">入力データをもとに判定しています</div>
     <div id="riskRows"></div>
@@ -761,14 +757,14 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       <div id="precText" style="font-size:18px;font-weight:900;color:var(--navy);">--</div>
     </div>
 
-    <!-- Trend risk -->
+    
     <div class="trend-box">
       <div class="trend-title">現在の値が継続した場合のリスク増加 <span class="ev-tag">査読論文準拠</span></div>
       <div id="trendRows"></div>
       <div class="trend-src" id="trendSrc"></div>
     </div>
 
-    <!-- Asset graph -->
+    
     <div class="graph-wrap">
       <div class="graph-title">健康資産の推移（現在〜80歳）</div>
       <div class="graph-sub">青：健康管理を継続した場合　赤：現状のまま放置した場合</div>
@@ -781,7 +777,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       </div>
     </div>
 
-    <!-- 80歳時点の資産 -->
+    
     <div class="age80-box" id="age80box">
       <div class="a80-item">
         <div class="a80-label">健康維持した場合の80歳資産</div>
@@ -794,7 +790,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       </div>
     </div>
 
-    <!-- Loss summary -->
+    
     <div class="loss-summary">
       <div class="loss-title">健康リスク放置による推定損失内訳（〜80歳）</div>
       <div class="loss-grid">
@@ -818,7 +814,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       </div>
     </div>
 
-    <!-- 週あたり健康投資試算 -->
+    
     <div class="wi-box" id="wiBox" style="display:none">
       <div class="wi-headline">健康資産を守るために必要な「週あたり投資目安」</div>
       <div class="wi-calc">
@@ -840,7 +836,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       <div class="wi-msg">週1回の運動・健康管理にこの金額を充て続けるだけで、<br><span id="wiDiffMsg" class="wi-diff-hl">--</span>の健康資産損失を防げる計算になります。</div>
     </div>
 
-    <!-- Lifetime medical costs -->
+    
     <div class="med-box">
       <div class="med-title">推定生涯医療費（厚労省データ準拠）</div>
       <table class="med-table" id="medTable">
@@ -853,7 +849,7 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
       </div>
     </div>
 
-    <!-- 3サービス CTA -->
+    
     <div class="service-cta-section">
       <div class="service-cta-label">シミュレーション結果をもとに、最適なプランを選ぶ</div>
       <div class="service-cta-grid">
@@ -885,9 +881,9 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </div>
 </div>
 
-</div><!-- /layout -->
+</div>
 
-<!-- DISCLAIMER -->
+
 <div class="disclaimer">
   <strong>免責事項・エビデンスについて：</strong>
   本シミュレーションは医療行為ではなく、医学的診断・投資助言を行うものではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。
@@ -944,9 +940,9 @@ textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,136,102,.1
   </div>
 </div>
 
-</div><!-- /page -->
+</div>
 
-<!-- STICKY MOBILE CTA -->
+
 <button class="sticky-cta" id="stickyCta" data-cta-pos="sticky">FRACTAL WORKOUTに相談する →</button>
 
 <script>

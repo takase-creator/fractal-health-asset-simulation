@@ -1,5 +1,5 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const html=fs.readFileSync(__dirname+'/../health-asset-simulation.html','utf8');
+const html=fs.readFileSync(__dirname+'/../health-asset-simulation.html','utf8')+'\n'+fs.readFileSync(__dirname+'/../assets/simulator-core.js','utf8');
 const blocks=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
 blocks.forEach((s,i)=>new vm.Script(s,{filename:'inline-'+i}));
 for(const f of ['nippn-seminar.js','health-ocr.js'])new vm.Script(fs.readFileSync(__dirname+'/../assets/'+f,'utf8'));

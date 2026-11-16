@@ -18,7 +18,7 @@
    if(id==='step2Section'||id==='step3'){
     const note=document.createElement('p');note.className='step-lock-note';note.textContent=id==='step2Section'?'STEP 1で「健康資産」または「健康寿命」を選んでから、健診結果と条件を入力してください。':'STEP 2でシミュレーションを実行すると、生活習慣の条件を変えて比較できます。';body.prepend(note);
    }
-   const button=document.createElement('button');button.type='button';button.className='step-accordion-toggle';button.setAttribute('aria-labelledby',labelId);button.setAttribute('aria-controls',body.id);button.setAttribute('aria-expanded','false');
+   const button=document.createElement('button');button.type='button';button.className='step-accordion-toggle';button.setAttribute('aria-label',document.getElementById(labelId)?.textContent.trim()||'STEPを開閉する');button.setAttribute('aria-controls',body.id);button.setAttribute('aria-expanded','false');
    const indicator=document.createElement('span');indicator.className='step-accordion-indicator';indicator.setAttribute('aria-hidden','true');indicator.textContent='＋ 開く';button.append(indicator);header.append(button);
    const record={panel,body,button,indicator,anchor};records.set(id,record);
    button.addEventListener('click',()=>{setOpen(record,body.hidden);window.dispatchEvent(new Event('scroll'));});

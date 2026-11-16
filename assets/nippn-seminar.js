@@ -18,7 +18,7 @@
  const aftercare=$('nextPlan');if(aftercare){comparison.after(aftercare);const saves=document.querySelector('.share-actions');if(saves)aftercare.querySelector('.pb').insertBefore(saves,aftercare.querySelector('.aftercare-next'));}
  // Optional services follow the five steps, just before the evidence footer.
  const support=document.createElement('section');support.id='supplementalSupport';support.className='supplemental-support';support.setAttribute('aria-label','継続サポート・サービスのご案内');support.append($('step5Toggle'),$('step5Body'));document.querySelector('.disclaimer').before(support);
- const label=document.createElement('div');label.className='review-label';label.textContent='上長確認用の改訂案｜試算モデルは個人の寿命・発症・資産を予測するものではありません。';document.querySelector('.hero').before(label);
+ const label=document.createElement('div');label.className='review-label';label.textContent='健診結果を振り返るための参考試算です。個人の寿命・発症・資産を予測するものではありません。';document.querySelector('.hero').before(label);
  const riskNote=document.createElement('p');riskNote.className='risk-reference';riskNote.innerHTML='6項目は独自ルールで整理した参考スコアです。<strong>発症確率（%）や研究の倍率ではありません。</strong>腎機能など、この入力だけでは判断できない項目もあります。';$('riskRows').before(riskNote);
  const studyLink=document.createElement('p');studyLink.className='risk-reference';studyLink.innerHTML='<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4390315/" target="_blank" rel="noopener">出典：Kawahara et al., PLoS ONE 2015・表1</a>。比較対象・期間・集団が異なる研究の数値を、そのままあなたの発症確率や倍率には変換できません。';$('trendSrc').after(studyLink);
  const note=document.createElement('div');note.className='model-note';note.innerHTML='<strong>この結果の読み方</strong>大規模研究の関連と独自の仮定を使ったシナリオ比較です。個人の寿命・発症年齢・将来資産の予測ではありません。青線は医療費等による追加負担をゼロとした比較用の想定です。年率3%の運用・所得の変化等を仮定し、運動費用、交通費・待ち時間の金銭換算は含めていません。';$('age80box').after(note);

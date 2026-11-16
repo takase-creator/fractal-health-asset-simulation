@@ -11,7 +11,7 @@ assert.equal(classifyCandidate(parse('空腹時血糖 5.6 mmol/L').glucose,'40',
 assert.deepEqual(describeScenarioChanges({exerciseHours:0},{},75),[]);
 const changes=describeScenarioChanges({exerciseHours:1},{exerciseHoursPerWeek:1.5,smoking:'never',weightLossKg:3},75.2);
 assert.equal(changes.length,3);assert.match(changes[1],/60分 → 週90分/);assert.match(changes[2],/75.2kg → 72.2kg/);
-const html=fs.readFileSync(__dirname+'/../health-asset-simulation.html','utf8');const fn=html.match(/function computeTrend\([\s\S]*?\n}/)[0];const c={};vm.createContext(c);vm.runInContext(fn,c);
+const html=fs.readFileSync(__dirname+'/../health-asset-simulation.html','utf8')+'\n'+fs.readFileSync(__dirname+'/../assets/simulator-core.js','utf8');const fn=html.match(/function computeTrend\([\s\S]*?\n}/)[0];const c={};vm.createContext(c);vm.runInContext(fn,c);
 const t=c.computeTrend({hba1c:5.9});assert.match(t.rows[0].val,/13.8%/);assert.match(t.rows[1].val,/3.4倍/);assert.match(t.rows[1].val,/2.9–3.7/);
 assert.equal(c.computeTrend({hba1c:6.5}).rows.length,1);assert.match(c.computeTrend({hba1c:5.55}).rows[0].val,/桁数/);assert.match(c.computeTrend({hba1c:null}).rows[0].val,/未入力/);
 for(const name of ['health-ocr.js','simulation-experience.js'])new vm.Script(fs.readFileSync(__dirname+'/../assets/'+name,'utf8'));

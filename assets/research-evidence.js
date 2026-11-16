@@ -10,10 +10,10 @@ const BP_RESEARCH = [
     "period": "5年間の発症を評価",
     "finding": "HbA1c区分ごとの糖尿病発症割合と調整ハザード比を報告。画面は割合とHRを別の指標として表示します。",
     "limit": "健診を受けた研究集団の結果です。個人の発症確率でも、運動による改善率でもありません。",
-    "use": "HbA1c区分に対応する研究の集団値の表示に使用。独自スコアを発症確率に変換するものではありません。",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4390315/",
+    "use": "HbA1c区分に対応する研究の集団値の表示に使用。個人の発症確率を算出するものではありません。",
+    "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0122698",
     "model_role": "study_display",
-    "verification_scope": "原著本文・表1",
+    "verification_scope": "原著本文・図1・表2",
     "verified_on": "2026-11-16"
   },
   {
@@ -26,7 +26,7 @@ const BP_RESEARCH = [
     "period": "平均2.8年追跡",
     "finding": "生活習慣介入群では、プラセボ群に対する糖尿病の発症率が相対的に58%低下（95%信頼区間48–66%）。介入には7%以上の減量目標と週150分以上の身体活動目標が含まれました。",
     "limit": "食事・減量・運動を組み合わせた介入です。運動だけの効果、週90分の効果、個人への58%の効果とは言えません。",
-    "use": "生活習慣改善の説明に使用。発症率・寿命・資産の計算係数には追加していません。",
+    "use": "生活習慣改善の説明に使用。発症率・寿命・資産の計算係数には使用していません。",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1370926/",
     "model_role": "context_only",
     "verification_scope": "原著の抄録・方法・結果",
@@ -122,9 +122,9 @@ const BP_RESEARCH = [
     "period": "Nurses’ Health Study：1980–2014年／Health Professionals Follow-up Study：1986–2014年",
     "finding": "健康的な生活習慣の組み合わせと、がん・心血管疾患・2型糖尿病のない余命が長いこととの関連を報告しています。",
     "limit": "観察研究で、因果関係や日本人個人の健康寿命を保証しません。3疾患のない余命と「日常生活に制限がない期間」は定義が異なります。",
-    "use": "健康年数シナリオの背景説明です。本ツールの年数計算全体を検証した研究ではありません。",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/",
-    "model_role": "model_context",
+    "use": "健康寿命との定義の違いを説明する背景研究です。個人の健康年数を計算する根拠には使用しません。",
+    "url": "https://www.bmj.com/content/368/bmj.l6669",
+    "model_role": "context_only",
     "verification_scope": "原著本文・対象集団・研究デザイン",
     "verified_on": "2026-11-16"
   },
@@ -138,9 +138,9 @@ const BP_RESEARCH = [
     "period": "研究ごとに追跡期間が異なる",
     "finding": "少量喫煙でも冠動脈疾患・脳卒中リスクとの関連があり、心血管の超過リスクは喫煙本数に単純比例しませんでした。",
     "limit": "観察研究の統合です。本数を減らした直後の改善率や、個人の発症確率・健康年数・医療費を直接計算するものではありません。",
-    "use": "喫煙本数とリスクの非線形性の参考です。本ツールの本数間の補間・点数への換算は独自の仮定です。",
+    "use": "喫煙本数とリスクの非線形性の参考です。本数から点数・余命・医療費への換算は行いません。",
     "url": "https://www.bmj.com/content/360/bmj.j5855",
-    "model_role": "model_shape_context",
+    "model_role": "context_only",
     "verification_scope": "原著の抄録・結果",
     "verified_on": "2026-11-16"
   }
@@ -150,12 +150,12 @@ if(typeof module!=='undefined'&&module.exports){module.exports=BP_RESEARCH;}else
  function annotateReport(){
   document.querySelectorAll('#raRisks .rr-n').forEach((label,i)=>{if(label.querySelector('.ra-ref-link'))return;for(const id of reportGroups[i]||[]){const j=BP_RESEARCH.findIndex(s=>s.id===id),a=document.createElement('a');a.className='ra-ref-link';a.href=BP_RESEARCH[j].url;a.target='_blank';a.rel='noopener';a.textContent=`[${j+1}]`;label.append(' ',a);}});
   let holder=document.getElementById('raSources');if(!holder){holder=document.createElement('div');holder.id='raSources';holder.className='ra-sources';document.getElementById('raFoot').before(holder);}
-  holder.replaceChildren();const title=document.createElement('strong');title.textContent='研究出典｜領域の説明・背景（計算モデル全体の検証ではありません）';holder.append(title);
+  holder.replaceChildren();const title=document.createElement('strong');title.textContent='研究出典｜領域の説明・背景（個人予測の根拠ではありません）';holder.append(title);
   for(let i=0;i<BP_RESEARCH.length;i++){const study=BP_RESEARCH[i],a=document.createElement('a');a.href=study.url;a.target='_blank';a.rel='noopener';a.textContent=`[${i+1}] ${study.citation}`;holder.append(a);}
  }
  window.BPResearch={studies:BP_RESEARCH,annotateReport,createDetails(ids,label){
   const details=document.createElement('details');details.className='research-details';
-  const summary=document.createElement('summary');summary.textContent=label||`根拠となる研究を見る（${ids.length}本）`;details.append(summary);
+  const summary=document.createElement('summary');summary.textContent=label||`この領域の研究を見る（${ids.length}本）`;details.append(summary);
   for(const id of ids){const study=BP_RESEARCH.find(s=>s.id===id);if(!study)continue;
    const article=document.createElement('article');article.className='research-study';
    const heading=document.createElement('h4');heading.textContent=study.citation;article.append(heading);

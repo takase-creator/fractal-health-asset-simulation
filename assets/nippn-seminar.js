@@ -12,7 +12,7 @@
  ['ocrFile','ocrCamera'].forEach(id=>$(id).addEventListener('change',()=>{$('ocrFileName').textContent=$(id).files[0]?.name||'未選択';}));
  $('resetFormBtn').addEventListener('click',()=>{$('ocrFileName').textContent='未選択';});
  // STEP 3 is the separate scenario comparison section.
- const comparison=document.createElement('section');comparison.id='step3';comparison.className='panel improvement-section';comparison.setAttribute('aria-labelledby','step3Title');comparison.innerHTML='<div class="ph"><span class="ph-step">STEP 3</span><h2 id="step3Title">生活習慣を変えて、結果を比べる</h2></div><div class="pb"></div>';
+ const comparison=document.createElement('section');comparison.id='step3';comparison.className='panel improvement-section';comparison.setAttribute('aria-labelledby','step3Title');comparison.innerHTML='<div class="ph"><span class="ph-step">STEP 3</span><h2 id="step3Title">生活習慣を変えて比べる</h2></div><div class="pb"></div>';
  comparison.querySelector('.pb').append($('improveBox'),$('roiBlock'));stage2.after(comparison);
  // STEP 4 follows scenario comparison; STEP 5 follows STEP 4.
  const aftercare=$('nextPlan');if(aftercare){comparison.after(aftercare);const saves=document.querySelector('.share-actions');if(saves)aftercare.querySelector('.pb').insertBefore(saves,aftercare.querySelector('.aftercare-next'));}

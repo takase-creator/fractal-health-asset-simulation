@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ニップン様｜健診結果・生活習慣の確認 | BODY PALETTE</title>
+<link rel="icon" type="image/png" href="assets/images/embedded-brand-0.png"/>
+<link rel="apple-touch-icon" href="assets/images/embedded-brand-0.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+<link rel="stylesheet" href="assets/min/simulator-base.css?v=a578f9ddb7">
+<link rel="stylesheet" href="assets/min/health-ocr.css?v=1e25c49013">
+<link rel="stylesheet" href="assets/min/nippn-seminar.css?v=b7460c2b3c">
+<link rel="stylesheet" href="assets/min/simulation-experience.css?v=5cb45d55f8">
+<link rel="stylesheet" href="assets/min/report-tone.css?v=9d69e082b3">
+<link rel="stylesheet" href="assets/min/research-evidence.css?v=6382424974">
+<link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
+<link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=3eacc3548d">
+<style>.nippn-review-note{box-sizing:border-box;max-width:1100px;margin:12px auto;padding:12px 16px;border-left:4px solid #008f9e;background:#edf7f5;color:#173c38;font-family:sans-serif}.nippn-review-note strong{font-size:15px}.nippn-review-note p{font-size:13px;line-height:1.7;margin:5px 0 0}@media(max-width:760px){.nippn-review-note{margin:8px 12px;padding:10px 12px}}</style></head>
+<body><aside class="nippn-review-note" aria-label="操作確認用のご案内"><strong>株式会社ニップン様｜操作確認用</strong><p>健診票の読み取り・数値の修正・結果の見方をお試しください。現在は公開期間を設定していない確認版です。アンケートの回答は送信・保存されません。</p></aside>
+
+
+<div class="expiry-overlay" id="expiryOverlay">
+  <div class="expiry-card">
+    <img src="./assets/images/bp-logo.png" alt="BODY PALETTE" class="expiry-logo">
+    <div class="expiry-icon">🗓</div>
+    <h2>公開期間は終了しました</h2>
+    <p>本シミュレーションの公開期間は終了いたしました。<br>ご利用いただきありがとうございました。</p>
+    <p class="expiry-sub">健診結果で気になる数値があった方は、<br><strong>二次健診の受診</strong>と、専門家の知見のもとでの<strong>継続的な健康習慣</strong>をお勧めします。</p>
+  </div>
+</div>
+
+<div class="page">
+
+
+<div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div class="consent-modal">
+    <div class="consent-head">
+      <h3 id="consentTitle">健診結果の確認の前に</h3>
+      <p>データの取り扱いについてご確認ください</p>
+    </div>
+    <div class="consent-body">
+      <p id="consentLead">本シミュレーションは、入力いただいた健診データ・資産情報をもとに、健康リスクと将来資産への影響を試算するツールです。</p>
+      <ul class="consent-points">
+        <li id="consentLocal">入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）</li>
+        <li>氏名・連絡先を入力せずに利用できます。入力した健診値・資産額は勤務先へ送信しません</li>
+        <li>この画面単体では、アンケートや集計情報を外部へ送信しません</li>
+        <li>結果は参考試算値であり、医療診断・投資助言ではありません</li>
+      </ul>
+      <p style="margin:10px 0 0;font-size:11px;color:var(--muted);text-align:center;">提供：FRACTAL WORKOUT株式会社</p>
+      <label class="consent-check-row" for="consentCheck">
+        <input type="checkbox" id="consentCheck">
+        <span class="check-icon"></span>
+        <span class="check-label">上記の内容を理解し、データがブラウザ内のみで処理されることに同意して健診結果を確認します</span>
+      </label>
+      <button class="consent-btn" id="consentOkBtn" disabled>健診結果を確認する</button>
+      <button class="consent-cancel" id="consentCancelBtn">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="form-overlay" id="formOverlay" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+  <div class="form-modal">
+    <div class="form-modal-head">
+      <h3 id="formTitle">FRACTAL WORKOUTに相談する</h3>
+      <p>無料カウンセリング ｜ オンライン・対面どちらでも対応</p>
+      <button class="form-modal-close" id="formCloseBtn" aria-label="閉じる">×</button>
+    </div>
+    <div class="form-modal-body">
+
+
+      <div class="form-success" id="formSuccess">
+        <div class="fs-icon">✅</div>
+        <h4>送信が完了しました</h4>
+        <p>ご相談内容を受け付けました。<br>担当スタッフより2営業日以内にご連絡いたします。</p>
+      </div>
+
+
+      <form id="consultForm" novalidate>
+
+        <div class="form-disclaimer">
+          <strong>ご注意</strong>
+          本カウンセリングは、運動・コンディショニングに関するご相談をお伺いするものです。医療行為、診断、治療、処方を行うものではありません。既往歴や医師からの運動制限がある場合は、事前にその内容をご共有ください。
+        </div>
+
+
+        <div class="form-sec">
+          <div class="form-sec-title">必須項目</div>
+          <div class="fg2">
+            <div class="field">
+              <label for="f-name">氏名<span class="req">必須</span></label>
+              <input type="text" id="f-name" name="name" placeholder="山田 太郎" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-email">メールアドレス<span class="req">必須</span></label>
+              <input type="email" id="f-email" name="email" placeholder="example@email.com" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="f-tel">電話番号<span class="req">必須</span></label>
+              <input type="tel" id="f-tel" name="tel" placeholder="090-0000-0000" required autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="f-contact">希望する連絡方法<span class="req">必須</span></label>
+              <select id="f-contact" name="contact_method" required>
+                <option value="">選択してください</option>
+                <option value="email">メール</option>
+                <option value="tel">電話</option>
+                <option value="either">どちらでも可</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-purpose">相談希望内容<span class="req">必須</span></label>
+            <select id="f-purpose" name="purpose" required>
+              <option value="">選択してください</option>
+              <option value="shoulder_back">肩こり、腰痛、姿勢改善について相談したい</option>
+              <option value="exercise_lack">運動不足を改善したい</option>
+              <option value="lifestyle_disease">生活習慣病予防、体力低下について相談したい</option>
+              <option value="doctor_recommend">医師から運動を勧められている</option>
+              <option value="pilates_pt">ピラティス、パーソナルトレーニングを体験したい</option>
+              <option value="corporate">法人、健康経営、保健事業について相談したい</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-datetime">希望日時<span class="req">必須</span></label>
+            <input type="text" id="f-datetime" name="preferred_datetime" placeholder="例：平日午前、または第1・3土曜日午後など">
+          </div>
+        </div>
+
+
+        <div class="form-sec">
+          <div class="form-sec-title">任意項目（より適切なご提案のために）</div>
+          <div class="field" style="margin-bottom:10px;">
+            <label for="f-symptom">現在の身体の悩み<span class="opt-tag">任意</span></label>
+            <textarea id="f-symptom" name="symptom" placeholder="例：慢性的な腰痛、デスクワークでの肩こり など"></textarea>
+          </div>
+          <div class="fg2">
+            <div class="field">
+              <label for="f-exp">運動経験<span class="opt-tag">任意</span></label>
+              <select id="f-exp" name="exercise_exp">
+                <option value="">選択してください</option>
+                <option value="none">ほとんどない</option>
+                <option value="light">軽い運動程度（ウォーキング等）</option>
+                <option value="gym">ジム・スポーツクラブ経験あり</option>
+                <option value="pt">パーソナルトレーニング経験あり</option>
+                <option value="athlete">競技スポーツ経験あり</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-freq">通える頻度<span class="opt-tag">任意</span></label>
+              <select id="f-freq" name="frequency">
+                <option value="">選択してください</option>
+                <option value="weekly_1">週1回程度</option>
+                <option value="weekly_2">週2回程度</option>
+                <option value="weekly_3">30分×週3回</option>
+                <option value="monthly">月数回</option>
+                <option value="undecided">未定</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-goal">目的<span class="opt-tag">任意</span></label>
+            <select id="f-goal" name="goal">
+              <option value="">選択してください</option>
+              <option value="health">健康維持・増進</option>
+              <option value="diet">ダイエット・体型改善</option>
+              <option value="rehab">痛み・不調の改善・リハビリ</option>
+              <option value="performance">パフォーマンス向上</option>
+              <option value="checkup">健診値の改善</option>
+              <option value="habit">運動習慣の形成</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-medical">既往歴または医師からの運動制限の有無<span class="opt-tag">任意</span></label>
+            <select id="f-medical" name="medical_history">
+              <option value="">選択してください</option>
+              <option value="none">特になし</option>
+              <option value="has_restriction">医師から運動制限を受けている</option>
+              <option value="has_history">既往歴あり（詳細は備考欄へ）</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="f-note">入会前に確認したいこと<span class="opt-tag">任意</span></label>
+            <textarea id="f-note" name="note" placeholder="料金・スケジュール・施設設備などご自由にどうぞ"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit" id="formSubmitBtn">送信する — 無料カウンセリングを申し込む</button>
+        <p class="privacy-note" style="margin-top:8px;">いただいた個人情報はご相談対応の目的にのみ利用し、FRACTAL WORKOUT株式会社が管理します。ご本人の同意なく第三者へ提供しません。</p>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<header class="brand-header">
+  <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ"><img class="brand-logo__full" src="./assets/images/bp-logo.png" alt="BODY PALETTE" width="230" height="172"></a>
+  <div class="ui-brand-context"><span class="ui-status-dot"></span><span>健診結果・生活習慣と費用の確認</span></div>
+</header>
+<section class="hero" aria-label="このシミュレーションについて">
+  <div class="hero-copy">
+    <div class="hero-tag">健診結果と生活習慣の確認</div>
+    <h1>健康寿命・健康資産<span>シミュレーション</span></h1>
+    <p>健診値を確認し、生活習慣を振り返ります。<br>費用はご自身の入力条件で比較できます。</p>
+    <a class="ui-start" href="#step1">健診結果の確認をはじめる <span aria-hidden="true">→</span></a>
+    <p class="hero-input-note">健診票の写真・手入力に対応。画像・健診値は端末内で処理します。</p>
+  </div>
+  <figure class="hero-photo"><img src="assets/images/health-check-hero-v5.webp" srcset="assets/images/health-check-hero-v5-768.webp 768w, assets/images/health-check-hero-v5.webp 1536w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 1124px) 55vw, 590px" alt="若手からシニアまで男女6人が、健診票とスマートフォンで健康について確認するイメージ" width="1536" height="1024" fetchpriority="high" decoding="async"></figure>
+</section>
+<div class="steps-intro"><h2>5つのSTEPで進めます</h2><p>見たいSTEPを押すと開きます。はじめての方はSTEP 1から。</p></div>
+
+
+
+<nav class="step-nav" id="stepNav">
+  <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">STEP 1</span><span class="sn-label">テーマ選択</span></a>
+  <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">STEP 2</span><span class="sn-label">入力・結果</span></a>
+  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">STEP 3</span><span class="sn-label">取り組み</span></a>
+  <a class="step-nav-item" href="#nextPlan" data-step="4"><span class="sn-num">STEP 4</span><span class="sn-label">社内施策</span></a>
+  <a class="step-nav-item" href="#seminarSurvey" data-step="5"><span class="sn-num">STEP 5</span><span class="sn-label">アンケート</span></a>
+</nav>
+
+<div class="layout" id="layout">
+
+
+<div class="panel" id="p0">
+  <div class="ph" id="step1"><span class="ph-step">STEP 1</span><span id="step1Title">テーマを選ぶ</span></div>
+  <div class="pb">
+
+    <div class="mode-select" id="modeSelect">
+      <div class="mode-select-q">確認したいテーマを選んでください</div>
+      <div class="mode-cards">
+        <button type="button" class="mode-card" data-mode="asset" id="modeAsset" aria-pressed="false">
+          <span class="mode-ico">💰</span>
+          <span class="mode-t">健診値と費用を確認する</span>
+          <span class="mode-d">健診値を公的な判定値と照合し、入力した費用を比較します。</span>
+        </button>
+        <button type="button" class="mode-card" data-mode="lifespan" id="modeLife">
+          <span class="mode-ico">🌱</span>
+          <span class="mode-t">健診値と健康寿命を知る</span>
+          <span class="mode-d">健診値を確認し、集団の健康寿命と個人の余命の違いを知ります。</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="modeFlow" hidden>
+    <div class="mode-context" id="modeContext" role="status"></div>
+
+
+
+    <section class="ocr-box" aria-labelledby="ocrTitle">
+      <h3 id="ocrTitle">健診結果を写真から入力</h3>
+      <p>今回の健診結果を読み取り、写真と照合して反映します。</p>
+      <div class="ocr-capture-actions">
+        <label class="ocr-camera-control" id="ocrCameraButton" for="ocrCamera">写真を撮って読み取る<input id="ocrCamera" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="写真を撮って読み取る" aria-describedby="ocrCameraHelp ocrPrivacy ocrStatus"></label>
+        <label class="ocr-file-control" for="ocrFile">ファイルを選択<input id="ocrFile" type="file" accept="image/jpeg,image/png,image/webp" aria-label="健診結果のファイルを選択" aria-describedby="ocrCameraHelp ocrPrivacy ocrStatus"></label>
+      </div>
+      <p id="ocrFileName" class="ocr-file-name" role="status">未選択</p>
+      <p id="ocrCameraHelp">JPEG・PNG・WebP／15MBまで。PDFはスクリーンショットをご利用ください。</p>
+      <p id="ocrPrivacy">画像は送信・保存せず、ブラウザ内で読み取ります。</p>
+      <details class="ocr-privacy-details"><summary>画像の扱い・撮影について</summary><p>撮影できない場合は「ファイルを選択」をご利用ください。撮影写真の端末への保存はOS・カメラの仕様によります。読取エンジンの取得には通信が必要な場合があります。</p></details>
+      <p id="ocrStatus" role="status" aria-live="polite">写真を選んでください。</p>
+      <progress id="ocrProgress" max="1" aria-label="画像の読み取り進捗" hidden></progress>
+      <button type="button" id="ocrCancel" hidden>読み取りを中止</button>
+      <img id="ocrPreview" class="ocr-preview" alt="選択した健診結果。今回の結果と単位を確認してください" hidden>
+      <div id="ocrReview" hidden>
+        <p>基準値や前回値を誤読する場合があります。写真と照合して修正してください。入力済みの項目は、反映した項目だけ置き換わります。</p>
+        <div id="ocrRows"></div>
+        <details><summary>読み取った文字を確認する</summary><pre id="ocrText" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
+        <label class="ocr-confirm" for="ocrConfirm"><input id="ocrConfirm" type="checkbox">写真の今回の結果・単位と、反映する数値が一致していることを確認しました</label>
+        <div class="ocr-actions"><button type="button" class="ocr-primary" id="ocrApply">確認した数値を入力欄へ反映</button><button type="button" id="ocrDiscard">読み取り結果を破棄</button></div>
+      </div>
+    </section>
+    <button type="button" class="adv-toggle" id="advToggle">
+      <span class="adv-toggle-icon">＋</span>
+      健診結果（13項目）を入力する
+      <span class="adv-toggle-sub">写真がなくても手入力できます。未入力の項目は判定できません</span>
+    </button>
+
+    <div class="precision-meter" id="precisionMeter">
+      <div class="pm-head">
+        <span class="pm-label">健診結果の入力状況</span>
+        <span class="pm-level" id="pmLevel" data-lv="簡易">簡易</span>
+      </div>
+      <div class="pm-bar"><div class="pm-fill" id="pmFill"></div></div>
+      <div class="pm-note" id="pmNote">健診結果を入れるほど、<strong>判定に使える項目</strong>が増えます（簡易→標準→詳細）。分かる項目だけ入力してください。</div>
+    </div>
+
+    <div id="advancedInputs" style="display:none">
+    <div class="sec-title">健診結果（13項目・任意）</div>
+    <div class="subnote">分かる項目だけ、今回の健診結果と単位を確認して入力してください。</div>
+
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/></svg>体格</div>
+    <div class="fg2">
+      <div class="field"><label for="height">身長 (cm)</label><input id="height" type="number" step="any" inputmode="decimal" placeholder="例：170" min="100" max="250"><span class="ferr" id="e-height">100〜250cmで入力</span></div>
+      <div class="field"><label for="weight">体重 (kg)</label><input id="weight" type="number" step="any" inputmode="decimal" placeholder="例：68" min="20" max="300"><span class="ferr" id="e-weight">20〜300kgで入力</span></div>
+      <div class="field"><label for="waist">腹囲・おへそ周り (cm)</label><input id="waist" type="number" step="any" inputmode="decimal" placeholder="例：85" min="40" max="200"><span class="ferr" id="e-waist">40〜200cmで入力</span></div>
+    </div>
+
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 20s-6.5-4.2-6.5-9.2A3.7 3.7 0 0 1 12 8a3.7 3.7 0 0 1 6.5 2.6C18.5 15.8 12 20 12 20z"/></svg>血圧</div>
+    <div class="fg2">
+      <div class="field"><label for="sbp">収縮期・上の血圧 (mmHg)</label><input id="sbp" type="number" step="any" inputmode="decimal" placeholder="例：128" min="60" max="260"><span class="ferr" id="e-sbp">60〜260で入力</span></div>
+      <div class="field"><label for="dbp">拡張期・下の血圧 (mmHg)</label><input id="dbp" type="number" step="any" inputmode="decimal" placeholder="例：80" min="30" max="160"><span class="ferr" id="e-dbp">30〜160で入力</span></div>
+    </div>
+
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M12 3.5s5.5 6 5.5 10.5a5.5 5.5 0 0 1-11 0C6.5 9.5 12 3.5 12 3.5z"/></svg>脂質</div>
+    <div class="fg3">
+      <div class="field"><label for="ldl">LDL・悪玉 (mg/dL)</label><input id="ldl" type="number" step="any" inputmode="decimal" placeholder="例：120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
+      <div class="field"><label for="hdl">HDL・善玉 (mg/dL)</label><input id="hdl" type="number" step="any" inputmode="decimal" placeholder="例：55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
+      <div class="field"><label for="tgFasting">中性脂肪の採血条件</label><select id="tgFasting"><option value="unknown">分からない</option><option value="fasting">空腹時</option><option value="nonfasting">随時（空腹時以外）</option></select></div>
+      <div class="field"><label for="tg">中性脂肪・TG (mg/dL)</label><input id="tg" type="number" step="any" inputmode="decimal" placeholder="例：120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
+    </div>
+
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v5.5l-4 7A2 2 0 0 0 7.8 19h8.4a2 2 0 0 0 1.8-3l-4-7V3.5"/><path d="M7.5 14.5h9"/></svg>血糖</div>
+    <div class="fg2">
+      <div class="field"><label for="glucose">空腹時血糖 (mg/dL)</label><input id="glucose" type="number" step="any" inputmode="decimal" placeholder="例：105" min="40" max="600"><span class="ferr" id="e-glucose">40〜600で入力</span></div>
+      <div class="field"><label for="hba1c">HbA1c・過去1〜2ヶ月の血糖 (%)</label><input id="hba1c" type="number" inputmode="decimal" step="any" placeholder="例：5.8" min="3" max="15"><span class="ferr" id="e-hba1c">3〜15で入力</span></div>
+    </div>
+
+    <div class="hd-group-label"><svg viewBox="0 0 24 24"><path d="M4 8c4-2.5 12-2.5 16 0 0 5.5-3.5 9.5-8.5 11.5C7 17.5 4 13.5 4 8z"/><path d="M9 11c1.5 1.5 4 1.5 5.5 0"/></svg>肝機能</div>
+    <div class="fg3">
+      <div class="field"><label for="ast">AST・肝機能 (U/L)</label><input id="ast" type="number" step="any" inputmode="decimal" placeholder="例：22" min="5" max="1000"><span class="ferr" id="e-ast">5〜1000で入力</span></div>
+      <div class="field"><label for="alt">ALT・肝機能 (U/L)</label><input id="alt" type="number" step="any" inputmode="decimal" placeholder="例：24" min="5" max="1000"><span class="ferr" id="e-alt">5〜1000で入力</span></div>
+      <div class="field"><label for="ggt">γ-GTP・肝機能/飲酒 (U/L)</label><input id="ggt" type="number" step="any" inputmode="decimal" placeholder="例：35" min="5" max="2000"><span class="ferr" id="e-ggt">5〜2000で入力</span></div>
+    </div>
+
+
+    <div class="mets-banner" id="metsBanner" style="display:none">
+      <div class="mets-icon">⚠</div>
+      <div class="mets-body">
+        <div class="mets-title" id="metsBannerTitle">メタボリックシンドローム疑い</div>
+        <div class="mets-desc" id="metsBannerDesc">入力値に基づく判定です。確定診断は医療機関で受けてください。</div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="step2-head" id="step2"><span class="ph-step">STEP 2</span>生活習慣・試算条件</div>
+    <div class="sec-title">現在の生活習慣を入力</div>
+    <div class="fg2">
+      <div class="field">
+        <label for="gender">性別</label>
+        <select id="gender"><option value="male">男性</option><option value="female">女性</option></select>
+      </div>
+      <div class="field">
+        <label for="age">年齢</label>
+        <select id="age"></select>
+      </div>
+      <div class="field">
+        <label for="habit">運動習慣</label>
+        <select id="habit">
+          <option value="none">ほぼない</option>
+          <option value="30x1">①30分の運動を週1回</option>
+          <option value="30x2">②30分の運動を週2回</option>
+          <option value="30x3">③30分の運動を週3回</option>
+          <option value="60x1">④60分の運動を週1回</option>
+          <option value="60x2">⑤60分の運動を週2回</option>
+          <option value="60x3">⑥60分の運動を週3回</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="smoking">喫煙習慣</label>
+        <select id="smoking">
+          <option value="never">非喫煙</option>
+          <option value="past">過去喫煙（禁煙済み）</option>
+          <option value="current">現在喫煙中</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field cig-count-field" id="cigCountField" style="display:none">
+      <label for="cigCount">1日の本数（本）</label>
+      <input id="cigCount" type="number" inputmode="numeric" min="1" max="60" placeholder="分かる場合は本数を入力（任意）">
+      <span class="subnote" style="margin:6px 0 0;">喫煙状況を振り返るための入力です。本数から発症確率・余命・医療費は計算しません。</span>
+    </div>
+
+
+
+
+
+    <div class="demo-bar">
+      <button type="button" class="db-reset" id="resetFormBtn">↺ リセット（最初から）</button>
+      <button type="button" id="demoFillBtn" style="display:none">▶ デモ用サンプルを入力</button>
+    </div>
+    <button class="cta-btn" id="runBtn">健康資産をシミュレーションする</button>
+    <div class="input-reassurance" aria-label="シミュレーションについて"><span>氏名入力なし</span><span>入力はこの画面で試算</span></div>
+    <p class="privacy-note">入力内容はこのページ内で試算に使用され、氏名・連絡先は入力しません。</p>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel" id="p1">
+  <div id="prerunMsg" aria-live="polite">
+    <div class="pm-t">試算結果</div>
+    <div class="pm-s">入力後に実行ボタンを押すと、ここに表示されます。</div>
+  </div>
+  <div class="ph result-section-heading" id="simulationResults">あなたの健康資産シミュレーション結果</div>
+  <div class="pb">
+
+
+    <div class="print-title">健康資産シミュレーション｜参考試算結果</div>
+
+
+
+
+    <div class="pr-a">
+
+    <div class="checkup-alert" id="checkupAlert" style="display:none">
+      <div class="ca-icon">⚠</div>
+      <div class="ca-body">
+        <div class="ca-title" id="caTitle">注意：健診基準値を超える項目があります</div>
+        <div class="ca-detail" id="caDetail"></div>
+      </div>
+    </div>
+
+
+
+
+
+    <div id="lifespanResult" class="mode-life-only"></div>
+
+
+
+    <div class="sec-title" id="riskTitle" style="margin-top:22px;">6つの健康リスクを確認</div>
+    <div class="subnote" id="precDetail">入力データをもとに判定しています</div>
+    <div id="riskRows"></div>
+    <div class="prec-row">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;">入力状況</div>
+      <div id="precText" style="font-size:18px;font-weight:900;color:var(--navy);">--</div>
+    </div>
+
+
+    <div class="trend-box">
+      <div class="trend-title">研究で報告された関連を知る <span class="ev-tag">研究の集団データ</span></div>
+      <div id="trendRows"></div>
+      <div class="trend-src" id="trendSrc"></div>
+    </div>
+    </div>
+
+    <div class="pr-b">
+
+    <div class="improve-box" id="improveBox">
+      <div class="improve-title" id="improveTitle">生活習慣を変えた場合の試算</div>
+      <div class="improve-sub" id="improveSub">変更する条件を選ぶと、比較結果を表示します。</div>
+
+      <div class="improve-toggles" id="improveToggles">
+        <label class="improve-chk" for="impQuitSmoke" id="impQuitSmokeWrap">
+          <input type="checkbox" id="impQuitSmoke">
+          <span class="check-icon"></span>
+          <span><span class="ic-label">禁煙する</span><span class="ic-note" id="impQuitSmokeNote"></span></span>
+        </label>
+        <label class="improve-chk" for="impExercise" id="impExerciseWrap">
+          <input type="checkbox" id="impExercise">
+          <span class="check-icon"></span>
+          <span><span class="ic-label">運動習慣をつける（30分×週3回）</span><span class="ic-note" id="impExerciseNote"></span></span>
+        </label>
+        <div class="improve-slider-row" id="impWeightRow">
+          <div class="isr-head">
+            <div class="isr-label">体重を減らす</div>
+            <div class="isr-val" id="impWeightVal">0kg</div>
+          </div>
+          <div class="isr-ctrl">
+            <button type="button" class="isr-btn" id="impWeightMinus" aria-label="1kg減らす">−</button>
+            <input type="range" id="impWeightLoss" min="0" max="15" step="1" value="0">
+            <button type="button" class="isr-btn" id="impWeightPlus" aria-label="1kg増やす">＋</button>
+          </div>
+          <div class="isr-note" id="impWeightNote">ボタン（−／＋）またはバーで、減らす体重を選べます。身長・体重の入力が必要です。</div>
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+
+    <div class="pr-c">
+
+
+
+    </div>
+
+
+
+
+    <section class="panel aftercare-section" id="nextPlan" aria-labelledby="nextPlanTitle">
+      <div class="ph"><span class="ph-step">STEP 4</span><h2 id="nextPlanTitle">社内の施策・受診案内を見る</h2></div>
+      <div class="pb">
+        <p class="aftercare-intro" id="nextPlanSub">社内の健康施策と、健診後の受診案内をご紹介します。</p>
+    <div class="exam-cta" id="examCta">
+      <span class="exam-cta-tag">健診後の受診案内</span>
+      <h2>健診結果に気になる数値があれば、<span class="hl">受診案内を確認</span>してください。</h2>
+      <p class="exam-cta-lead">この画面は診断を行いません。受診が必要かどうかは、健診結果の判定と受診案内を確認してください。</p>
+
+      <details class="exam-details" id="examDetails" open>
+        <summary>二次健診の確認事項と受診の流れ</summary>
+        <div class="exam-details-inner">
+      <div class="exam-reasons">
+        <div class="exam-reason">
+          <img class="exam-reason-image" src="assets/images/checkup-review-ai-v1.webp" srcset="assets/images/checkup-review-ai-v1-640.webp 640w, assets/images/checkup-review-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="医師と健診結果を確認する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
+          <div class="er-t">気になる値を確認する</div>
+          <div class="er-d">健診結果の判定と受診勧奨に沿って、必要な検査や対応を医療機関で確認します。</div>
+        </div>
+        <div class="exam-reason">
+          <img class="exam-reason-image" src="assets/images/checkup-benefits-ai-v1.webp" srcset="assets/images/checkup-benefits-ai-v1-640.webp 640w, assets/images/checkup-benefits-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="会社の費用補助の案内を担当者と確認する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
+          <div class="er-t">費用補助の有無を確認する</div>
+          <div class="er-d">補助の有無・対象・自己負担は会社や健康保険組合の制度によって異なります。案内を確認してください。</div>
+        </div>
+        <div class="exam-reason">
+          <img class="exam-reason-image" src="assets/images/checkup-booking-ai-v1.webp" srcset="assets/images/checkup-booking-ai-v1-640.webp 640w, assets/images/checkup-booking-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="案内を見ながらスマートフォンで受診予約する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
+          <div class="er-t">予約方法を確認する</div>
+          <div class="er-d">会社の健診案内から受診先・予約方法・必要書類を確認してください。</div>
+        </div>
+      </div>
+
+      <div class="exam-flow">
+        <div class="exam-flow-h">受診までの流れ</div>
+        <div class="exam-steps">
+          <div class="exam-step"><div class="es-n">1</div><div class="es-t">会社の健診案内<br>（メール・書面）を確認</div></div>
+          <div class="exam-step"><div class="es-n">2</div><div class="es-t">案内の窓口で<br>受診日を予約</div></div>
+          <div class="exam-step"><div class="es-n">3</div><div class="es-t">二次健診を受診<br>正確な数値を把握</div></div>
+        </div>
+      </div>
+        </div>
+      </details>
+      <p class="exam-note">※受診方法・費用補助の詳細は、会社の健康管理担当または加入する健康保険組合の案内をご確認ください。この結果は印刷・画像保存して、受診時の参考資料としてお使いいただけます。</p>
+    </div>
+        <div class="next-plan-head aftercare-next"></div>
+      </div>
+    </section>
+
+
+
+    <div class="share-actions">
+      <div class="save-btn-row">
+        <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
+          <span class="ui-output-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg></span> 画像で保存する
+        </button>
+        <button type="button" class="pdf-btn" id="pdfBtn">
+          <span class="ui-output-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7zM16 11h1"/></svg></span> PDFで保存・印刷
+        </button>
+      </div>
+      <p class="pdf-note" id="shareImgNote">スマホはそのまま画像として保存・共有できます（PCはPDF印刷も可）。</p>
+    </div>
+
+
+
+
+    <div class="step-sec-head" id="step5">必要な方への追加案内</div>
+
+
+    <button type="button" class="step5-toggle" id="step5Toggle" aria-expanded="false" aria-controls="step5Body">
+      <span class="s5t-icon">＋</span>
+      <span class="s5t-txt">
+        <span class="s5t-main">継続サポート・サービスのご案内を見る</span>
+        <span class="s5t-sub">オンラインパーソナルなどのサービス情報（任意）</span>
+      </span>
+    </button>
+
+    <div class="service-cta-wrap" id="step5Body" hidden>
+
+    <div class="service-cta-section">
+
+
+      <div class="service-cta-label">BODY PALETTEの運動指導サービス</div>
+      <div class="service-cta-grid">
+
+        <div class="service-card">
+          <span class="sc-badge">場所を選ばない</span>
+          <div class="sc-title">オンライン<br>パーソナルトレーニング</div>
+          <div class="sc-desc">自宅・出張先どこからでも。トレーナーが1対1で運動を指導します。</div>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4274609" target="_blank" rel="noopener noreferrer" data-reserve="online">予約・体験する →</a>
+        </div>
+
+        <div class="service-card">
+          <span class="sc-badge">原宿の店舗で実施</span>
+          <div class="sc-title">メディカルフィットネス<br>パーソナルトレーニング</div>
+          <div class="sc-desc">利用条件や医療費控除の扱いは、サービス案内でご確認ください。</div>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/2847212" target="_blank" rel="noopener noreferrer" data-reserve="harajuku-pt">予約・体験する →</a>
+        </div>
+
+        <div class="service-card">
+          <span class="sc-badge">原宿の店舗で実施・女性向け</span>
+          <div class="sc-title">ピラティス<br>（女性専門コース）</div>
+          <div class="sc-desc">体幹・姿勢・コンディショニングを重視した女性専門のピラティスプログラム。</div>
+          <a class="sc-btn sc-btn-book" href="https://fractal-workout.stores.jp/reserve/fractal-workout/4897576" target="_blank" rel="noopener noreferrer" data-reserve="pilates">予約・体験する →</a>
+        </div>
+
+      </div>
+      <p class="service-note">利用方法や料金は、各サービスの予約ページでご確認ください。</p>
+    </div>
+    </div>
+
+
+  </div>
+</div>
+
+</div>
+
+
+<div class="disclaimer">
+  <strong>免責事項・エビデンスについて：</strong>
+  健診結果の確認と費用の条件比較のための参考情報です。医学的診断・個人の寿命や発症の予測・投資助言は行いません。
+  <span class="disc-toggle" id="discToggle">▼ 引用元・詳細を見る</span>
+  <div class="disc-detail" id="discDetail">
+  <p>健診値は厚生労働省の保健指導・受診勧奨判定値と照合します。疾病の診断や特定保健指導の対象者選定は行いません。未入力の検査は評価できません。</p>
+  <p>研究集団の発症割合・ハザード比は個人の確率や生活習慣改善の効果ではありません。費用は本人の入力額×年数のみの比較です。個人の寿命・将来資産や運動による節約額は算出しません。</p>
+  </div>
+</div>
+
+
+<div class="report-a4-wrap" aria-hidden="true">
+  <div id="reportA4">
+    <div class="ra-head">
+      <div class="ra-brand"><img id="raLogo" src="assets/images/bp-logo.png" alt="BODY PALETTE"><span class="ra-brand-txt">BODY PALETTE</span></div>
+      <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
+    </div>
+    <div class="ra-hero">
+      <div class="ra-report-kicker">BODY PALETTE｜健診結果の確認</div>
+      <div class="ra-hero-label" id="raHeroLabel">入力した健診値を確認</div>
+      <div class="ra-formula">
+        <div class="rf-cell"><span class="rf-l" id="raFmLL">確認項目</span><span class="rf-v good" id="raFmLV">--</span></div>
+        <span class="rf-op" id="raFmOp">−</span>
+        <div class="rf-cell"><span class="rf-l" id="raFmRL">現在の条件の場合</span><span class="rf-v bad" id="raFmRV">--</span></div>
+        <span class="rf-op">＝</span>
+        <div class="rf-cell res"><span class="rf-l" id="raFmDL">比較基準との差額（試算）</span><span class="rf-v diff" id="raFmDV">--</span></div>
+      </div>
+    </div>
+    <div class="ra-input">
+      <div class="ra-sec-t">入力データ（基本情報・健診結果）<span class="ra-sec-note">健診票の判定を優先してください／オレンジは公的な保健指導判定値等に該当する入力項目</span></div>
+      <div class="ra-input-grid" id="raInputGrid"></div>
+    </div>
+    <div class="ra-risk2">
+      <div>
+        <div class="ra-sec-t">6領域の確認状況</div>
+        <div class="ra-risks" id="raRisks"></div>
+      </div>
+      <div>
+        <div class="ra-sec-t">研究で報告された関連を知る</div>
+        <div class="ra-trend" id="raTrend"></div>
+        <div class="ra-cvd-note">研究の割合・HRは集団の指標です。あなたの発症確率や、生活習慣を変えた場合の効果を示すものではありません。</div>
+      </div>
+    </div>
+    <div class="ra-basis">
+      <div class="ra-basis-title">数値の意味を分けて確認します</div>
+      <div class="ra-basis-grid"><div><strong>研究データ</strong>研究に参加した集団の割合やHR。個人の確率・改善効果とは異なります。</div><div><strong>健診値の照合</strong>公的な判定値との照合です。病名・発症確率は判定しません。</div><div><strong>費用の条件比較</strong>入力した年額×年数です。病気や運動の効果から金額を算出しません。</div></div>
+    </div>
+    <div class="ra-bottom">
+      <div>
+        <div class="ra-sec-t" id="raDetailT">--</div>
+        <div class="ra-list" id="raDetail"></div>
+      </div>
+      <div class="ra-next">
+        <div class="ra-step-label">STEP 4</div>
+        <div class="ra-sec-t">社内の施策・受診案内</div>
+        <p>社内の健康施策と、健診後の受診案内をご紹介します。</p>
+      </div>
+    </div>
+    <div class="ra-msg" id="raMsg"></div>
+    <div class="ra-foot" id="raFoot"></div>
+  </div>
+</div>
+
+</div>
+
+
+<a href="#examCta" class="sticky-cta" id="stickyCta">二次健診を受診しましょう →</a>
+
+
+
+
+
+<script src="assets/min/medical-evidence-model.js?v=4a712480a1"></script>
+<script src="assets/min/simulator-core.js?v=ca495005d7"></script>
+<script src="assets/min/health-ocr.js?v=d1be79dac8"></script>
+<script src="assets/min/research-evidence.js?v=7cd5cf936d"></script>
+<script src="assets/min/nippn-seminar.js?v=593cfea5b1"></script>
+<script src="assets/min/simulation-experience.js?v=6a660a51ff"></script>
+
+<script src="assets/min/seminar-survey.js?v=3983e7f015"></script>
+<script src="assets/step-accordion.js?v=20261118-review"></script>
+<script src="assets/min/body-palette-ui.js?v=496a7d5dc0"></script>
+<script src="assets/min/medical-review-ui.js?v=5d6b53b564"></script>
+</body>
+</html>

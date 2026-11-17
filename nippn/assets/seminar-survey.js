@@ -1,0 +1,58 @@
+/* Survey preview only: no network request, analytics event, or persistent storage. */
+(function(){
+ 'use strict';
+ if(document.getElementById('seminarSurvey'))return;
+ const survey=document.createElement('section');survey.id='seminarSurvey';survey.className='panel seminar-survey';survey.setAttribute('aria-labelledby','surveyTitle');
+ survey.innerHTML=`<div class="ph"><span class="ph-step">STEP 5</span><span id="surveyTitle">アンケートに答える</span></div>
+ <div class="pb"><p class="survey-lead">画面の使いやすさと、今後取り組みたいことを教えてください。全4問、約1分です。</p>
+ <p class="survey-preview-note">確認用の画面です。回答は送信・保存されません。氏名・連絡先の入力はありません。</p>
+ <form id="seminarSurveyForm">
+ <div class="survey-field"><label for="surveyEase">1. シミュレーションの画面操作は分かりやすかったですか。<span class="survey-required">必須</span></label>
+ <select id="surveyEase" name="ease" required><option value="">選んでください</option><option value="5">とても分かりやすかった</option><option value="4">分かりやすかった</option><option value="3">どちらともいえない</option><option value="2">やや分かりにくかった</option><option value="1">分かりにくかった</option></select></div>
+ <div class="survey-field"><label for="surveyUnderstanding">2. 健診結果を受けて何をするか、具体的に考えられましたか。<span class="survey-required">必須</span></label>
+ <select id="surveyUnderstanding" name="understanding" required><option value="">選んでください</option><option value="5">具体的に考えられた</option><option value="4">ある程度考えられた</option><option value="3">どちらともいえない</option><option value="2">あまり考えられなかった</option><option value="1">考えられなかった</option></select></div>
+ <fieldset class="survey-field survey-actions"><legend>3. これから取り組んでみたいことを教えてください。<span class="survey-optional">任意・複数選択可</span></legend>
+ <div class="survey-options">
+ <label><input type="checkbox" name="actions" value="exercise">運動習慣を見直す</label>
+ <label><input type="checkbox" name="actions" value="food">食事を見直す</label>
+ <label><input type="checkbox" name="actions" value="sleep">睡眠を整える</label>
+ <label><input type="checkbox" name="actions" value="checkup">健診票の判定・受診案内を確認する</label>
+ <label><input type="checkbox" name="actions" value="continue">今の取り組みを続ける</label>
+ <label><input type="checkbox" name="actions" value="undecided">まだ決めていない</label>
+ </div></fieldset>
+ <div class="survey-field"><label for="surveyComment">4. 分かりにくかった点や、ご意見があれば教えてください。<span class="survey-optional">任意</span></label>
+ <textarea id="surveyComment" name="comment" maxlength="300" rows="3" aria-describedby="surveyCommentHelp surveyCounter"></textarea>
+ <div class="survey-comment-help"><span id="surveyCommentHelp">300文字まで。個人を特定する情報や、詳しい健康情報は記入しないでください。</span><span id="surveyCounter">0 / 300</span></div></div>
+ <button type="submit" class="survey-confirm-button">回答内容を確認する</button>
+ </form>
+ <section id="surveyConfirmation" class="survey-confirmation" aria-labelledby="surveyConfirmationTitle" hidden>
+ <h3 id="surveyConfirmationTitle" tabindex="-1">回答内容の確認</h3><dl id="surveyAnswerSummary"></dl>
+ <p>この画面は確認用です。回答の送信・保存は行っていません。</p><button type="button" id="surveyBack">入力に戻る</button>
+ </section></div>`;
+ const nextPlan=document.getElementById('nextPlan');
+ (nextPlan||document.getElementById('p1')).after(survey);
+ document.body.classList.add('has-seminar-survey');
+ if(nextPlan&&!document.getElementById('surveyStepLink')){
+  const link=document.createElement('a');link.id='surveyStepLink';link.className='survey-step-link';link.href='#seminarSurvey';link.textContent='STEP 5 アンケートへ進む';nextPlan.querySelector('.next-plan-head').append(link);
+ }
+ window.dispatchEvent(new Event('scroll'));
+ const form=document.getElementById('seminarSurveyForm');const confirmation=document.getElementById('surveyConfirmation');
+ const actions=[...form.querySelectorAll('[name="actions"]')];
+ actions.forEach(el=>el.addEventListener('change',()=>{
+  if(!el.checked)return;
+  if(el.value==='undecided')actions.filter(other=>other!==el).forEach(other=>other.checked=false);
+  else actions.find(other=>other.value==='undecided').checked=false;
+ }));
+ document.getElementById('surveyComment').addEventListener('input',event=>{document.getElementById('surveyCounter').textContent=event.target.value.length+' / 300';});
+ form.addEventListener('submit',event=>{
+  event.preventDefault();if(!form.reportValidity())return;
+  const ease=document.getElementById('surveyEase'),understanding=document.getElementById('surveyUnderstanding');
+  const selectedActions=actions.filter(el=>el.checked).map(el=>el.closest('label').textContent.trim());
+  const pairs=[['画面操作の分かりやすさ',ease.selectedOptions[0].textContent],['今後取り組むこと',understanding.selectedOptions[0].textContent],['取り組んでみたいこと',selectedActions.join(' ／ ')||'回答なし'],['ご意見',document.getElementById('surveyComment').value.trim()||'回答なし']];
+  const summary=document.getElementById('surveyAnswerSummary');summary.replaceChildren();
+  for(const [question,answer] of pairs){const dt=document.createElement('dt');dt.textContent=question;const dd=document.createElement('dd');dd.textContent=answer;summary.append(dt,dd);}
+  form.hidden=true;confirmation.hidden=false;document.getElementById('surveyConfirmationTitle').focus();
+ });
+ document.getElementById('surveyBack').addEventListener('click',()=>{confirmation.hidden=true;form.hidden=false;document.getElementById('surveyEase').focus();});
+ document.getElementById('resetFormBtn').addEventListener('click',()=>{form.reset();confirmation.hidden=true;form.hidden=false;document.getElementById('surveyAnswerSummary').replaceChildren();document.getElementById('surveyCounter').textContent='0 / 300';});
+})();

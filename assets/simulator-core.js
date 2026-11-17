@@ -586,6 +586,8 @@ function runSimulation() {
 
   // 入力エラーがあればエラー箇所へスクロールして知らせる
   if(!validateAll()) {
+    const warning=document.getElementById('simulationInputError');
+    if(warning){warning.hidden=false;warning.textContent='入力範囲・単位を確認してください。赤く表示された項目を修正して、もう一度確認ボタンを押してください。';}
     const errEl = document.querySelector('input.err');
     if(errEl) {
       // エラー入力が折りたたみ（健診データ）内で非表示なら自動展開してから案内
@@ -602,6 +604,8 @@ function runSimulation() {
   btn.disabled = true;
   btn.textContent = '計算中...';
   setTimeout(() => {
+   const wasPreRun=document.body.classList.contains('pre-run');
+   try{
     document.body.classList.remove('pre-run');   // 先に表示して幅を確定→グラフ等を正しいサイズで描画（押した瞬間に結果）
     window.dispatchEvent(new Event('scroll'));
     updateAll();
@@ -613,6 +617,15 @@ function runSimulation() {
     const _p1=document.getElementById('p1'); if(_p1){ _p1.classList.remove('revealed'); void _p1.offsetWidth; _p1.classList.add('revealed'); }
     animateHero();
     window.dispatchEvent(new Event('bp:simulation-complete'));
+   }catch(error){
+    if(wasPreRun)document.body.classList.add('pre-run');
+    const warning=document.getElementById('simulationInputError');
+    if(warning){warning.hidden=false;warning.textContent='結果を表示できませんでした。入力内容はそのままで、もう一度確認ボタンを押してください。改善しない場合はページを再読み込みしてください。';warning.scrollIntoView({behavior:'smooth',block:'center'});}
+    console.error('Simulation result could not be displayed.',error);
+   }finally{
+    btn.disabled=false;
+    btn.textContent='入力した健診結果を確認する';
+   }
   }, 100);
 }
 

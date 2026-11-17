@@ -26,6 +26,15 @@
   }
  }
  initialize();
+ // Honor direct STEP links and browser back/forward as well as in-page clicks.
+ // A direct link must not leave the requested input/result section collapsed.
+ function openHash(){
+  const target=location.hash;if(target.length<2)return;
+  const record=[...records.values()].find(r=>target==='#'+r.anchor||target==='#'+r.panel.id||[...r.panel.querySelectorAll('[id]')].some(el=>'#'+el.id===target));
+  if(record)setOpen(record,true);
+ }
+ openHash();
+ window.addEventListener('hashchange',openHash);
  const layout=document.getElementById('layout');if(layout)new MutationObserver(initialize).observe(layout,{childList:true});
  document.addEventListener('click',event=>{
   const link=event.target.closest('a[href^="#"]');if(!link)return;

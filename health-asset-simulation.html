@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>健診結果・生活習慣と費用の確認 | BODY PALETTE</title>
+<title>健康寿命・健康資産シミュレーション | BODY PALETTE</title>
 <link rel="icon" type="image/png" href="assets/images/embedded-brand-0.png"/>
 <link rel="apple-touch-icon" href="assets/images/embedded-brand-0.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -12,14 +12,13 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
 <link rel="stylesheet" href="assets/min/simulator-base.css?v=a578f9ddb7">
 <link rel="stylesheet" href="assets/min/health-ocr.css?v=1e25c49013">
-<link rel="stylesheet" href="assets/min/nippn-seminar.css?v=b7460c2b3c">
+<link rel="stylesheet" href="assets/min/nippn-seminar.css?v=0b4386e0c2">
 <link rel="stylesheet" href="assets/min/simulation-experience.css?v=5cb45d55f8">
-<link rel="stylesheet" href="assets/min/report-tone.css?v=9d69e082b3">
-<link rel="stylesheet" href="assets/min/research-evidence.css?v=6382424974">
+<link rel="stylesheet" href="assets/min/report-tone.css?v=1577a4a69f">
+<link rel="stylesheet" href="assets/min/research-evidence.css?v=f40067d24b">
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
-<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=3eacc3548d">
-<link rel="stylesheet" href="assets/min/result-charts.css?v=0336009878">
+<link rel="stylesheet" href="assets/min/body-palette-ui.css?v=0f49c92625">
 </head>
 <body>
 
@@ -40,7 +39,7 @@
 <div class="consent-overlay" id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
   <div class="consent-modal">
     <div class="consent-head">
-      <h3 id="consentTitle">健診結果の確認の前に</h3>
+      <h3 id="consentTitle">シミュレーション実行の前に</h3>
       <p>データの取り扱いについてご確認ください</p>
     </div>
     <div class="consent-body">
@@ -55,9 +54,9 @@
       <label class="consent-check-row" for="consentCheck">
         <input type="checkbox" id="consentCheck">
         <span class="check-icon"></span>
-        <span class="check-label">上記の内容を理解し、データがブラウザ内のみで処理されることに同意して健診結果を確認します</span>
+        <span class="check-label">上記の内容を理解し、データがブラウザ内のみで処理されることに同意してシミュレーションを実行します</span>
       </label>
-      <button class="consent-btn" id="consentOkBtn" disabled>健診結果を確認する</button>
+      <button class="consent-btn" id="consentOkBtn" disabled>シミュレーションを実行する</button>
       <button class="consent-cancel" id="consentCancelBtn">キャンセル</button>
     </div>
   </div>
@@ -201,15 +200,15 @@
 
 <header class="brand-header">
   <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ"><img class="brand-logo__full" src="./assets/images/bp-logo.png" alt="BODY PALETTE" width="230" height="172"></a>
-  <div class="ui-brand-context"><span class="ui-status-dot"></span><span>健診結果・生活習慣と費用の確認</span></div>
+  <div class="ui-brand-context"><span class="ui-status-dot"></span><span>健康寿命・健康資産シミュレーション</span></div>
 </header>
 <section class="hero" aria-label="このシミュレーションについて">
   <div class="hero-copy">
     <div class="hero-tag">健診結果と生活習慣の確認</div>
     <h1>健康寿命・健康資産<span>シミュレーション</span></h1>
-    <p>健診値を確認し、生活習慣を振り返ります。<br>費用はご自身の入力条件で比較できます。</p>
-    <a class="ui-start" href="#step1">健診結果の確認をはじめる <span aria-hidden="true">→</span></a>
-    <p class="hero-input-note">健診票の写真・手入力に対応。画像・健診値は端末内で処理します。</p>
+    <p>健診結果と生活習慣をもとに試算します。<br>運動などの条件を変えて、結果を比べられます。</p>
+    <a class="ui-start" href="#step1">シミュレーションをはじめる <span aria-hidden="true">→</span></a>
+    <p class="hero-input-note">健診票の写真・手入力に対応。健診値・資産額は端末内で処理します。</p>
   </div>
   <figure class="hero-photo"><img src="assets/images/health-check-hero-v5.webp" srcset="assets/images/health-check-hero-v5-768.webp 768w, assets/images/health-check-hero-v5.webp 1536w" sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 1124px) 55vw, 590px" alt="若手からシニアまで男女6人が、健診票とスマートフォンで健康について確認するイメージ" width="1536" height="1024" fetchpriority="high" decoding="async"></figure>
 </section>
@@ -220,7 +219,7 @@
 <nav class="step-nav" id="stepNav">
   <a class="step-nav-item on" href="#step1" data-step="1"><span class="sn-num">STEP 1</span><span class="sn-label">テーマ選択</span></a>
   <a class="step-nav-item" href="#step2" data-step="2"><span class="sn-num">STEP 2</span><span class="sn-label">入力・結果</span></a>
-  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">STEP 3</span><span class="sn-label">取り組み</span></a>
+  <a class="step-nav-item" href="#step3" data-step="3"><span class="sn-num">STEP 3</span><span class="sn-label">条件比較</span></a>
   <a class="step-nav-item" href="#nextPlan" data-step="4"><span class="sn-num">STEP 4</span><span class="sn-label">社内施策</span></a>
   <a class="step-nav-item" href="#seminarSurvey" data-step="5"><span class="sn-num">STEP 5</span><span class="sn-label">アンケート</span></a>
 </nav>
@@ -233,17 +232,17 @@
   <div class="pb">
 
     <div class="mode-select" id="modeSelect">
-      <div class="mode-select-q">確認したいテーマを選んでください</div>
+      <div class="mode-select-q">試算するテーマを選んでください</div>
       <div class="mode-cards">
         <button type="button" class="mode-card" data-mode="asset" id="modeAsset" aria-pressed="false">
           <span class="mode-ico">💰</span>
-          <span class="mode-t">健診値と費用を確認する</span>
-          <span class="mode-d">健診値を公的な判定値と照合し、入力した費用を比較します。</span>
+          <span class="mode-t">健康資産を比べる</span>
+          <span class="mode-d">現在の生活習慣と比較基準で、80歳時点の資産差額を確認します。</span>
         </button>
         <button type="button" class="mode-card" data-mode="lifespan" id="modeLife">
           <span class="mode-ico">🌱</span>
-          <span class="mode-t">健診値と健康寿命を知る</span>
-          <span class="mode-d">健診値を確認し、集団の健康寿命と個人の余命の違いを知ります。</span>
+          <span class="mode-t">健康寿命を比べる</span>
+          <span class="mode-d">生活習慣の条件を変えた場合の、健康年数の差を確認します。</span>
         </button>
       </div>
     </div>
@@ -312,7 +311,6 @@
     <div class="fg3">
       <div class="field"><label for="ldl">LDL・悪玉 (mg/dL)</label><input id="ldl" type="number" step="any" inputmode="decimal" placeholder="例：120" min="30" max="400"><span class="ferr" id="e-ldl">30〜400で入力</span></div>
       <div class="field"><label for="hdl">HDL・善玉 (mg/dL)</label><input id="hdl" type="number" step="any" inputmode="decimal" placeholder="例：55" min="15" max="150"><span class="ferr" id="e-hdl">15〜150で入力</span></div>
-      <div class="field"><label for="tgFasting">中性脂肪の採血条件</label><select id="tgFasting"><option value="unknown">分からない</option><option value="fasting">空腹時</option><option value="nonfasting">随時（空腹時以外）</option></select></div>
       <div class="field"><label for="tg">中性脂肪・TG (mg/dL)</label><input id="tg" type="number" step="any" inputmode="decimal" placeholder="例：120" min="20" max="1500"><span class="ferr" id="e-tg">20〜1500で入力</span></div>
     </div>
 
@@ -375,14 +373,32 @@
 
     <div class="field cig-count-field" id="cigCountField" style="display:none">
       <label for="cigCount">1日の本数（本）</label>
-      <input id="cigCount" type="number" inputmode="numeric" min="1" max="60" placeholder="分かる場合は本数を入力（任意）">
-      <span class="subnote" style="margin:6px 0 0;">喫煙状況を振り返るための入力です。本数から発症確率・余命・医療費は計算しません。</span>
+      <input id="cigCount" type="number" inputmode="numeric" min="1" max="60" placeholder="未入力の場合は1日20本として試算します">
+      <span class="subnote" style="margin:6px 0 0;">本数に応じてモデル内の参考スコアが変わります。実際の発症確率を示すものではありません。</span>
     </div>
 
+    <div class="sec-title mode-asset-only" id="assetInfoTitle">資産情報</div>
+    <div class="asset-box mode-asset-only" id="assetInfoBox">
+      <div class="fg2">
+        <div class="field">
+          <label for="income">現在の年収（万円）</label>
+          <input id="income" type="number" min="0" step="any" inputmode="decimal" placeholder="例：500">
+        </div>
+        <div class="field">
+          <label for="assets">現在の総資産（万円）</label>
+          <input id="assets" type="number" min="0" step="any" inputmode="decimal" placeholder="例：300">
+        </div>
+      </div>
+      <div class="asset-hint">
+        ※年収が未入力の場合は年齢・性別の日本平均値（国税庁2024年）を自動適用します。<br>
+        ※総資産は貯蓄＋投資の合計額を入力してください。
+      </div>
+    </div>
 
-
-
-
+    <details class="mode-asset-only model-note" id="economicAssumptions"><summary>資産試算の仮定を確認・変更する</summary><div class="fg2">
+      <div class="field"><label for="medicalShare">モデル医療費に対する本人負担の仮定（%）</label><input id="medicalShare" type="number" min="0" max="100" value="30"><span class="subnote">初期値30%。年齢・所得・高額療養費・健保の付加給付は自動反映しません。</span></div>
+      <div class="field"><label for="incomeLossAssumption">健康による収入減の仮定（%）</label><input id="incomeLossAssumption" type="number" min="0" max="100" value="0"><span class="subnote">初期値0%。仕事の能率低下が、そのまま給与減になるとは限りません。</span></div>
+    </div><p>医療費の進行・複数疾患の補正は独自の仮定です。個別の診療費を推定するモデルとして検証されていません。想定値の変更に対する差を確認する用途でご利用ください。</p></details>
     <div class="demo-bar">
       <button type="button" class="db-reset" id="resetFormBtn">↺ リセット（最初から）</button>
       <button type="button" id="demoFillBtn" style="display:none">▶ デモ用サンプルを入力</button>
@@ -407,7 +423,18 @@
     <div class="print-title">健康資産シミュレーション｜参考試算結果</div>
 
 
-
+    <div class="graph-wrap mode-asset-only">
+      <div class="graph-title">健康資産の推移（現在〜80歳）</div>
+      <div class="graph-sub">青：追加負担なしの比較基準　赤：現在の条件を続ける想定</div>
+      <canvas id="chart" role="img" aria-label="現在から80歳までの健康資産推移を比較する参考グラフ。金額と計算条件はグラフ下の比較対象で確認できます。"></canvas>
+      <div class="g-legend">
+        <div><span class="g-dot" style="background:#638fa7"></span>比較基準（追加負担なし）</div>
+        <div><span class="g-dot" style="background:#d46f8e"></span>現在の条件</div>
+        <div id="legendImproved" style="display:none"><span class="g-dot" style="background:#0a807c"></span>生活習慣を改善した場合</div>
+        <div><span class="g-dot" style="background:#c6d6d3;width:14px;height:2px;border-radius:0;margin-top:4px;"></span>60歳（定年・再雇用）</div>
+        <div><span class="g-dot" style="background:#0fa8a3;width:14px;height:3px;border-radius:0;margin-top:3px;"></span>65歳（年金移行）</div>
+      </div>
+    </div>
 
     <div class="pr-a">
 
@@ -420,11 +447,69 @@
     </div>
 
 
+    <div class="age80-box mode-asset-only" id="age80box">
+      <div class="a80-main">
+        <div class="a80-main-label" id="a80mainLabel">追加負担なしの比較基準に対する、80歳時点の資産差額</div>
+        <div class="a80-main-num" id="a80diffBig">--</div>
+        <div class="a80-main-sub" id="a80mainSub">現在の条件と比較基準との差です。実際の資産残高ではありません。</div>
+      </div>
+      <div class="a80-calc">
+        <div class="a80-c-cell"><span class="cl">健康維持なら</span><span class="cv good" id="a80good">--</span></div>
+        <span class="a80-c-op" id="a80op">−</span>
+        <div class="a80-c-cell"><span class="cl" id="a80badLabel">現在の条件の場合</span><span class="cv bad" id="a80bad">--</span></div>
+        <span class="a80-c-op">＝</span>
+        <div class="a80-c-cell res"><span class="cl">比較基準との差額</span><span class="cv diff" id="a80diffCalc">--</span></div>
+      </div>
+    </div>
 
 
-
-    <div id="lifespanResult" class="mode-life-only"></div>
-
+    <div class="life-result mode-life-only" id="lifespanResult">
+      <div class="life-main">
+        <div class="life-main-label">現在の条件と比較基準の健康年数差</div>
+      <div class="life-main-num" id="lifeLostBig">--</div>
+      <div class="life-main-sub" id="lifeLostSub">独自の仮定による年数差です。個人の寿命の予測ではありません。</div>
+    </div>
+    <div class="life-vision">
+      <div class="life-vision-copy">
+        <div class="life-vision-kicker">健康年数の比較</div>
+        <div class="life-vision-title" id="lifeVisionTitle">生活習慣の条件を変えて比較できます。</div>
+        <div class="life-vision-sub" id="lifeVisionSub">表示する年数は独自モデルの参考値です。個人の寿命を予測するものではありません。</div>
+        <div class="life-days"><strong id="lifeDays">--</strong><span>日分の「元気に自立して過ごす時間」の目安</span></div>
+      </div>
+    </div>
+    <div class="life-compare">
+        <div class="life-mini">
+          <span class="life-mini-lbl">比較基準：約</span>
+          <span class="life-mini-val good" id="lifeMaintainAge">--</span>
+          <span class="life-mini-u">歳（参考値）</span>
+        </div>
+        <div class="life-mini">
+          <span class="life-mini-lbl">現在の条件：約</span>
+          <span class="life-mini-val bad" id="lifeNeglectAge">--</span>
+          <span class="life-mini-u">歳まで</span>
+        </div>
+      </div>
+      <div class="life-bar" id="lifeBar">
+        <div class="lb-cap-row"><span>現在</span><span>モデル上の年齢比較</span></div>
+        <div class="lb-row">
+          <span class="lb-cap good">健康維持</span>
+          <div class="lb-track"><div class="lb-fill good" id="lbGood"></div><span class="lb-age" id="lbGoodAge">--歳</span></div>
+        </div>
+        <div class="lb-row">
+          <span class="lb-cap bad">現在の条件</span>
+          <div class="lb-track"><div class="lb-fill bad" id="lbBad"></div><span class="lb-age" id="lbBadAge">--歳</span></div>
+        </div>
+        <div class="lb-gap" id="lbGap">比較基準と現在の条件による年数差です</div>
+      </div>
+      <div class="life-actions" id="lifeActions"></div>
+      <div class="life-live-change" id="lifeLiveChange" hidden aria-live="polite">
+        <div class="life-live-change-label">選んだ改善を、この試算に反映</div>
+        <strong id="lifeLiveValue">+--年</strong>
+        <span id="lifeLiveSub">生活習慣を変えた場合の健康寿命の差を表示します。</span>
+      </div>
+      <div class="life-src" id="lifeSrc"></div>
+    </div>
+    <div class="life-teaser mode-life-only" id="lifeTeaser"></div>
 
 
     <div class="sec-title" id="riskTitle" style="margin-top:22px;">6つの健康リスクを確認</div>
@@ -448,7 +533,14 @@
     <div class="improve-box" id="improveBox">
       <div class="improve-title" id="improveTitle">生活習慣を変えた場合の試算</div>
       <div class="improve-sub" id="improveSub">変更する条件を選ぶと、比較結果を表示します。</div>
-
+      <div class="improve-try" id="improveTry">
+        <div>
+          <div class="improve-try-kicker">変更する条件の例</div>
+          <div class="improve-try-title" id="improveTryTitle">30分×週3回の運動を続ける場合を試算する</div>
+          <div class="improve-try-desc" id="improveTryDesc">選んだ条件と、現在の条件を比べます。</div>
+        </div>
+        <button type="button" class="try-improve-btn" id="tryImproveBtn" data-improve-action="exercise">この条件で比べる →</button>
+      </div>
       <div class="improve-toggles" id="improveToggles">
         <label class="improve-chk" for="impQuitSmoke" id="impQuitSmokeWrap">
           <input type="checkbox" id="impQuitSmoke">
@@ -473,19 +565,64 @@
           <div class="isr-note" id="impWeightNote">ボタン（−／＋）またはバーで、減らす体重を選べます。身長・体重の入力が必要です。</div>
         </div>
       </div>
-
+      <div class="improve-result" id="improveResult" style="display:none">
+        <div class="ir-item">
+          <div class="ir-label" id="impRiskLabel">総合疾患リスクスコア</div>
+          <div class="ir-val small" id="impRiskScore">--</div>
+        </div>
+        <div class="ir-item">
+          <div class="ir-label" id="impOutcomeLabel">改善した場合の80歳資産</div>
+          <div class="ir-val" id="impGood">--</div>
+        </div>
+        <div class="ir-item">
+          <div class="ir-label" id="impDiffLabel">現在の条件との差額</div>
+          <div class="ir-val" id="impDiff">--</div>
+        </div>
+      </div>
     </div>
 
     </div>
 
     <div class="pr-c">
 
-
+    <details class="loss-summary mode-asset-only"><summary class="loss-title">健康リスクによる推定損失内訳・計算条件を見る</summary><p class="model-note">独自モデルの仮定による参考値です。以下の項目は計算範囲が異なるため単純合計せず、資産差額と区別してご覧ください。</p>
+      <div class="loss-grid">
+        <div class="loss-card">
+          <div class="lc-label">設定した仮定による<br>累積収入減（参考）</div>
+          <div class="lc-val" id="lossPT">--</div>
+        </div>
+        <div class="loss-card">
+          <div class="lc-label">本人負担割合を適用した<br>累積医療費（仮定）</div>
+          <div class="lc-val" id="lossMed">--</div>
+        </div>
+        <div class="loss-card">
+          <div class="lc-label">収入減に対する<br>運用機会差（参考）</div>
+          <div class="lc-val" id="lossComp">--</div>
+        </div>
+      </div>
+      <div class="loss-total">
+        <div class="lt-label">80歳時点の資産差額（試算）</div>
+        <div class="lt-val" id="lossTotal">--</div>
+        <div class="lt-sub">※試算値。実際は個人の状況により異なります。</div>
+      </div>
+    </details>
 
     </div>
 
 
+      <div class="roi-block" id="roiBlock">
+        <span class="roi-step-tag">運動の条件による比較</span>
+        <h2 class="roi-title">30分×週3回の運動を続けた場合</h2>
+        <p class="roi-lead">現在の運動習慣を続ける場合と、80歳時点の資産を比べます。</p>
 
+        <div class="roi-headline-num">
+          <div class="rh-label">80歳まで続けた場合の資産差額</div>
+          <div class="rh-val" id="roiProtect">--</div>
+          <div class="rh-sub" id="roiProtectSub">現在の条件との差額（参考試算）</div>
+        </div>
+
+        <p class="roi-note">※現在の年齢から80歳まで、継続的な運動習慣を実践した場合の試算値です。金額は入力値からの試算であり、効果を保証するものではありません。まずは二次健診の受診を。</p>
+      </div>
 
     <section class="panel aftercare-section" id="nextPlan" aria-labelledby="nextPlanTitle">
       <div class="ph"><span class="ph-step">STEP 4</span><h2 id="nextPlanTitle">社内の施策・受診案内を見る</h2></div>
@@ -494,7 +631,7 @@
     <div class="exam-cta" id="examCta">
       <span class="exam-cta-tag">健診後の受診案内</span>
       <h2>健診結果に気になる数値があれば、<span class="hl">受診案内を確認</span>してください。</h2>
-      <p class="exam-cta-lead">この画面は診断を行いません。受診が必要かどうかは、健診結果の判定と受診案内を確認してください。</p>
+      <p class="exam-cta-lead">この結果は参考試算です。受診が必要かどうかは、健診結果の判定と受診案内を確認してください。</p>
 
       <details class="exam-details" id="examDetails" open>
         <summary>二次健診の確認事項と受診の流れ</summary>
@@ -534,7 +671,23 @@
     </section>
 
 
+    <div class="share-card mode-asset-only" id="shareCard">
+      <div class="sc-card-head">
 
+        <img src="assets/images/embedded-brand-2.webp" alt="BODY PALETTE" class="sc-card-logo">
+        <div class="sc-card-brand">BODY PALETTE<span>健康資産シミュレーション結果</span></div>
+      </div>
+      <div class="sc-card-risk">
+        <span class="sc-card-risk-label">総合疾患リスクスコア</span>
+        <span class="sc-card-risk-badge" id="scRiskBadge">--</span>
+      </div>
+      <div class="sc-headline">
+        <span class="sc-hl-pre" id="scHlPre">現在の条件と比較基準の、80歳時点の差額</span>
+        <span class="sc-hl-num bad" id="scHlNum">--</span>
+      </div>
+      <div class="sc-hl-sub" id="scHlSub">--</div>
+      <div class="sc-card-foot">BODY PALETTE ｜ <span id="scDate"></span>試算 ｜ 医学的診断・投資助言ではありません。まずは二次健診の受診を。</div>
+    </div>
     <div class="share-actions">
       <div class="save-btn-row">
         <button type="button" class="pdf-btn share-btn" id="shareImgBtn">
@@ -548,7 +701,7 @@
     </div>
 
 
-
+    <p class="print-disclaimer">※本シミュレーションはBODY PALETTEが独自に開発した試算ツールです。医学的診断・投資助言ではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。気になる数値がある場合は必ず二次健診を受診してください。｜出力日：<span id="printDate"></span></p>
 
     <div class="step-sec-head" id="step5">必要な方への追加案内</div>
 
@@ -604,11 +757,13 @@
 
 <div class="disclaimer">
   <strong>免責事項・エビデンスについて：</strong>
-  健診結果の確認と費用の条件比較のための参考情報です。医学的診断・個人の寿命や発症の予測・投資助言は行いません。
+  本シミュレーションは医療行為ではなく、医学的診断・投資助言を行うものではありません。資産推移は参考試算値であり、実際の変動は市場環境・生活状況により大きく異なります。
   <span class="disc-toggle" id="discToggle">▼ 引用元・詳細を見る</span>
   <div class="disc-detail" id="discDetail">
-  <p>健診値は厚生労働省の保健指導・受診勧奨判定値と照合します。疾病の診断や特定保健指導の対象者選定は行いません。未入力の検査は評価できません。</p>
-  <p>研究集団の発症割合・ハザード比は個人の確率や生活習慣改善の効果ではありません。費用は本人の入力額×年数のみの比較です。個人の寿命・将来資産や運動による節約額は算出しません。</p>
+  <p>検査値の区分と研究上の関連を使った独自の参考モデルです。6項目のスコア・健康年数・経済影響の結び付けは、個人予測モデルとして検証されていません。</p>
+  <p>血糖の集団データ：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4390315/" target="_blank" rel="noopener">Kawahara et al., PLoS ONE 2015</a>。生活習慣と疾患のない余命の研究例：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/" target="_blank" rel="noopener">Li et al., BMJ 2020</a>（米国集団）。研究の結果は、この独自計算全体を検証したものではありません。</p>
+  <p>運動の推奨量：<a href="https://www.mhlw.go.jp/content/10904750/001222158.pdf" target="_blank" rel="noopener">厚生労働省・身体活動・運動ガイド2023</a>。30分×週3回は実行例で、万人共通の処方ではありません。</p>
+  <p>経済モデルは年率3%・年齢別収入・貯蓄率等を仮定します。医療費はモデル費用×入力した負担割合、収入減は入力した率を使用。高額療養費・付加給付・税・個別家計・通院時間・交通費・運動費用は自動反映しません。</p>
   </div>
 </div>
 
@@ -620,10 +775,10 @@
       <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
     </div>
     <div class="ra-hero">
-      <div class="ra-report-kicker">BODY PALETTE｜健診結果の確認</div>
-      <div class="ra-hero-label" id="raHeroLabel">入力した健診値を確認</div>
+      <div class="ra-report-kicker">BODY PALETTE｜参考試算</div>
+      <div class="ra-hero-label" id="raHeroLabel">現在の条件が続く想定では、80歳時点で</div>
       <div class="ra-formula">
-        <div class="rf-cell"><span class="rf-l" id="raFmLL">確認項目</span><span class="rf-v good" id="raFmLV">--</span></div>
+        <div class="rf-cell"><span class="rf-l" id="raFmLL">健康維持なら</span><span class="rf-v good" id="raFmLV">--</span></div>
         <span class="rf-op" id="raFmOp">−</span>
         <div class="rf-cell"><span class="rf-l" id="raFmRL">現在の条件の場合</span><span class="rf-v bad" id="raFmRV">--</span></div>
         <span class="rf-op">＝</span>
@@ -631,23 +786,23 @@
       </div>
     </div>
     <div class="ra-input">
-      <div class="ra-sec-t">入力データ（基本情報・健診結果）<span class="ra-sec-note">健診票の判定を優先してください／オレンジは公的な保健指導判定値等に該当する入力項目</span></div>
+      <div class="ra-sec-t">入力データ（基本情報・健診結果）<span class="ra-sec-note">健診値は右に基準範囲を併記／<b class="warn">オレンジ</b>は基準を外れた要注意項目</span></div>
       <div class="ra-input-grid" id="raInputGrid"></div>
     </div>
     <div class="ra-risk2">
       <div>
-        <div class="ra-sec-t">6領域の確認状況</div>
+        <div class="ra-sec-t">6つの健康リスク｜独自参考スコア</div>
         <div class="ra-risks" id="raRisks"></div>
       </div>
       <div>
         <div class="ra-sec-t">研究で報告された関連を知る</div>
         <div class="ra-trend" id="raTrend"></div>
-        <div class="ra-cvd-note">研究の割合・HRは集団の指標です。あなたの発症確率や、生活習慣を変えた場合の効果を示すものではありません。</div>
+        <div class="ra-cvd-note">※CVDは心血管疾患の略です。研究の割合・HRと、独自モデルの試算は別の指標です。</div>
       </div>
     </div>
     <div class="ra-basis">
-      <div class="ra-basis-title">数値の意味を分けて確認します</div>
-      <div class="ra-basis-grid"><div><strong>研究データ</strong>研究に参加した集団の割合やHR。個人の確率・改善効果とは異なります。</div><div><strong>健診値の照合</strong>公的な判定値との照合です。病名・発症確率は判定しません。</div><div><strong>費用の条件比較</strong>入力した年額×年数です。病気や運動の効果から金額を算出しません。</div></div>
+      <div class="ra-basis-title">3種類の数値を分けて読みます</div>
+      <div class="ra-basis-grid"><div><strong>研究データ</strong>研究に参加した集団の割合やHR。個人の確率・改善効果とは異なります。</div><div><strong>独自スコア</strong>入力値や習慣を整理する0〜100の指標。発症確率や倍率ではありません。</div><div><strong>独自の試算モデル</strong>入力条件と仮定に基づく比較。個人の寿命・資産の予測精度は未検証です。</div></div>
     </div>
     <div class="ra-bottom">
       <div>
@@ -674,17 +829,14 @@
 
 
 
-<script src="assets/min/medical-evidence-model.js?v=4a712480a1"></script>
-<script src="assets/min/simulator-core.js?v=7b72df3514"></script>
+<script src="assets/min/simulator-core.js?v=e211af2675"></script>
 <script src="assets/min/health-ocr.js?v=d1be79dac8"></script>
-<script src="assets/min/research-evidence.js?v=7cd5cf936d"></script>
-<script src="assets/min/nippn-seminar.js?v=593cfea5b1"></script>
-<script src="assets/min/simulation-experience.js?v=6a660a51ff"></script>
-
+<script src="assets/min/research-evidence.js?v=8021b56464"></script>
+<script src="assets/min/nippn-seminar.js?v=3a3de1e866"></script>
+<script src="assets/min/simulation-experience.js?v=5252c56384"></script>
+<script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
 <script src="assets/min/seminar-survey.js?v=3983e7f015"></script>
 <script src="assets/min/step-accordion.js?v=539d104676"></script>
-<script src="assets/min/body-palette-ui.js?v=496a7d5dc0"></script>
-<script src="assets/min/medical-review-ui.js?v=5d6b53b564"></script>
-<script src="assets/min/result-charts.js?v=a7ec5b5302"></script>
+<script src="assets/min/body-palette-ui.js?v=5db3503786"></script>
 </body>
 </html>

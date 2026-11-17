@@ -1,0 +1,111 @@
+/* Message hierarchy and editorial layout, scoped to the Nippn review. */
+@media screen{
+ body.message-first{background:#fff;color:#182d2b;font-size:16px}
+ body.message-first .nippn-review-note{max-width:1200px;margin:0 auto;padding:9px 24px;border:0;border-bottom:1px solid #d6e3df;background:#f2f6f3;display:flex;gap:22px;align-items:baseline}
+ body.message-first .nippn-review-note strong{font-size:12px;font-weight:700;white-space:nowrap}
+ body.message-first .nippn-review-note p{font-size:12px;margin:0;line-height:1.6;color:#526660}
+ body.message-first .brand-header{max-width:1200px;margin:0 auto;padding:16px 24px;border-bottom:0}
+ body.message-first .brand-logo img{width:98px;height:66px;object-fit:contain}
+ body.message-first .ui-brand-context{font-size:13px;color:#38544d}
+ body.message-first .hero{max-width:1200px;margin:0 auto 24px;padding:8px 24px 30px;display:grid;grid-template-columns:1fr 1.1fr;gap:32px;align-items:center;border-bottom:1px solid #bdcdc5}
+ body.message-first .hero-copy{padding:0;max-width:none}
+ body.message-first .hero-tag{font-size:15px;font-weight:700;color:#2b7669;margin:0 0 18px;letter-spacing:0}
+ body.message-first .hero h1{font-size:clamp(30px,3.1vw,46px)!important;font-weight:850!important;line-height:1.38!important;letter-spacing:-.045em!important;color:#172d28!important;margin:0 0 22px!important;white-space:normal}
+ body.message-first .hero h1 span{color:#087763!important;display:block;font-size:inherit!important;white-space:nowrap}
+ body.message-first .hero-copy>p:not(.hero-input-note){font-size:16px!important;line-height:1.9!important;margin:0 0 25px!important;color:#334c45!important}
+ body.message-first .hero-photo{margin:0!important;overflow:hidden;border-radius:0!important;box-shadow:none!important;min-height:0!important;height:auto!important;aspect-ratio:1.3}
+ body.message-first .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center}
+ body.message-first .ui-start,body.message-first .review-begin{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;background:#087763!important;color:#fff!important;border:1px solid #087763!important;border-radius:3px!important;padding:17px 24px!important;font-size:18px!important;font-weight:750!important;min-height:60px;box-shadow:0 3px 0 #035143!important;text-decoration:none;transition:background .15s}
+ body.message-first .ui-start:hover,body.message-first .review-begin:hover{background:#035c4d!important;transform:none!important}
+ body.message-first .ui-start:focus-visible,body.message-first .review-begin:focus-visible{outline:3px solid #e30068;outline-offset:4px}
+ body.message-first .hero-input-note{font-size:12px!important;line-height:1.8!important;margin-top:15px!important;max-width:420px;color:#53665e!important}
+ body.message-first .steps-intro{max-width:1200px;padding:0 24px;margin:0 auto 14px;align-items:baseline}
+ body.message-first .steps-intro h2{font-size:21px!important;letter-spacing:-.025em;font-weight:800;color:#1c322b}
+ body.message-first .steps-intro p{font-size:13px;color:#54675f}
+ body.message-first .step-nav{max-width:1152px;margin:0 auto 20px!important;background:#fff;border:0!important;border-bottom:2px solid #ccd9d2!important;box-shadow:none!important;gap:0}
+ body.message-first .step-nav-item{border:0!important;border-right:1px solid #dbe4df!important;padding:13px 8px!important;background:#fff;color:#37574a}
+ body.message-first .step-nav-item.on{background:#e9f3ed!important;border-bottom:3px solid #087763!important;margin-bottom:-2px}
+ body.message-first .sn-num{font-size:11px!important;letter-spacing:.08em;font-weight:600}
+ body.message-first .sn-label{font-size:14px!important;font-weight:750!important;color:#203e30;margin-top:6px}
+ body.message-first .layout{max-width:1200px;margin:0 auto;padding:0 24px!important}
+ body.message-first .layout>.step-accordion-section{border:0!important;border-bottom:1px solid #c7d5cd!important;margin:0!important;box-shadow:none!important;border-radius:0!important}
+ body.message-first .layout>.step-accordion-section>.ph{padding:20px 0!important;background:#fff!important;gap:18px!important;border:0!important;min-height:100px}
+ body.message-first .ph-step{font-size:12px!important;font-weight:800!important;color:#087763!important;background:#edf5ef!important;padding:9px 10px!important;border-radius:0!important;white-space:nowrap}
+ body.message-first .ui-section-heading :is(h2,#step1Title,#surveyTitle){font-size:23px!important;font-weight:800!important;line-height:1.45!important;color:#183729!important;letter-spacing:-.02em}
+ body.message-first .ui-section-caption{font-size:14px!important;line-height:1.7!important;color:#566a5d!important;margin:6px 0 0!important}
+ body.message-first .step-accordion-toggle{min-width:94px;min-height:44px;border:1px solid #93ada0!important;background:#f3f7f3!important;color:#254f3a!important;border-radius:3px!important;font-size:13px!important;font-weight:700!important;flex-shrink:0}
+ body.message-first .step-accordion-toggle:hover{background:#e5efe8!important;border-color:#087763!important}
+ body.message-first .step-accordion-body>.pb,body.message-first .step2-inputs{padding:10px 0 26px!important}
+ body.message-first .step-lock-note{font-size:14px;padding:12px 16px;background:#f3f6f2}
+ body.message-first .review-preparation{max-width:760px;padding:5px 0 25px}
+ body.message-first .review-preparation .preparation-title{font-size:23px;font-weight:800;margin:0 0 10px}
+ body.message-first .review-preparation p{font-size:16px;line-height:1.9;margin:0 0 22px}
+ body.message-first #modeSelect[hidden]{display:none!important}
+ body.message-first .clinical-result-summary{background:#edf5ef;border:0;border-left:5px solid #087763;padding:24px 26px;margin:18px 0 22px}
+ body.message-first .clinical-result-summary h3{font-size:29px!important;line-height:1.5!important;font-weight:850!important;color:#163f2c;margin:10px 0 12px}
+ body.message-first .clinical-result-summary p{font-size:16px;line-height:1.85;color:#304e3c;margin:0 0 12px}
+ body.message-first .clinical-result-summary a{font-size:12px;color:#276951;text-decoration:underline}
+ body.message-first .clinical-result-summary[data-attention=referral]{background:#fff2ef;border-color:#b95137}
+ body.message-first .clinical-result-summary[data-attention=referral] h3{color:#933b29}
+ body.message-first #riskTitle{font-size:21px!important;font-weight:800!important;margin:30px 0 12px}
+ body.message-first #riskRows{gap:0 28px}
+ body.message-first .risk-row{padding:20px 0!important;border:0!important;border-top:1px solid #d5e0d9!important;background:#fff!important;border-radius:0!important}
+ body.message-first .risk-name{font-size:19px!important;font-weight:800!important}
+ body.message-first .clinical-status{font-size:16px!important;font-weight:750!important;line-height:1.65}
+ body.message-first .clinical-values{font-size:14px!important;line-height:1.85!important;color:#3c5547!important}
+ body.message-first .clinical-partial{font-size:13px;color:#695640}
+ body.message-first .ui-step-footer{padding:20px 0 28px!important;border:0!important}
+ body.message-first .ui-step-next{background:#087763!important;color:#fff!important;padding:15px 20px!important;border-radius:3px!important;border:1px solid #087763!important;font-size:16px!important;font-weight:750!important;text-decoration:none!important}
+ body.message-first .checkup-method h3{font-size:20px!important;font-weight:800!important}
+ body.message-first .checkup-method-buttons button{font-size:16px!important;min-height:50px!important;font-weight:750!important}
+ body.message-first #runBtn{font-size:20px!important;min-height:62px!important;font-weight:800!important;background:#087763!important;color:#fff!important;border-radius:3px!important}
+ body.message-first #improveTitle{font-size:24px!important;font-weight:800!important;line-height:1.5}
+ body.message-first #selectedChanges{font-size:17px!important;font-weight:700;padding:18px 20px!important}
+ body.message-first .review-cost-details,body.message-first .clinical-methods{max-width:1152px;margin:20px auto 0;padding:16px 0;border-top:1px solid #d3ded6;font-size:14px}
+ body.message-first .review-cost-details>summary,body.message-first .clinical-methods>summary{cursor:pointer;font-size:15px;font-weight:700;color:#3d5d49}
+ body.message-first .review-cost-details .clinical-cost{margin:20px 0 0}
+ body.message-first .disclaimer{max-width:1152px;margin:24px auto;font-size:12px;line-height:1.9;color:#607266}
+}
+@media screen and (max-width:760px){
+ body.message-first .nippn-review-note{display:block;padding:8px 16px}
+ body.message-first .nippn-review-note p{font-size:11px;margin-top:3px}
+ body.message-first .brand-header{padding:10px 16px}
+ body.message-first .hero{padding:6px 16px 24px;gap:20px;grid-template-columns:1fr;margin-bottom:22px}
+ body.message-first .hero-copy{order:0}
+ body.message-first .hero-photo{order:1;aspect-ratio:1.65;width:100%;max-height:290px}
+ body.message-first .hero-tag{margin-bottom:12px;font-size:13px}
+ body.message-first .hero h1{font-size:clamp(27px,7vw,38px)!important;line-height:1.4!important;margin-bottom:16px!important}
+ body.message-first .hero-copy>p:not(.hero-input-note){font-size:14px!important;margin-bottom:18px!important;line-height:1.85!important}
+ body.message-first .ui-start{width:100%;font-size:17px!important}
+ body.message-first .hero-input-note{margin-top:11px!important;font-size:11px!important}
+ body.message-first .steps-intro{display:block;padding:0 16px}
+ body.message-first .steps-intro h2{font-size:19px!important}
+ body.message-first .steps-intro p{margin:6px 0 0}
+ body.message-first .step-nav{margin:0 16px 10px!important;width:calc(100% - 32px)!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;display:grid!important}
+ body.message-first .step-nav-item{padding:9px 2px!important;min-width:0}
+ body.message-first .sn-num{font-size:9px!important}
+ body.message-first .sn-label{font-size:11px!important;line-height:1.5;white-space:normal;letter-spacing:-.03em}
+ body.message-first .layout{padding:0 16px!important}
+ body.message-first .layout>.step-accordion-section>.ph{padding:18px 0!important;gap:10px!important;flex-wrap:wrap;min-height:0}
+ body.message-first .ui-section-heading{flex:1;min-width:150px}
+ body.message-first .ui-section-heading :is(h2,#step1Title,#surveyTitle){font-size:19px!important;line-height:1.5!important}
+ body.message-first .ui-section-caption{font-size:12px!important;margin-top:4px!important}
+ body.message-first .ph-step{padding:6px!important;font-size:10px!important}
+ body.message-first .step-accordion-toggle{min-width:80px;min-height:40px;margin-left:auto}
+ body.message-first .clinical-result-summary{padding:18px 16px}
+ body.message-first .clinical-result-summary h3{font-size:24px!important}
+ body.message-first .clinical-result-summary p{font-size:14px;line-height:1.8}
+ body.message-first .review-cost-details,body.message-first .clinical-methods,body.message-first .disclaimer{margin-left:16px;margin-right:16px}
+}
+@media screen{
+ body.message-first .hero,body.message-first .brand-header,body.message-first .steps-intro,body.message-first .layout{max-width:1200px!important;width:100%!important;box-sizing:border-box}
+ body.message-first .hero h1 span{font-weight:850!important;font-family:inherit!important;letter-spacing:-.045em!important}
+ body.message-first .step-nav{max-width:1152px!important}
+ body.message-first .layout>.step-accordion-section>.ph{background:#fff!important;border-radius:0!important}
+}
+@media screen{
+ body.message-first .ui-section-heading{flex:1;min-width:0!important}
+ body.message-first .step-accordion-toggle{position:static!important;inset:auto!important;width:auto!important;height:44px!important;min-height:44px!important;align-self:center;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:8px 12px!important;margin-left:auto!important}
+ body.message-first .step-accordion-indicator{position:static!important;inset:auto!important;margin:0!important;white-space:nowrap}
+}
+@media screen{body.message-first .step-accordion-indicator{border:0!important;background:none!important;box-shadow:none!important;padding:0!important}}

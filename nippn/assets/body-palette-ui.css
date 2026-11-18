@@ -187,19 +187,6 @@
 
 @media screen{#step2Section .ocr-capture-actions label{min-height:46px}#impWeightLoss{appearance:none;-webkit-appearance:none;height:4px;background:#dce7e2;border:0;outline-offset:5px}#impWeightLoss::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#278e82;border:2px solid #fff;box-shadow:0 0 0 1px #278e82}#impWeightLoss::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#278e82;border:2px solid #fff}}
 
-/* Evidence-corrected results: no disease scores, life-year estimates or medical savings. */
-.medical-retired{display:none!important}
-.clinical-result-summary,.clinical-life-context,.clinical-cost{border-top:2px solid #17645c;padding:18px 0;margin:18px 0;color:#173e36;text-align:left}
-.clinical-result-summary h3,.clinical-life-context h3,.clinical-cost h3{font-size:19px;line-height:1.6;margin:6px 0 9px}
-.clinical-result-summary p,.clinical-life-context p,.clinical-cost p,.clinical-methods p{font-size:13px;line-height:1.85;margin:8px 0}
-.clinical-result-summary a,.clinical-life-context a,.clinical-methods a{font-size:12px;text-decoration:underline}
-.clinical-status{font-size:13px;font-weight:700;padding:7px 0;border-bottom:1px solid #d9e4de;margin:8px 0;color:#496159}
-.clinical-status[data-level="high"]{color:#a13750}.clinical-status[data-level="mid"]{color:#85502e}
-.clinical-values,.clinical-partial{font-size:12px;line-height:1.8;margin:6px 0;color:#496159}
-.clinical-cost h3>span{font-size:11px;font-weight:400;margin-left:8px}.clinical-cost-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
-.clinical-cost-result{background:#eff5f1;text-align:center;padding:16px;margin:12px 0;font-size:13px;line-height:1.7}.clinical-cost-result span{display:block}.clinical-cost-result strong{display:block;font-size:clamp(36px,6vw,64px);line-height:1.2;color:#17645c;margin:7px 0;overflow-wrap:anywhere}
-.clinical-small{font-size:12px!important;line-height:1.8;color:#496159}.clinical-methods{padding:14px 0;border-top:1px solid #cbd7ce;margin:18px 0}.clinical-methods>summary{cursor:pointer;font-size:14px;font-weight:600}
-#raRisks .rr{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #e0e8e3;padding:5px 0}#raRisks .rr-status{font-size:9px;font-weight:500;color:#496159;max-width:155px;text-align:right}.ra-detail-note{font-size:9px}
-@media screen and (max-width:600px){.clinical-cost-fields{grid-template-columns:1fr 1fr}.clinical-cost-fields>.field:last-child{grid-column:1/-1}.clinical-result-summary h3,.clinical-life-context h3,.clinical-cost h3{font-size:17px}}
-@media print{.clinical-methods,.clinical-cost input{display:none}.medical-retired{display:none!important}}
-.clinical-notices:not([hidden]){border-left:4px solid #a13750;background:#fff4f5;padding:12px 16px;margin:14px 0}.clinical-notices p{font-size:13px;font-weight:600;line-height:1.85;margin:6px 0;color:#823349}
+/* Restore the existing health-year comparison chart with readable labels. */
+#lifespanResult .life-mini{background:#fff;border:1px solid #c6d9cf}#lifespanResult :is(.life-mini-lbl,.life-mini-u,.lb-cap-row){color:#486456}#lifespanResult :is(.life-mini-val.good,.lb-cap.good){color:#006e68}#lifespanResult :is(.life-mini-val.bad,.lb-cap.bad,.lb-gap){color:#9b3d59}#lifespanResult .life-bar{background:#fff;border:1px solid #c6d9cf}#lifespanResult .lb-track{background:#e1ebe5}#lifespanResult .lb-fill.good{background:#3aa399}#lifespanResult .lb-fill.bad{background:#cf809a}#lifespanResult .lb-age{color:#173e36}
+#lifespanResult .life-actions{background:#fff;border:1px solid #c6d9cf}#lifespanResult :is(.la-h,.la-y,.life-live-change-label){color:#006e68}#lifespanResult .la-l{color:#334e42}#lifespanResult .la-total .la-y{color:#9b3d59}#lifespanResult .life-src{color:#486456}#lifespanResult .life-live-change strong{color:#006e68}#lifespanResult .life-live-change span:last-child{color:#486456}

@@ -219,6 +219,6 @@ $('ocrApply').addEventListener('click',()=>{
 });
 $('ocrDiscard').addEventListener('click',()=>{lastFile=null;$('ocrRetry').hidden=true;clearReview();releaseImage();status('読み取り結果を破棄しました。入力欄は変更していません。');});
 $('resetFormBtn').addEventListener('click',()=>{stop();lastFile=null;$('ocrRetry').hidden=true;clearReview();releaseImage();status('写真を選ぶと、数値の候補を表示します。');});
-root.addEventListener('pagehide',()=>{stop();lastFile=null;releaseImage();});
+root.addEventListener('pagehide',()=>{stop();lastFile=null;clearReview();releaseImage();});
 root.addEventListener('pageshow',e=>{if(e.persisted){setInputsDisabled(false);$('ocrRetry').hidden=true;status('写真を選び直してください。入力済みの数値は保持しています。');}});
 })(typeof window==='undefined'?globalThis:window);

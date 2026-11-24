@@ -896,11 +896,16 @@ function chartDomain(values){
  const low=Math.min(...values),high=Math.max(...values),span=Math.max(high-low,1);
  return {min:low-span*0.08,max:high+span*0.08};
 }
+let chartRenderSnapshot=null;
 function drawChart(ages,blueArr,redArr,startAge,greenArr){
+  chartRenderSnapshot=[ages,blueArr,redArr,startAge,greenArr];
   const cv=document.getElementById('chart');
   const wrap=cv.parentElement;
-  const dW=Math.max(200,wrap.clientWidth-24);
-  const dH=Math.round(dW*(window._chartRatio||0.34));
+  // A closed accordion has no measurable width. Keep the previous drawing until opened.
+  if(wrap.clientWidth<80)return;
+  const style=getComputedStyle(wrap);
+  const dW=Math.max(200,Math.floor(wrap.clientWidth-parseFloat(style.paddingLeft||0)-parseFloat(style.paddingRight||0)));
+  const dH=Math.max(dW<600?230:220,Math.round(dW*(window._chartRatio||0.34)));
   const dpr=window.devicePixelRatio||1;
   cv.width=dW*dpr; cv.height=dH*dpr;
   cv.style.width=dW+'px'; cv.style.height=dH+'px';
@@ -1403,8 +1408,14 @@ window.addEventListener('resize',()=>{
 
 // 印刷時：グラフを縦長比率で再描画してA4横のスペースを活用
 function redrawChart(){
-  try{updateAll();}catch(e){}
+  try{if(chartRenderSnapshot)drawChart(...chartRenderSnapshot);else updateAll();}catch(e){console.error('Asset chart redraw failed',e);}
 }
+// Redraw when an accordion, mode switch or mobile layout gives the plot a new size.
+if(typeof ResizeObserver!=='undefined'){
+ let chartResizeFrame=0;
+ new ResizeObserver(()=>{cancelAnimationFrame(chartResizeFrame);chartResizeFrame=requestAnimationFrame(redrawChart);}).observe(document.getElementById('chart').parentElement);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestAnimationFrame(redrawChart);});
 window.addEventListener('beforeprint',()=>{
   window._chartRatio=0.42;redrawChart();
   const pd=document.getElementById('printDate');

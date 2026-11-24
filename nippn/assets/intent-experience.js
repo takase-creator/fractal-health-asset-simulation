@@ -23,6 +23,7 @@
  context.innerHTML='<p id="sampleDataNote" class="intent-sample-note" hidden>サンプル入力を起点にしています。ご自身のデータか確認してください。</p><h3>この結果の入力条件</h3><dl id="resultInputList"></dl><p id="resultMissingNote"></p><p class="intent-auto-note">結果表示後は、入力や比較条件の変更に合わせて再計算します。</p>';
  const method=document.createElement('details');method.className='intent-method';method.id='resultMethod';method.innerHTML='<summary>比較対象と計算条件を確認する</summary><p>比較基準は、このモデルで追加負担がないと置いた条件です。現在の条件との違いを、同じ計算期間・運用等の仮定で比較しています。</p><p>年収・資産を入れていない場合はモデルの初期設定を使います。医療費・収入減・運用・健康年数の換算には独自の仮定があり、個人予測としての精度は検証されていません。</p><a href="#economicAssumptions">資産試算の仮定を確認・変更する →</a>';
  const chartSummary=document.createElement('p');chartSummary.id='chartTextSummary';chartSummary.className='intent-chart-summary';graph.append(chartSummary);$('chart').setAttribute('aria-describedby','chartTextSummary');$('chart').setAttribute('aria-label','現在の年齢から80歳までの資産推移を比較する参考グラフ。比較結果は上の金額、計算した条件は下の一覧で確認できます。');
+ const inputDetails=document.createElement('details');const inputSummary=document.createElement('summary');inputSummary.textContent='この結果の入力条件を確認';inputDetails.append(inputSummary);for(const child of [...context.children])if(child.id!=='sampleDataNote')inputDetails.append(child);context.append(inputDetails);
  graph.after(context);context.after(method);
  method.querySelector('a').addEventListener('click',()=>{$('economicAssumptions').open=true;});
  const notice=document.querySelector('.restored-model-note');

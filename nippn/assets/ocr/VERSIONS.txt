@@ -1,0 +1,6 @@
+Browser-local OCR dependencies. No image upload endpoint.
+Tesseract.js 5.1.1 (npm distribution; library and worker)
+tesseract.js-core 5.1.1 (npm dependency, LSTM SIMD and non-SIMD embedded WASM builds)
+Japanese traineddata: @tesseract.js-data/jpn 4.0.0_best_int, fetched by Tesseract.js 5.1.1; stored gzip with fixed timestamp.
+Tesseract.js and Tesseract core/language models: Apache-2.0. See LICENSE-tesseract.txt and core/LICENSE; bundled third-party notices are adjacent to each distribution file.
+All recognition runs in a worker on the participant's device. Public engine/model files are fetched from the same GitHub Pages origin.

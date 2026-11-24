@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const {parseDocument,mergeDocuments}=require('../nippn/assets/health-ocr-parser');
+let y=0;const words=[];
+const row=(pairs)=>{y+=32;for(const [text,x,confidence=95]of pairs)words.push({text,confidence,bbox:{x0:x,y0:y,x1:x+Math.max(20,text.length*9),y1:y+20}});};
+row([['検査項目',0],['基準値',190],['今回',330],['前回',450],['前々回',570]]);
+row([['LDL',0],['60～119',190],['145',330],['130',450],['110',570]]);
+row([['HDL',0],['40以上',190],['55',330],['50',450],['60',570]]);
+row([['AST',0],['30以下',190],['31',330],['21',450],['20',570]]);
+let result=parseDocument({words});assert.deepEqual(result.ldl.values,['145']);assert.deepEqual(result.hdl.values,['55']);assert.deepEqual(result.ast.values,['31']);
+assert.deepEqual(mergeDocuments([{words}]).ldl.values,['145']);
+const ambiguous={words:[]};let xx=0;for(const text of ['体重','68','65']){ambiguous.words.push({text,confidence:95,bbox:{x0:xx,y0:10,x1:xx+30,y1:30}});xx+=100;}
+assert.equal(parseDocument(ambiguous).weight.ambiguous,true);
+const empty={words:[{text:'随時血糖',confidence:98,bbox:{x0:0,y0:0,x1:80,y1:20}},{text:'120',confidence:98,bbox:{x0:140,y0:0,x1:170,y1:20}}]};assert.equal(parseDocument(empty).glucose,undefined);
+const low={words:[{text:'AST',confidence:98,bbox:{x0:0,y0:0,x1:60,y1:20}},{text:'99',confidence:25,bbox:{x0:140,y0:0,x1:170,y1:20}}]};assert.equal(parseDocument(low).ast.ambiguous,true);
+const make=(text,value)=>({words:[{text,confidence:98,bbox:{x0:0,y0:0,x1:110,y1:20}},{text:value,confidence:98,bbox:{x0:150,y0:0,x1:180,y1:20}}]});
+assert.equal(parseDocument(make('non-HDL','130')).hdl,undefined);assert.equal(parseDocument(make('標準体重','60')).weight,undefined);
+assert.deepEqual(parseDocument(make('Hb-A1c','6.1')).hba1c.values,['6.1']);assert.deepEqual(parseDocument(make('身 長','170.5')).height.values,['170.5']);
+assert.equal(mergeDocuments([make('HbA1c','61')]).hba1c,undefined);
+assert.equal(mergeDocuments([make('空腹時血糖','1000')]).glucose,undefined);
+const conflicts=mergeDocuments([make('体重','68'),make('体重','88')]);assert.equal(conflicts.weight.ambiguous,true);assert.deepEqual(conflicts.weight.values,['68','88']);
+assert.deepEqual(parseDocument(make('血圧','130/80')).sbp.values,['130']);assert.deepEqual(parseDocument(make('血圧','130/80')).dbp.values,['80']);
+console.log('PASS: 16 position-aware OCR checks: current/prior/reference separation, ambiguity, aliases, ranges and paired blood pressure.');

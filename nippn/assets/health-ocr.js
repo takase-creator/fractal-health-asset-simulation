@@ -16,7 +16,7 @@ const fields=[
 function parse(text){
  const found={};
  for(const raw of text.normalize('NFKC').split(/[\r\n]+/)){
-  const line=raw.replace(/[，]/g,',').replace(/(?<=[一-龥ぁ-ん])\s+(?=[一-龥ぁ-ん])/g,'');
+  const line=raw.replace(/[，]/g,',').replace(/([一-龥ぁ-ん])\s+(?=[一-龥ぁ-ん])/g,'$1');
   for(const [id,,unit,re] of fields){
    const m=re.exec(line); if(!m)continue;
    let tail=line.slice(m.index+m[0].length);
@@ -24,7 +24,7 @@ function parse(text){
    let end=tail.length;
    for(const [, , ,other] of fields){const n=other.exec(tail);if(n)end=Math.min(end,n.index);}
    tail=tail.slice(0,end).replace(/mg\s*\/\s*d[l1]|mmHg|cm|kg|U\s*\/\s*L|NGSP/gi,'');
-   const values=[...tail.matchAll(/(?<![\d.])-?\d+(?:\.\d+)?/g)].map(x=>x[0]);
+   const values=[...tail.matchAll(/(?:^|[^\d.])(-?\d+(?:\.\d+)?)/g)].map(x=>x[1]);
    if(!values.length)continue;
    if(!found[id])found[id]={values:[],lines:[],ambiguous:false};
    const f=found[id]; f.lines.push(line.trim());
@@ -43,7 +43,7 @@ function classifyCandidate(candidate,min,max){
 }
 if(typeof module!=='undefined'&&module.exports){module.exports={parse,fields,classifyCandidate};return;}
 const $=id=>document.getElementById(id);
-let worker=null, generation=0, busy=false, previewURL=null, loadPromise=null;
+let worker=null, generation=0, busy=false, previewURL=null, loadPromise=null, currentPass=0;
 function status(s){$('ocrStatus').textContent=s;}
 function clearReview(){ document.getElementById('ocrPhotoDialog')?.close(); document.getElementById('ocrReviewPhoto')?.removeAttribute('src'); $('ocrRows').replaceChildren();$('ocrText').textContent='';$('ocrReview').hidden=true; $('ocrConfirm').checked=false; $('ocrApply').disabled=false; }
 function releaseImage(){document.getElementById('ocrPhotoDialog')?.close();document.getElementById('ocrReviewPhoto')?.removeAttribute('src');document.getElementById('ocrLargePhoto')?.removeAttribute('src');if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('ocrPreview').removeAttribute('src');$('ocrPreview').hidden=true;}
@@ -53,14 +53,14 @@ function load(){
  if(root.Tesseract)return Promise.resolve();
  if(loadPromise)return loadPromise;
  loadPromise=new Promise((resolve,reject)=>{
-  const s=document.createElement('script');s.src='assets/ocr/tesseract.min.js';
+  const s=document.createElement('script');s.src='assets/ocr/tesseract.min.js?v=5.1.1';
   const timer=setTimeout(()=>{s.remove();loadPromise=null;reject(new Error('load'));},30000);
   s.onload=()=>{clearTimeout(timer);resolve();};s.onerror=()=>{clearTimeout(timer);s.remove();loadPromise=null;reject(new Error('load'));};
   document.head.append(s);
  });return loadPromise;
 }
-function showReview(text){
- const result=parse(text);clearReview();$('ocrText').textContent=text;
+function showReview(text,documents=[]){
+ const result=documents.length&&root.BPHealthOCRParser?root.BPHealthOCRParser.mergeDocuments(documents):parse(text);clearReview();$('ocrText').textContent=text;
  if(!$('ocrReviewLayout')){
   const layout=document.createElement('div');layout.id='ocrReviewLayout';layout.className='ocr-review-layout';
   const aside=document.createElement('aside');aside.className='ocr-photo-panel';
@@ -99,7 +99,10 @@ function showReview(text){
    edit.textContent=invalid?`入力できる範囲は${target.min}〜${target.max} ${unit}です。数値・単位を確認してください。`:input.value!==''?'入力・修正済み。写真の今回の結果と照合してください。':'空欄：この項目は反映しません。';
    updateReviewSummary();
   });
-  row.append(labelEl,input,source,edit);groups[kind].append(row);
+  const sourceDetails=document.createElement('details');sourceDetails.className='ocr-source-details';const sourceTitle=document.createElement('summary');sourceTitle.textContent='読取原文を確認';sourceDetails.append(sourceTitle,source);
+  row.append(labelEl,input,sourceDetails,edit);
+  if(kind==='review'&&f?.values.length){const choices=document.createElement('div');choices.className='ocr-candidate-choices';for(const value of f.values){const pick=document.createElement('button');pick.type='button';pick.textContent=value+'を選ぶ';pick.addEventListener('click',()=>{input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));});choices.append(pick);}row.append(choices);}
+  groups[kind].append(row);
  }
  for(const [key,title] of defs){groups[key].querySelector('legend').textContent=title+' '+counts[key]+'項目';groups[key].hidden=counts[key]===0;}
  function updateReviewSummary(){
@@ -114,10 +117,25 @@ function showReview(text){
  const focus=counts.review?groups.review:counts.read?groups.read:groups.unread;
  focus.querySelector('input')?.focus();
 }
+async function prepareImage(file){
+ const image=new Image();const url=URL.createObjectURL(file);
+ try{image.src=url;await image.decode();const scale=Math.min(1,2800/Math.max(image.naturalWidth,image.naturalHeight));
+ const original=document.createElement('canvas');original.width=Math.round(image.naturalWidth*scale);original.height=Math.round(image.naturalHeight*scale);
+ const ctx=original.getContext('2d',{willReadFrequently:true});ctx.fillStyle='#fff';ctx.fillRect(0,0,original.width,original.height);ctx.drawImage(image,0,0,original.width,original.height);
+ const clean=document.createElement('canvas');clean.width=original.width;clean.height=original.height;const out=clean.getContext('2d');const pixels=ctx.getImageData(0,0,original.width,original.height);const w=original.width,h=original.height,mask=new Uint8Array(w*h);
+ for(let i=0;i<mask.length;i++){const j=i*4;mask[i]=(.299*pixels.data[j]+.587*pixels.data[j+1]+.114*pixels.data[j+2])<190?1:0;}
+ const erased=new Uint8Array(mask.length);
+ // Long straight rules obstruct table OCR. Detect against the original mask in both directions.
+ for(let y=0;y<h;y++){let start=-1;for(let x=0;x<=w;x++){if(x<w&&mask[y*w+x]){if(start<0)start=x;}else if(start>=0){if(x-start>Math.max(80,w/16))for(let k=start;k<x;k++)erased[y*w+k]=1;start=-1;}}}
+ for(let x=0;x<w;x++){let start=-1;for(let y=0;y<=h;y++){if(y<h&&mask[y*w+x]){if(start<0)start=y;}else if(start>=0){if(y-start>Math.max(100,h/18))for(let k=start;k<y;k++)erased[k*w+x]=1;start=-1;}}}
+ for(let i=0;i<mask.length;i++){const j=i*4,v=mask[i]&&!erased[i]?0:255;pixels.data[j]=pixels.data[j+1]=pixels.data[j+2]=v;pixels.data[j+3]=255;}
+ out.putImageData(pixels,0,0);return {original,clean};
+ }finally{URL.revokeObjectURL(url);}
+}
 async function handleImageSelection(){
  const file=this.files[0];this.value='';if(!file)return;
  if($('ocrFileName'))$('ocrFileName').textContent=file.name;
- stop();clearReview();releaseImage();
+ if(busy)stop();else generation++;clearReview();releaseImage();
  if(!/^image\/(jpeg|png|webp)$/.test(file.type)){status('JPEG・PNG・WebPの画像を選んでください。PDFやHEICは画像に変換するか、スクリーンショットを使ってください。');return;}
  if(file.size>15*1024*1024){status('画像は15MB以下にしてください。今回の結果がある部分だけ切り抜くと読み取りやすくなります。');return;}
  const gen=generation;busy=true;setInputsDisabled(true);$('ocrCancel').hidden=false;$('ocrProgress').hidden=false;$('ocrProgress').removeAttribute('value');
@@ -127,19 +145,29 @@ async function handleImageSelection(){
  try{
   const operation=(async()=>{
    await load();if(gen!==generation)return;
-   localWorker=await root.Tesseract.createWorker('jpn+eng',1,{
-    workerPath:new URL('assets/ocr/worker.min.js',document.baseURI).href,
-    logger:m=>{if(gen!==generation)return;if(m.status==='recognizing text'){status('画像を読み取り中… '+Math.round(m.progress*100)+'%');$('ocrProgress').value=m.progress;}}
+   localWorker=worker||await root.Tesseract.createWorker('jpn',1,{
+    workerPath:new URL('assets/ocr/worker.min.js?v=5.1.1',document.baseURI).href,
+    corePath:new URL('assets/ocr/core',document.baseURI).href,
+    langPath:new URL('assets/ocr/lang',document.baseURI).href,
+    cachePath:'bp-health-jpn-v5-20261124',
+    logger:m=>{if(!busy)return;if(m.status==='recognizing text'){status('健診票を読み取り中（'+currentPass+'/2）… '+Math.round(m.progress*100)+'%');$('ocrProgress').value=m.progress;}}
    });
    if(gen!==generation){await localWorker.terminate();return;}
    worker=localWorker;
-   await worker.setParameters({preserve_interword_spaces:'1'});
-   const result=await worker.recognize(file);
-   if(gen===generation)showReview(result.data.text);
+   const images=await prepareImage(file);if(gen!==generation)return;
+   const documents=[];let pass=0;
+   for(const [image,mode]of [[images.clean,'6'],[images.original,'11']]){
+    if(gen!==generation)return;pass++;currentPass=pass;status('健診票を読み取り中（'+pass+'/2）…');
+    await worker.setParameters({preserve_interword_spaces:'1',tessedit_pageseg_mode:mode,user_defined_dpi:'300'});
+    const {data}=await worker.recognize(image,{}, {text:true,blocks:true,tsv:true});
+    documents.push({text:data.text,words:(data.words||data.blocks?.flatMap(b=>b.paragraphs?.flatMap(p=>p.lines?.flatMap(l=>l.words||[])||[])||[])||[]).map(w=>({text:w.text,bbox:w.bbox,confidence:w.confidence}))});
+   }
+   if(gen===generation)showReview(documents.map(d=>d.text).join('\n--- 別の読取設定 ---\n'),documents);
+   images.original.width=images.clean.width=1;images.original.height=images.clean.height=1;
   })();
   await Promise.race([operation,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('timeout')),180000);})]);
- }catch(e){if(gen===generation){status('読み取りを完了できませんでした。通信環境と画像形式を確認して、もう一度お試しください。手入力もできます。');releaseImage();}}
- finally{clearTimeout(timer);if(gen===generation)stop();}
+ }catch(e){if(gen===generation){console.error('Browser OCR failed',e);if(worker){worker.terminate().catch(()=>{});worker=null;}status('読み取りが完了しませんでした。通信を確認して写真を選び直すか、今回の結果がある部分のスクリーンショットをお試しください。手入力もできます。');}}
+ finally{clearTimeout(timer);if(gen===generation){busy=false;setInputsDisabled(false);$('ocrCancel').hidden=true;$('ocrProgress').hidden=true;}}
 }
 $('ocrFile').addEventListener('change',handleImageSelection);
 $('ocrCamera')?.addEventListener('change',handleImageSelection);

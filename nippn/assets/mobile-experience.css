@@ -143,3 +143,22 @@
  body.message-first .mode-card[data-mode] .mode-t{font-size:17px!important}
  body.message-first .mode-card[data-mode] .mode-d{font-size:12px!important}
 }
+
+/* Tighten only the checkup-entry block; keep every disclosure and touch target. */
+@media screen{
+ body.message-first #step2Section .checkup-method{margin:8px 0 4px!important;padding-top:6px!important}
+ body.message-first #step2Section .checkup-method h3{margin:0 0 4px!important;line-height:1.4!important}
+ body.message-first #step2Section .checkup-method-buttons{gap:8px!important;margin:0!important}
+ body.message-first #step2Section .checkup-method-buttons button{min-height:44px!important;padding:8px 10px!important;line-height:1.4!important}
+ body.message-first #step2Section #modeFlow{margin:0!important;padding:0!important}
+ body.message-first #step2Section .ocr-box{margin:0!important;padding:2px 0 6px!important}
+ body.message-first #step2Section .ocr-box>p{margin:3px 0!important;line-height:1.4!important}
+ body.message-first #step2Section .ocr-capture-actions{margin:5px 0 4px!important;gap:8px!important}
+ body.message-first #step2Section .ocr-capture-actions label{min-height:44px!important;padding:8px 10px!important;margin:0!important;line-height:1.4!important}
+ body.message-first #step2Section .ocr-privacy-details{margin:3px 0!important;line-height:1.4!important}
+ body.message-first #step2Section #ocrStatus{margin:4px 0 0!important}
+}
+@media screen{
+ body.message-first #step2Section .ocr-privacy-details>summary{min-height:24px!important;padding:2px 0!important;line-height:1.4!important}
+ body.message-first #step2Section #ocrStatus{margin-top:2px!important}
+}

@@ -11,8 +11,6 @@
  body.message-first .hero-copy>p:not(.hero-input-note){font-size:14px!important;line-height:1.65!important;margin-bottom:12px!important}
  body.message-first .hero .ui-start{min-height:46px!important;font-size:16px!important;padding:10px 14px!important}
  body.message-first .hero-input-note{font-size:11px!important;line-height:1.5!important;margin-top:7px!important}
- body.message-first .hero-photo{max-height:156px!important;aspect-ratio:2.15!important;min-height:0!important}
- body.message-first .hero-photo img{object-position:center top!important}
  body.message-first .steps-intro{padding:0 12px!important;margin-bottom:8px!important;display:flex!important;gap:8px;justify-content:space-between;align-items:center}
  body.message-first .steps-intro h2{font-size:16px!important;line-height:1.5}
  body.message-first .steps-intro p{font-size:11px!important;margin:0!important;max-width:98px;line-height:1.5}
@@ -118,3 +116,9 @@
  body.message-first .ocr-candidate-choices button{padding:5px 10px!important;min-height:36px!important;font-size:13px!important;background:#eaf8f5;color:#007f79;border-color:#8dbfba}
 }
 @media screen and (max-width:360px){body.message-first .mode-card .mode-t{font-size:15px!important}body.message-first .mode-card{padding:9px!important}}
+
+/* Keep the approved photograph at its original ratio, with every person visible. */
+@media screen{
+ body.message-first .hero-photo{width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:3/2!important}
+ body.message-first .hero-photo img{display:block;width:100%!important;height:auto!important;aspect-ratio:3/2!important;object-fit:contain!important;object-position:center!important}
+}

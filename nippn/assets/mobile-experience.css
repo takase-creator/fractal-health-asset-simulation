@@ -119,6 +119,6 @@
 
 /* Keep the approved photograph at its original ratio, with every person visible. */
 @media screen{
- body.message-first .hero-photo{width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:3/2!important}
+ body.message-first .hero-photo{width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
  body.message-first .hero-photo img{display:block;width:100%!important;height:auto!important;aspect-ratio:3/2!important;object-fit:contain!important;object-position:center!important}
 }

@@ -101,8 +101,9 @@
  $('surveyCounter')?.setAttribute('aria-live','polite');
  // A concrete overview of what the result contains, without changing the mode.
  document.querySelector('.hero-copy>p').innerHTML='健診結果と生活習慣を入力。<br>80歳時点の資産差額と健康年数の参考シナリオを比べます。';
- document.querySelector('.preparation-title').textContent='健診票と、ご自身の生活習慣を確認します。';
  $('simulationResults').setAttribute('aria-describedby','resultReadyStatus');
  const reading=$('resultReadingOrder');if(reading){reading.setAttribute('tabindex','0');reading.setAttribute('role','region');reading.setAttribute('aria-label','比較対象・計算条件・損失内訳。小さい画面では横にスクロールできます。');}
+ function ensureInputMode(){if(document.body.dataset.mode==='unselected')$('modeAsset').click();}
+ $('resetFormBtn').addEventListener('click',ensureInputMode);ensureInputMode();
  render();
 })();

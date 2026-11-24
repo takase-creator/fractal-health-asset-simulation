@@ -162,3 +162,24 @@
  body.message-first #step2Section .ocr-privacy-details>summary{min-height:24px!important;padding:2px 0!important;line-height:1.4!important}
  body.message-first #step2Section #ocrStatus{margin-top:2px!important}
 }
+
+/* Explicit grid placement prevents tablet-width results entering the operator column. */
+@media screen{
+ body.message-first #age80box{padding:10px!important}
+ body.message-first #age80box .intent-difference-basis{margin:3px 0!important;line-height:1.35!important}
+ body.message-first #age80box #a80diffBig{margin:4px 0!important}
+ body.message-first #age80box .a80-calc{display:grid!important;grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr) 16px minmax(0,1fr)!important;gap:6px 4px!important;align-items:center!important;margin-top:8px!important;padding-top:8px!important}
+ body.message-first #age80box .a80-c-cell{width:100%!important;min-width:0!important;max-width:none!important;height:auto!important;padding:6px!important;gap:3px!important;grid-row:1!important}
+ body.message-first #age80box .a80-c-cell:nth-child(1){grid-column:1!important}
+ body.message-first #age80box .a80-c-cell:nth-child(3){grid-column:3!important}
+ body.message-first #age80box .a80-c-cell.res{grid-column:5!important;grid-row:1!important}
+ body.message-first #age80box .a80-c-op{grid-row:1!important;justify-self:center!important;justify-content:center!important;min-width:0!important;font-size:16px!important;line-height:1!important}
+ body.message-first #age80box .a80-c-op:nth-child(2){grid-column:2!important}
+ body.message-first #age80box .a80-c-op:nth-child(4){grid-column:4!important}
+ body.message-first #age80box .a80-c-cell .cl{white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;line-height:1.35!important}
+ body.message-first #age80box .a80-c-cell .cv{white-space:nowrap!important;overflow-wrap:normal!important;font-size:clamp(16px,2.7vw,22px)!important;line-height:1.15!important}
+}
+@media screen and (max-width:600px){
+ body.message-first #age80box .a80-calc{grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr) 16px!important}
+ body.message-first #age80box .a80-c-cell.res{grid-column:1/-1!important;grid-row:2!important;padding:6px!important}
+}

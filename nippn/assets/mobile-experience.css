@@ -183,3 +183,26 @@
  body.message-first #age80box .a80-calc{grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr) 16px!important}
  body.message-first #age80box .a80-c-cell.res{grid-column:1/-1!important;grid-row:2!important;padding:6px!important}
 }
+
+/* Color the whole card from its existing low/mid/high reference-score label. */
+@media screen{
+ body.message-first #riskRows{gap:10px!important}
+ body.message-first #riskRows .risk-row[data-level]{--risk-bg:#f0f3f4;--risk-accent:#617177;--risk-ink:#35474d;background:var(--risk-bg)!important;border:1px solid var(--risk-accent)!important;border-left:4px solid var(--risk-accent)!important;border-radius:4px;padding:12px!important;min-width:0}
+ body.message-first #riskRows .risk-row[data-level="low"]{--risk-bg:#def3ee;--risk-accent:#08786d;--risk-ink:#075c53}
+ body.message-first #riskRows .risk-row[data-level="mid"]{--risk-bg:#ffead2;--risk-accent:#aa570e;--risk-ink:#804006}
+ body.message-first #riskRows .risk-row[data-level="high"]{--risk-bg:#fadce7;--risk-accent:#b12a58;--risk-ink:#8e2146}
+ body.message-first #riskRows .risk-name{min-width:0!important}
+ body.message-first #riskRows .risk-row[data-level] .risk-lv{background:var(--risk-accent)!important;color:#fff!important;font-weight:800}
+ body.message-first #riskRows .risk-row[data-level] .bar{background:rgba(255,255,255,.75)!important}
+ body.message-first #riskRows .risk-row[data-level] .bar>span{background:var(--risk-accent)!important}
+ body.message-first #riskRows .risk-row[data-level] details summary{background:rgba(255,255,255,.65)!important;color:var(--risk-ink)!important;border-color:var(--risk-accent)!important}
+}
+@media screen and (max-width:600px){
+ body.message-first #riskRows .risk-row[data-level]{padding:10px!important}
+ body.message-first #riskRows .risk-row-main{grid-template-columns:minmax(0,1fr)!important;gap:6px!important}
+ body.message-first #riskRows .risk-name{grid-column:1;grid-row:1}
+ body.message-first #riskRows .risk-score{grid-column:1;grid-row:2}
+ body.message-first #riskRows .bar{grid-column:1;grid-row:3}
+ body.message-first #riskRows .risk-lv{grid-column:1;grid-row:4}
+}
+@media screen{body.message-first #riskRows .risk-row[data-level] :is(.risk-score,.risk-explain){color:#344940!important}}

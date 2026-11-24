@@ -64,6 +64,11 @@
   const validationIds=['height','weight','waist','sbp','dbp','ldl','hdl','tg','glucose','hba1c','ast','alt','ggt','income','assets','medicalShare','incomeLossAssumption'];
   if(validationIds.some(id=>$(id)&&!$(id).checkValidity())){context.classList.add('is-stale');running.textContent='入力内容を修正してください。結果と入力条件の一覧は、直前の有効な条件のままです。';return;}
   context.classList.remove('is-stale');
+  // Presentation follows the existing label; scoring and thresholds are unchanged.
+  $('riskRows').querySelectorAll('.risk-row').forEach(card=>{
+   const label=card.querySelector('.risk-lv')?.textContent.trim();
+   card.dataset.level=label==='\u9ad8'?'high':label==='\u4e2d'?'mid':label==='\u4f4e'?'low':'unknown';
+  });
   const mode=document.body.dataset.mode||'unselected';
   const isLife=mode==='lifespan';
   $('resultAsset').setAttribute('aria-pressed',String(!isLife));$('resultLife').setAttribute('aria-pressed',String(isLife));

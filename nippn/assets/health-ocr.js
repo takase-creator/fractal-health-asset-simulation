@@ -46,8 +46,8 @@ const $=id=>document.getElementById(id);
 let worker=null, generation=0, busy=false, previewURL=null, loadPromise=null, currentPass=0, workerController=null, activeSession=null, lastFile=null, workerEpoch=0;
 function status(s){$('ocrStatus').textContent=s;}
 function dropWorker(){workerEpoch++;if(workerController){workerController.abort();workerController=null;}if(worker){worker.terminate().catch(()=>{});worker=null;}}
-function clearReview(){ document.getElementById('ocrPhotoDialog')?.close(); document.getElementById('ocrReviewPhoto')?.removeAttribute('src'); $('ocrRows').replaceChildren();$('ocrText').textContent='';$('ocrReview').hidden=true; $('ocrConfirm').checked=false; $('ocrApply').disabled=false; }
-function releaseImage(){document.getElementById('ocrPhotoDialog')?.close();document.getElementById('ocrReviewPhoto')?.removeAttribute('src');document.getElementById('ocrLargePhoto')?.removeAttribute('src');if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('ocrPreview').removeAttribute('src');$('ocrPreview').hidden=true;}
+function clearReview(){ document.getElementById('ocrPhotoDialog')?.close?.(); document.getElementById('ocrReviewPhoto')?.removeAttribute('src'); $('ocrRows').replaceChildren();$('ocrText').textContent='';$('ocrReview').hidden=true; $('ocrConfirm').checked=false; $('ocrApply').disabled=false; }
+function releaseImage(){document.getElementById('ocrPhotoDialog')?.close?.();document.getElementById('ocrReviewPhoto')?.removeAttribute('src');document.getElementById('ocrLargePhoto')?.removeAttribute('src');if(previewURL)URL.revokeObjectURL(previewURL);previewURL=null;$('ocrPreview').removeAttribute('src');$('ocrPreview').hidden=true;}
 function setInputsDisabled(disabled){['ocrFile','ocrCamera'].forEach(id=>{if($(id))$(id).disabled=disabled;});}
 function stop(){generation++;activeSession?.cancel();activeSession=null;dropWorker();busy=false;setInputsDisabled(false);$('ocrCancel').hidden=true;$('ocrProgress').hidden=true;}
 function load(){
@@ -69,9 +69,9 @@ function showReview(text,documents=[]){
   const photo=document.createElement('img');photo.id='ocrReviewPhoto';photo.alt='選択した健診結果。入力候補と照合してください';
   const zoom=document.createElement('button');zoom.type='button';zoom.textContent='写真を拡大して確認';
   const dialog=document.createElement('dialog');dialog.id='ocrPhotoDialog';dialog.setAttribute('aria-label','健診結果の写真を拡大');
-  const close=document.createElement('button');close.type='button';close.textContent='写真を閉じる';close.addEventListener('click',()=>dialog.close());
+  const close=document.createElement('button');close.type='button';close.textContent='写真を閉じる';close.addEventListener('click',()=>{if(dialog.close)dialog.close();else dialog.removeAttribute('open');});
   const large=document.createElement('img');large.id='ocrLargePhoto';large.alt='拡大した健診結果';dialog.append(close,large);document.body.append(dialog);
-  zoom.addEventListener('click',()=>{large.src=photo.src;dialog.showModal();});
+  zoom.addEventListener('click',()=>{large.src=photo.src;if(dialog.showModal)dialog.showModal();else dialog.setAttribute('open','');});
   aside.append(title,photo,zoom);$('ocrRows').before(layout);layout.append(aside,$('ocrRows'));
  }
  $('ocrReviewPhoto').src=$('ocrPreview').src;$('ocrPreview').hidden=true;
@@ -141,7 +141,7 @@ function progress(m){
  if(m.status==='recognizing text'){
   if(m.progress!==progress.previous){activeSession.touch();progress.previous=m.progress;}
   status('健診票を読み取り中（'+currentPass+'/2）… '+Math.round(m.progress*100)+'%');$('ocrProgress').value=m.progress;
- }else if(stages[m.status]){activeSession.touch();status(stages[m.status]+'…');}
+ }else if(stages[m.status]){activeSession.touch();const percent=Number.isFinite(m.progress)?' '+Math.round(m.progress*100)+'%':'';status(stages[m.status]+'…'+percent);if(percent)$('ocrProgress').value=m.progress;}
 }
 async function startReading(file){
  if(busy)stop();else generation++;clearReview();releaseImage();

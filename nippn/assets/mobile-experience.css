@@ -125,3 +125,21 @@
 
 /* Four steps, starting with inputs and results. */
 @media screen{body.message-first .step-nav{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+
+/* Generated editorial photographs remain backgrounds; button labels stay real text. */
+@media screen{
+ body.message-first #modeAsset{--mode-photo:url("images/mode-assets-ai-v1.webp")}
+ body.message-first #modeLife{--mode-photo:url("images/mode-healthy-years-ai-v1.webp")}
+ body.message-first .mode-card[data-mode]{display:flex!important;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;min-height:170px!important;padding:18px!important;background-color:#f4f7f5!important;background-image:linear-gradient(90deg,rgba(255,255,255,.99) 0%,rgba(255,255,255,.96) 43%,rgba(255,255,255,.3) 70%,rgba(255,255,255,0) 100%),var(--mode-photo)!important;background-size:cover!important;background-position:right top!important;background-repeat:no-repeat!important;text-align:left}
+ body.message-first .mode-card[data-mode][aria-pressed="true"]{background-image:linear-gradient(90deg,rgba(232,249,246,.99) 0%,rgba(232,249,246,.96) 43%,rgba(232,249,246,.3) 70%,rgba(232,249,246,0) 100%),var(--mode-photo)!important;background-size:cover!important;background-position:right top!important;background-repeat:no-repeat!important;outline:2px solid var(--bp-teal-ink);outline-offset:-2px}
+ body.message-first .mode-card[data-mode] .mode-ico{display:none!important}
+ body.message-first .mode-card[data-mode] .mode-t{display:block;max-width:63%;font-size:18px!important;line-height:1.4!important;margin:0!important}
+ body.message-first .mode-card[data-mode] .mode-d{display:block;max-width:60%;font-size:13px!important;line-height:1.65!important;margin:0!important}
+ body.message-first .mode-card[data-mode]:focus-visible{outline:3px solid #007d78;outline-offset:3px}
+}
+@media screen and (max-width:480px){
+ body.message-first .mode-cards{grid-template-columns:1fr!important}
+ body.message-first .mode-card[data-mode]{min-height:154px!important;padding:14px!important}
+ body.message-first .mode-card[data-mode] .mode-t{font-size:17px!important}
+ body.message-first .mode-card[data-mode] .mode-d{font-size:12px!important}
+}

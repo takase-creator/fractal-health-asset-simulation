@@ -18,6 +18,12 @@
  const asset=$('age80box'),life=$('lifespanResult'),graph=result.querySelector('.graph-wrap');
  body.prepend(graph);graph.after(asset);asset.after(life);
  const differenceBasis=document.createElement('p');differenceBasis.id='assetDifferenceBasis';differenceBasis.className='intent-difference-basis';differenceBasis.textContent='現在の条件 − 比較基準';$('a80mainLabel').after(differenceBasis);
+ const roi=$('roiBlock'),sessionMetric=roi.querySelector('.roi-per-session'),totalMetric=roi.querySelector('.roi-headline-num');
+ sessionMetric.querySelector('.roi-session-note').textContent='独自モデルの資産差額を、運動回数で割った参考値です。';
+ const roiMetrics=document.createElement('div');roiMetrics.className='roi-metrics';sessionMetric.before(roiMetrics);roiMetrics.append(sessionMetric,totalMetric);
+ const formula=document.createElement('details');formula.id='roiFormula';formula.className='roi-formula';
+ formula.innerHTML='<summary>この金額の計算式</summary><p><strong>80歳時点の資産差額</strong>＝週90分の運動を続ける条件の資産 − 現在の運動習慣を続ける条件の資産（どちらも同じ独自モデルで試算）。</p><p><strong>30分1回あたりの換算額</strong>＝資産差額（円）÷［（80 − 現在の年齢）× 年52週 × 週3回］。</p><p>表示額は丸めているため、表示値からの再計算と差が出る場合があります。長期の試算差額を回数で割った参考値であり、1回の運動で増える利益ではありません。運動費用は含みません。</p>';
+ roiMetrics.after(formula);
  const heading=$('simulationResults');
  heading.setAttribute('tabindex','-1');
  const pairWarning=document.createElement('p');pairWarning.id='bloodPressurePairWarning';pairWarning.className='intent-pair-warning';pairWarning.hidden=true;pairWarning.setAttribute('role','alert');$('dbp').closest('.field').after(pairWarning);
@@ -64,6 +70,7 @@
   const validationIds=['height','weight','waist','sbp','dbp','ldl','hdl','tg','glucose','hba1c','ast','alt','ggt','income','assets','medicalShare','incomeLossAssumption'];
   if(validationIds.some(id=>$(id)&&!$(id).checkValidity())){context.classList.add('is-stale');running.textContent='入力内容を修正してください。結果と入力条件の一覧は、直前の有効な条件のままです。';return;}
   context.classList.remove('is-stale');
+  roiMetrics.dataset.single=String(sessionMetric.hidden);
   // Presentation follows the existing label; scoring and thresholds are unchanged.
   $('riskRows').querySelectorAll('.risk-row').forEach(card=>{
    const label=card.querySelector('.risk-lv')?.textContent.trim();
@@ -87,7 +94,7 @@
   const entered=ids.filter(id=>String($(id).value).trim()!=='').length;
   $('resultMissingNote').textContent=entered<ids.length?'健診値 '+entered+'/13項目を入力。未入力の項目があり、モデルの初期設定・推定を含みます。未入力を「問題なし」とは判断できません。':'健診値 13/13項目を入力。入力数は医学的な診断・個人予測の精度を示すものではありません。';
   scenario.textContent=$('selectedChanges').textContent.includes('未選択')||!['impExercise','impQuitSmoke'].some(id=>$(id)?.checked)&&!Number($('impWeightLoss')?.value)?'比較条件はまだ変えていません。選ぶと、元の入力条件との差を確認できます。':'比較で変えた条件は上に表示しています。元の健診値・基本情報は書き換えていません。';
-  const per=$('roiSessionValue');if(per){const block=per.closest('.roi-session-value')?.parentElement;const label=block?.querySelector('.roi-session-label');if(label)label.textContent='30分の運動1回あたりに換算したモデル上の差額';}
+  const per=$('roiSessionValue');if(per){const block=per.closest('.roi-session-value')?.parentElement;const label=block?.querySelector('.roi-session-label');if(label)label.textContent='30分の運動1回あたりの換算額';}
   const ran=!document.body.classList.contains('pre-run');if(ran&&(!previouslyRun||lastMode!==mode))running.textContent=isLife?'健康年数の参考シナリオを表示しました。':'健康資産の参考シナリオを表示しました。';if(ran&&recovered)running.textContent='修正した有効な条件で再計算しました。';previouslyRun=ran;lastMode=mode;
   const nav=document.querySelector('.step-nav-item[href="#step2"]');if(nav)nav.dataset.resultState=ran?'calculated':'not-calculated';
  }

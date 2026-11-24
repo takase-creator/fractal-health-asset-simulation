@@ -4,9 +4,9 @@
  const $=id=>document.getElementById(id);
  const result=$('p1'),body=result?.querySelector(':scope > .pb');
  if(!body)return;
- // Put the conclusion before the supporting graph; preserve the original nodes.
+ // Show the existing graph first, then the large asset result and comparison amounts.
  const asset=$('age80box'),life=$('lifespanResult'),graph=result.querySelector('.graph-wrap');
- body.prepend(asset);asset.after(life);
+ body.prepend(graph);graph.after(asset);asset.after(life);
  const differenceBasis=document.createElement('p');differenceBasis.id='assetDifferenceBasis';differenceBasis.className='intent-difference-basis';differenceBasis.textContent='現在の条件 − 比較基準';$('a80mainLabel').after(differenceBasis);
  const heading=$('simulationResults');
  heading.setAttribute('tabindex','-1');
@@ -22,9 +22,9 @@
  const context=document.createElement('section');context.id='resultInputContext';context.className='intent-input-context';context.setAttribute('aria-label','この結果の入力条件');
  context.innerHTML='<p id="sampleDataNote" class="intent-sample-note" hidden>サンプル入力を起点にしています。ご自身のデータか確認してください。</p><h3>この結果の入力条件</h3><dl id="resultInputList"></dl><p id="resultMissingNote"></p><p class="intent-auto-note">結果表示後は、入力や比較条件の変更に合わせて再計算します。</p>';
  const method=document.createElement('details');method.className='intent-method';method.id='resultMethod';method.innerHTML='<summary>比較対象と計算条件を確認する</summary><p>比較基準は、このモデルで追加負担がないと置いた条件です。現在の条件との違いを、同じ計算期間・運用等の仮定で比較しています。</p><p>年収・資産を入れていない場合はモデルの初期設定を使います。医療費・収入減・運用・健康年数の換算には独自の仮定があり、個人予測としての精度は検証されていません。</p><a href="#economicAssumptions">資産試算の仮定を確認・変更する →</a>';
- const chartSummary=document.createElement('p');chartSummary.id='chartTextSummary';chartSummary.className='intent-chart-summary';graph.append(chartSummary);$('chart').setAttribute('aria-describedby','chartTextSummary');$('chart').setAttribute('aria-label','現在の年齢から80歳までの資産推移を比較する参考グラフ。比較結果は上の金額、計算した条件は下の一覧で確認できます。');
+ const chartSummary=document.createElement('p');chartSummary.id='chartTextSummary';chartSummary.className='intent-chart-summary';graph.append(chartSummary);$('chart').setAttribute('aria-describedby','chartTextSummary');$('chart').setAttribute('aria-label','現在の年齢から80歳までの資産推移を比較する参考グラフ。比較結果は下の金額、計算した条件は下の一覧で確認できます。');
  const inputDetails=document.createElement('details');const inputSummary=document.createElement('summary');inputSummary.textContent='この結果の入力条件を確認';inputDetails.append(inputSummary);for(const child of [...context.children])if(child.id!=='sampleDataNote')inputDetails.append(child);context.append(inputDetails);
- graph.after(context);context.after(method);
+ life.after(context);context.after(method);
  method.querySelector('a').addEventListener('click',()=>{$('economicAssumptions').open=true;});
  const notice=document.querySelector('.restored-model-note');
  if(notice){notice.textContent='独自の仮定による比較です。将来の実額・寿命・運動効果の予測ではありません。';method.insertAdjacentHTML('beforeend','<p>結果を医学的な診断や受診の代わりに使わず、健診票・主治医の案内を確認してください。</p>');}

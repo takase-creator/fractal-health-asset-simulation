@@ -122,3 +122,6 @@
  body.message-first .hero-photo{width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important}
  body.message-first .hero-photo img{display:block;width:100%!important;height:auto!important;aspect-ratio:3/2!important;object-fit:contain!important;object-position:center!important}
 }
+
+/* Four steps, starting with inputs and results. */
+@media screen{body.message-first .step-nav{grid-template-columns:repeat(4,minmax(0,1fr))!important}}

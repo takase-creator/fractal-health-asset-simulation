@@ -4,6 +4,16 @@
  const $=id=>document.getElementById(id);
  const result=$('p1'),body=result?.querySelector(':scope > .pb');
  if(!body)return;
+ // Remove the introductory guide after all calculator inputs have moved out.
+ $('p0')?.remove();
+ document.querySelector('.step-nav-item[href="#step1"]')?.remove();
+ const visibleSteps=['step2Section','step3','nextPlan','seminarSurvey'];
+ visibleSteps.forEach((id,index)=>{const badge=$(id)?.querySelector('.ph-step');if(badge)badge.textContent='STEP '+(index+1);});
+ document.querySelectorAll('.step-nav-item').forEach((link,index)=>{link.dataset.step=String(index+1);link.querySelector('.sn-num').textContent='STEP '+(index+1);});
+ if($('surveyStepLink'))$('surveyStepLink').textContent='STEP 4 アンケートへ進む';
+ function redirectRetiredGuide(){if(location.hash==='#step1')location.replace('#step2');}
+ window.addEventListener('hashchange',redirectRetiredGuide);redirectRetiredGuide();
+
  // Show the existing graph first, then the large asset result and comparison amounts.
  const asset=$('age80box'),life=$('lifespanResult'),graph=result.querySelector('.graph-wrap');
  body.prepend(graph);graph.after(asset);asset.after(life);
@@ -42,7 +52,7 @@
  }
  const reportRenderer=window.renderReportA4;
  if(typeof reportRenderer==='function')window.renderReportA4=function(...args){
-  const out=reportRenderer.apply(this,args),isLife=document.body.dataset.mode==='lifespan';
+  const out=reportRenderer.apply(this,args);if($('raMsg'))$('raMsg').innerHTML=$('raMsg').innerHTML.replace(/STEP 3/g,'STEP 2');const isLife=document.body.dataset.mode==='lifespan';
   $('raTitle').textContent=isLife?'健康年数の参考シナリオ':'健康資産の参考シナリオ';
   $('raFmDL').textContent=isLife?'現在の条件 − 比較基準（年数差）':'現在の条件 − 比較基準（80歳時点）';
   const value=$('raFmDV');if(value&&!value.textContent.startsWith('−')&&!/^0(?:年|万円)/.test(value.textContent))value.textContent='−'+value.textContent;
@@ -74,7 +84,7 @@
   scenario.textContent=$('selectedChanges').textContent.includes('未選択')||!['impExercise','impQuitSmoke'].some(id=>$(id)?.checked)&&!Number($('impWeightLoss')?.value)?'比較条件はまだ変えていません。選ぶと、元の入力条件との差を確認できます。':'比較で変えた条件は上に表示しています。元の健診値・基本情報は書き換えていません。';
   const per=$('roiSessionValue');if(per){const block=per.closest('.roi-session-value')?.parentElement;const label=block?.querySelector('.roi-session-label');if(label)label.textContent='30分の運動1回あたりに換算したモデル上の差額';}
   const ran=!document.body.classList.contains('pre-run');if(ran&&(!previouslyRun||lastMode!==mode))running.textContent=isLife?'健康年数の参考シナリオを表示しました。':'健康資産の参考シナリオを表示しました。';if(ran&&recovered)running.textContent='修正した有効な条件で再計算しました。';previouslyRun=ran;lastMode=mode;
-  const nav=document.querySelector('[data-step="2"]');if(nav)nav.dataset.resultState=ran?'calculated':'not-calculated';
+  const nav=document.querySelector('.step-nav-item[href="#step2"]');if(nav)nav.dataset.resultState=ran?'calculated':'not-calculated';
  }
  $('demoFillBtn')?.addEventListener('click',()=>{$('sampleDataNote').hidden=false;});
  $('resetFormBtn').addEventListener('click',()=>{$('sampleDataNote').hidden=true;pairWarning.hidden=true;});

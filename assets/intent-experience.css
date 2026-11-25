@@ -1,0 +1,50 @@
+@media screen{
+ .intent-result-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+ .intent-result-tools button{padding:9px 16px;min-height:44px;border:1px solid #8da798;border-radius:3px;background:#fff;color:#174e36;font:700 14px inherit;cursor:pointer}
+ .intent-result-tools button[aria-pressed=true]{background:#146b50;color:#fff;border-color:#146b50}
+ .intent-input-context{border-top:1px solid #ccd9d0;padding:14px 0;margin:12px 0;color:#294333}
+ .intent-input-context h3{font-size:17px;margin:0 0 10px;font-weight:750}
+ .intent-input-context dl{display:grid;grid-template-columns:125px 1fr;gap:5px 16px;margin:0;font-size:14px;line-height:1.7}
+ .intent-input-context dt{font-weight:700;color:#436350}.intent-input-context dd{margin:0}
+ #resultMissingNote{font-size:13px;line-height:1.8;margin:12px 0 0;color:#695a38}
+ .intent-auto-note{font-size:12px;margin:8px 0 0;color:#526b5b}
+ .intent-method{font-size:14px;line-height:1.8;border-bottom:1px solid #cedbd1;margin:10px 0 22px;padding:0 0 14px}
+ .intent-method summary{cursor:pointer;font-weight:700;min-height:32px;color:#385f47}
+ .intent-method p{margin:10px 0}.intent-method a{color:#176247;text-decoration:underline}
+ .intent-scenario-note{font-size:14px;line-height:1.8;margin:10px 0 14px;color:#3c5f49}
+ .intent-sr-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+ body.message-first #age80box{margin:8px 0 18px!important}
+ body.message-first .a80-main-num{font-variant-numeric:tabular-nums}
+ body.message-first .a80-calc{display:flex!important;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:12px!important;padding-top:12px!important;border-top:1px solid #d2ded6}
+ body.message-first .a80-c-cell .cl{font-size:12px!important}.a80-c-cell .cv{font-size:19px!important;font-weight:700!important}
+ .intent-result-tools button:focus-visible,.intent-method a:focus-visible{outline:3px solid #c90063;outline-offset:3px}
+ #runBtn:focus-visible,#ocrFile:focus-visible,#ocrCamera:focus-visible{outline:3px solid #c90063;outline-offset:4px}
+ #resultInputList :is(dt,dd){overflow-wrap:anywhere}
+}
+@media(max-width:760px){.intent-input-context dl{grid-template-columns:100px 1fr;gap:5px 10px}.intent-result-tools button{flex:1;padding:9px 8px}.a80-calc{gap:8px!important}.a80-c-cell .cv{font-size:17px!important}.intent-input-context{padding-top:12px}}
+@media(prefers-reduced-motion:reduce){.intent-result-tools button{transition:none!important}}
+@media print{.intent-result-tools,.intent-input-context,.intent-method,.intent-scenario-note,.intent-sr-status{display:none}}
+@media screen{.intent-result-tools button{font-family:inherit;font-size:14px;font-weight:700}.intent-input-context.is-stale::before{content:'入力エラーがあります。以下は直前の有効な条件です。';display:block;font-weight:700;color:#9c3d2c;margin:0 0 10px}}
+.intent-pair-warning{grid-column:1/-1;font-size:13px;color:#963d2b;line-height:1.7;padding:10px 12px;background:#fff2ef}.intent-sample-note{font-size:12px;color:#6c5632;border-left:3px solid #b7a16c;padding-left:10px;margin:0 0 12px}
+@media screen{
+ body.message-first .hero h1 span{white-space:normal!important;overflow-wrap:normal!important}
+ body.message-first .a80-main-label,body.message-first .field label{white-space:normal!important;overflow-wrap:anywhere}
+}
+@media screen and (max-width:600px){
+ body.message-first .a80-calc{display:grid!important;grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr)!important;gap:8px 4px!important}
+ body.message-first .a80-c-cell{width:auto!important;min-width:0!important;max-width:none!important}
+ body.message-first .a80-c-cell .cl{white-space:normal!important;overflow-wrap:anywhere;font-size:11px!important}
+ body.message-first .a80-c-cell .cv{width:auto!important;max-width:none!important;white-space:normal!important;overflow-wrap:anywhere;font-size:17px!important}
+ body.message-first .a80-calc>.a80-c-op:nth-of-type(2){grid-column:1;justify-self:end}
+ body.message-first .a80-calc>.a80-c-cell.res{grid-column:2/4}
+}
+.intent-chart-summary{font-size:13px;line-height:1.8;color:#456351;margin:10px 0 0}
+@media screen{
+ body.message-first .a80-c-cell .cl{color:#375845!important;opacity:1!important}
+ body.message-first .a80-c-cell .cv.good{color:#07654b!important}
+ body.message-first .a80-c-cell .cv.bad{color:#9a3852!important}
+ body.message-first .a80-c-cell .cv.diff{color:#193f2c!important}
+ body.message-first .a80-c-op{color:#4c6757!important;opacity:1!important}
+ body.message-first .a80-c-cell.res{background:#fff!important;border:1px solid #adc4b4!important}
+ .intent-difference-basis{font-size:12px;line-height:1.6;color:#42624e;margin:5px 0 9px}
+}

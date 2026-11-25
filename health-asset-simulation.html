@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="ja">
 <head>
+<link rel="canonical" href="https://takase-creator.github.io/fractal-health-asset-simulation/health-asset-simulation.html">
+<meta name="robots" content="noindex,nofollow">
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>健康寿命・健康資産シミュレーション | BODY PALETTE</title>
+<title>健康資産・健康年数シミュレーション | BODY PALETTE</title>
 <link rel="icon" type="image/png" href="assets/images/embedded-brand-0.png"/>
 <link rel="apple-touch-icon" href="assets/images/embedded-brand-0.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -19,13 +21,17 @@
 <link rel="stylesheet" href="assets/min/seminar-survey.css?v=b11d7b752a">
 <link rel="stylesheet" href="assets/min/step-accordion.css?v=1f8def8818">
 <link rel="stylesheet" href="assets/min/body-palette-ui.css?v=0f49c92625">
+<link rel="stylesheet" href="assets/message-first.css?v=f8200f5149">
+<link rel="stylesheet" href="assets/intent-experience.css?v=adf2fb43cf">
+<link rel="stylesheet" href="assets/bp-brand.css?v=d3f991f01e">
+<link rel="stylesheet" href="assets/mobile-experience.css?v=74a623032b">
 </head>
-<body>
+<body><aside class="nippn-review-note" aria-label="共通体験ページのご案内"><strong>BODY PALETTE｜共通体験ページ</strong><p>このページでは回答を送信・保存しません。回答の保存には、企業から案内された専用URLをご利用ください。</p></aside>
 
 
 <div class="expiry-overlay" id="expiryOverlay">
   <div class="expiry-card">
-    <img src="./assets/images/bp-logo.png" alt="BODY PALETTE" class="expiry-logo">
+    <img src="./assets/images/bp-logo-official.png" alt="BODY PALETTE" class="expiry-logo">
     <div class="expiry-icon">🗓</div>
     <h2>公開期間は終了しました</h2>
     <p>本シミュレーションの公開期間は終了いたしました。<br>ご利用いただきありがとうございました。</p>
@@ -199,7 +205,7 @@
 </div>
 
 <header class="brand-header">
-  <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ"><img class="brand-logo__full" src="./assets/images/bp-logo.png" alt="BODY PALETTE" width="230" height="172"></a>
+  <a class="brand-logo" href="#layout" aria-label="BODY PALETTE 健康シミュレーションへ"><img class="brand-logo__full" src="./assets/images/bp-logo-official.png" alt="BODY PALETTE" width="230" height="172"></a>
   <div class="ui-brand-context"><span class="ui-status-dot"></span><span>健康寿命・健康資産シミュレーション</span></div>
 </header>
 <section class="hero" aria-label="このシミュレーションについて">
@@ -636,7 +642,8 @@
       <details class="exam-details" id="examDetails" open>
         <summary>二次健診の確認事項と受診の流れ</summary>
         <div class="exam-details-inner">
-      <div class="exam-reasons">
+      <p class="exam-cards-hint">横にスワイプして、3つの確認事項をご覧ください →</p>
+      <div class="exam-reasons" tabindex="0" role="group" aria-label="健診後の3つの確認事項">
         <div class="exam-reason">
           <img class="exam-reason-image" src="assets/images/checkup-review-ai-v1.webp" srcset="assets/images/checkup-review-ai-v1-640.webp 640w, assets/images/checkup-review-ai-v1.webp 1536w" sizes="(max-width: 700px) 90vw, 30vw" alt="医師と健診結果を確認する様子のイメージ" width="1536" height="1024" loading="lazy" decoding="async">
           <div class="er-t">気になる値を確認する</div>
@@ -771,7 +778,7 @@
 <div class="report-a4-wrap" aria-hidden="true">
   <div id="reportA4">
     <div class="ra-head">
-      <div class="ra-brand"><img id="raLogo" src="assets/images/bp-logo.png" alt="BODY PALETTE"><span class="ra-brand-txt">BODY PALETTE</span></div>
+      <div class="ra-brand"><img id="raLogo" src="assets/images/bp-logo-official.png" alt="BODY PALETTE"><span class="ra-brand-txt">BODY PALETTE</span></div>
       <div class="ra-title"><span id="raTitle">健康資産シミュレーション結果</span><small id="raDate"></small></div>
     </div>
     <div class="ra-hero">
@@ -829,14 +836,18 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=e211af2675"></script>
-<script src="assets/min/health-ocr.js?v=d1be79dac8"></script>
+<script src="assets/min/simulator-core.js?v=aab00d2c64"></script>
+<script src="assets/health-ocr-runtime.js?v=9c3037ffe0"></script>
+<script src="assets/health-ocr-parser.js?v=ec6709db8a"></script>
+<script src="assets/min/health-ocr.js?v=4544a13fab"></script>
 <script src="assets/min/research-evidence.js?v=8021b56464"></script>
 <script src="assets/min/nippn-seminar.js?v=3a3de1e866"></script>
 <script src="assets/min/simulation-experience.js?v=5252c56384"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
-<script src="assets/min/seminar-survey.js?v=3983e7f015"></script>
+<script src="assets/min/seminar-survey.js?v=80b5052c5a"></script>
 <script src="assets/min/step-accordion.js?v=539d104676"></script>
 <script src="assets/min/body-palette-ui.js?v=5db3503786"></script>
+<script src="assets/message-first.js?v=f246e62e3d"></script>
+<script src="assets/intent-experience.js?v=40bd768882"></script>
 </body>
 </html>

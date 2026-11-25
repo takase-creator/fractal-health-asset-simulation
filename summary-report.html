@@ -94,11 +94,11 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
 .rg-card button{width:100%;padding:13px;background:linear-gradient(180deg,#0fa8a3,#0a807c);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;}
 .rg-err{color:#e24c5e!important;font-weight:700;margin-top:4px;}
 </style>
-</head>
-<body>
+<link rel="stylesheet" href="assets/shared-pages.css?v=20261125"></head>
+<body class="shared-report">
 <div id="repGate">
   <div class="rg-card">
-    <div class="rg-logo">BODY PALETTE</div>
+    <div class="rg-logo"><img src="assets/images/bp-logo-official.png" alt="BODY PALETTE"></div>
     <h1>社内用ページ</h1>
     <p>この集計サマリーは社内・提案用です。<br>アクセスキーを入力してください。</p>
     <input type="password" id="rgKey" placeholder="アクセスキー" autocomplete="off">
@@ -107,10 +107,7 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
   </div>
 </div>
 <div class="wrap">
-  <div class="tool-note">
-    <strong>企業ご担当者様向け・集計サマリー生成ツール（社内用）</strong><br>
-    健康セミナーで参加者が入力した<strong>匿名の集計データ</strong>（個人を特定しない年齢層・リスク区分など）を読み込み、貴社全体の傾向と推定インパクトをまとめた提案用サマリーを生成します。個人の結果・氏名等は含まれません。
-  </div>
+  <div class="tool-note"><strong>端末内のJSONデータから集計サマリーを作成する</strong><br>このページは、手元のデータを読み込んで確認するためのツールです。企業別アンケートのGoogle保存・意欲の前後比較・回答分布は、管理者専用のGoogle管理画面で確認できます。<br><a href="https://script.google.com/a/macros/fractal-workout.jp/s/AKfycbxSY3RpUvpO_aF350AlZKWSh3OGC6_z2T-wZ9jR2lLKNOGGDqbSo84QIWNpaRjAQFQ0/exec?view=admin" target="_blank" rel="noopener">Google管理画面を開く</a></div>
 
   <div class="controls">
     <textarea id="jsonIn" placeholder='ここに匿名データのJSONを貼り付け（本体ツールの ?fw_admin=1 → 「JSONコピー」、またはスプレッドシートのエクスポート）'></textarea>
@@ -134,7 +131,7 @@ body{font-family:"Noto Sans JP",sans-serif;color:var(--black);background:#eef4f2
   <div id="report">
     <div class="rep-head">
       <div class="rep-brand">
-        <img src="./assets/images/bp-logo.png" alt="BODY PALETTE" onerror="this.style.display='none'">
+        <img src="./assets/images/bp-logo-official.png" alt="BODY PALETTE" onerror="this.style.display='none'">
         <div class="bt">BODY PALETTE<span>健康セミナー 集計サマリー</span></div>
       </div>
       <div class="rep-title">

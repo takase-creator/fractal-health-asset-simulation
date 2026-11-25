@@ -122,9 +122,9 @@ const BP_RESEARCH = [
     "period": "Nurses’ Health Study：1980–2014年／Health Professionals Follow-up Study：1986–2014年",
     "finding": "健康的な生活習慣の組み合わせと、がん・心血管疾患・2型糖尿病のない余命が長いこととの関連を報告しています。",
     "limit": "観察研究で、因果関係や日本人個人の健康寿命を保証しません。3疾患のない余命と「日常生活に制限がない期間」は定義が異なります。",
-    "use": "健康年数シナリオの背景説明です。本ツールの年数計算全体を検証した研究ではありません。",
+    "use": "表2の50歳時点・性別別の研究集団の余命と群間差を表示します。個人を研究群へ割り当てず、行動単独の延伸年数へ換算しません。",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/",
-    "model_role": "model_context",
+    "model_role": "study_display",
     "verification_scope": "原著本文・対象集団・研究デザイン",
     "verified_on": "2026-11-16"
   },

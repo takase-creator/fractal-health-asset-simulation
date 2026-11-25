@@ -15,26 +15,7 @@ if (new Date() >= PUBLISH_END) {
 // 1. 定数・テーブル定義
 // ═══════════════════════════════════════════════════
 
-// 国税庁 令和6年分 民間給与実態統計調査 年齢別平均年収(万円)
-const INCOME_TABLE = {
-  male:   {25:446,30:517,35:566,40:612,45:653,50:693,55:735,60:545,65:430},
-  female: {25:360,30:383,35:393,40:399,45:403,50:408,55:410,60:340,65:300}
-};
-
-// 厚生労働省「令和5年度 厚生年金保険・国民年金事業の概況」
-// 老齢厚生年金 平均月額 → 年額
-const PENSION = {male:16.7*12, female:10.9*12}; // 万円/年
-
-// 総務省 家計調査 2022-23 年代別貯蓄率（可処分所得比）
-const SAVING_RATE = {
-  u30:0.20, u40:0.18, u50:0.13, u60:0.13, u65:0.10, pension:0.05
-};
-
-// 総務省「家計調査」令和4年 65歳以上無職世帯の消費支出（万円/年）
-// 男性（2人世帯想定）: 約27万/月 × 12 = 324万円
-// 女性（単身世帯想定）: 約15.5万/月 × 12 = 186万円
-const RETIREMENT_SPENDING = { male: 324, female: 186 };
-
+// 金額は利用者が確認できる家計の仮定から計算。健診値・独自点数から費用へ換算しない。
 // ═══════════════════════════════════════════════════
 // 2. UI初期化
 // ═══════════════════════════════════════════════════
@@ -248,7 +229,7 @@ function computeRisk(overrides){
   const medScore=Math.round((risks.glucose+risks.bp+risks.lipid+risks.liver+risks.kidney+risks.musculo*0.8)/5.8);
 
   return{gender,age,habit,exerciseHours,smoking,cigsPerDay:smoking==='current'?(cigsPerDay==null?20:cigsPerDay):null,
-    bmi,risks,entered,precision,medScore,hba1c,sbp,ldl,sm,waist,glucose};
+    bmi,risks,entered,precision,medScore,hba1c,sbp,ldl,sm,waist,glucose,scenarioChanged:Object.keys(overrides).length>0};
 }
 
 // ═══════════════════════════════════════════════════
@@ -277,186 +258,22 @@ function computeTrend(s){
 // ═══════════════════════════════════════════════════
 // 6. 発症確率 → 3フェーズ医療費（年間）
 // ═══════════════════════════════════════════════════
-// 疾患別1人当たり年間医療費（厚労省 令和4年度 国民医療費より算出）
-const PHASE_COST={
-  // [境界域, 発症後, 合併症期]（万円/年）
-  diabetes: [3, 22, 50],
-  hyp:      [3, 11, 30],
-  cvd:      [5, 61,100],
-  nafld:    [3, 18, 50],
-  ckd:      [3, 30,136],
-};
-
-// スコアから発症確率（5年ベースを年率換算）
-function getAnnualRisk(score, type){
-  // PMC4390315ベース（HbA1cデータ）の年率換算
-  // 糖代謝: スコア0-39→年率0.7%, 40-69→年率2.9%, 70-89→年率9.2%, 90-100→年率30%
-  // 他疾患は同様のステップ関数で近似
-  if(score>=90) return type==='diabetes'?0.44:0.30;
-  if(score>=70) return type==='diabetes'?0.092:0.10;
-  if(score>=40) return type==='diabetes'?0.029:0.04;
-  return type==='diabetes'?0.007:0.02;
-}
-
-// フェーズ判定（スコアと累積年数で動的に変化）。
-// 「5年以上経過すると1段階進行しうる」という上限つきの進行ルールはそのまま維持し、
-// 年数だけが際限なく費用を押し上げてしまわないようにするための判定にのみ使う。
-function phaseOf(score, yearsElapsed){
-  if(score>=90||(score>=70&&yearsElapsed>=5)) return 2; // 合併症期
-  if(score>=70||(score>=40&&yearsElapsed>=5)) return 1; // 発症後
-  if(score>=40) return 0; // 境界域
-  return -1; // リスクなし
-}
-
-// 閾値(edge)の手前bandポイントだけをlo→hiで滑らかに繋ぎ、それ以外は元通りフラットにするヘルパー。
-// 閾値からdistantな値まで一律に補間すると「まだ全然低リスクの人」まで数値が底上げされてしまうため、
-// 崖の直前だけをなだらかにする狭い遷移帯として使う。
-function narrowRamp(x, edge, band, lo, hi){
-  const t=Math.max(0,Math.min(1,(x-(edge-band))/band));
-  return lo+(hi-lo)*t;
-}
-
-// スコア（0〜100）を年間医療費に連続的に変換する。
-// 元々は40/70/90点で医療費が段階的に切り替わる階段状のモデルだったが、
-// 同じ段の中では数値がどれだけ改善しても金額が1円も動かないため、
-// 「どの段にいるか」はphaseOfの上限つきルールで判定しつつ、段の中身（スコア→費用）は
-// 次の段の値へ向けて連続的に補間する。ph<0（リスクなし域）は閾値の手前だけを狭く補間し、
-// 明らかに低リスクな人まで底上げされないようにする。
-function interpCost(score, yearsElapsed, costLevels){
-  const ph=phaseOf(score,yearsElapsed);
-  if(ph<0) return narrowRamp(score,40,8,0,costLevels[0]);
-  if(ph===0){
-    const t=Math.max(0,Math.min(1,(score-40)/30));
-    return costLevels[0]+(costLevels[1]-costLevels[0])*t;
-  }
-  if(ph===1){
-    const t=Math.max(0,Math.min(1,(score-70)/20));
-    return costLevels[1]+(costLevels[2]-costLevels[1])*t;
-  }
-  return costLevels[2];
-}
-
-// 複数疾患の乗法補正（JACC 2010メタ分析）。
-// 元は「70点以上が何個あるか」で1.0/1.4/2.0倍に切り替わる階段状だったが、
-// 60〜80点の間で各疾患の重症度を0〜1に連続化し、その合計値で滑らかに補間する。
-function multiDiseaseMultiplier(risks){
-  const sevSum=Object.values(risks).reduce((s,v)=>s+Math.max(0,Math.min(1,(v-60)/20)),0);
-  if(sevSum>=3) return 2.0;
-  if(sevSum>=2) return 1.4+(sevSum-2)*0.6;
-  return 1.0+(sevSum/2)*0.4;
-}
-
-// プレゼンティーイズム損失率（元は0.03/0.10/0.20の3段階）。
-// 40点・70点それぞれの手前だけを狭く滑らかにし、閾値から離れた低リスクの人には影響させない。
-function ptLossRateFor(medScore){
-  if(medScore<40) return narrowRamp(medScore,40,8,0.03,0.10);
-  if(medScore<70) return narrowRamp(medScore,70,8,0.10,0.20);
-  return 0.20;
-}
-
+// 根拠のない疾病別費用の自動推計は使用しない。
+// 旧版の未検証な疾病費用・5年進行・多疾患倍率を廃止。
+function narrowRamp(x,edge,band,lo,hi){return lo+(hi-lo)*Math.max(0,Math.min(1,(x-(edge-band))/band));}
 // ═══════════════════════════════════════════════════
 // 7. 年収・年金モデル
 // ═══════════════════════════════════════════════════
-function getIncomeCurve(gender, currentAge, userIncome){
-  const tbl=INCOME_TABLE[gender];
-
-  // 国税庁データから年齢補間（〜59歳）
-  const brackets=[25,30,35,40,45,50,55];
-  function peakIncome(age){
-    if(age>=60) return tbl[55]; // 55〜59歳ピークを基準に計算
-    const b=brackets.filter(b=>b<=age).pop()||25;
-    const nb=brackets.find(b=>b>age)||55;
-    if(b===nb) return tbl[b];
-    const ratio=(age-b)/(nb-b);
-    return tbl[b]+(tbl[nb]-tbl[b])*ratio;
-  }
-
-  // ユーザー入力倍率（現在年齢の平均値との比）
-  const currentAvg=peakIncome(Math.min(currentAge,59));
-  const scale=userIncome!==null&&userIncome!==undefined?userIncome/currentAvg:1.0;
-
-  return function(age){
-    // ─── Phase 1: 現役（〜59歳）───
-    if(age<60){
-      return peakIncome(age)*scale;
-    }
-    // ─── Phase 2: 定年再雇用（60〜64歳）───
-    // 国税庁データ：55〜59歳ピーク→60〜64歳は約74%に低下
-    // ユーザー倍率を維持しつつ、平均的な定年後減収率を適用
-    if(age>=60&&age<65){
-      const peak=peakIncome(59)*scale;
-      // 60歳から線形に減収：60歳=80%、64歳=70%（国税庁 60-64歳平均/55-59歳平均比）
-      const ratio=0.80-(age-60)*0.02;
-      return peak*ratio;
-    }
-    // ─── Phase 3: 年金（65歳〜）───
-    // 厚労省「令和5年度 厚生年金保険・国民年金事業の概況」
-    // 男性：16.7万円/月×12 = 200.4万円/年
-    // 女性：10.9万円/月×12 = 130.8万円/年
-    return PENSION[gender];
-  };
+function economicInputs(){
+ const val=(id,fallback)=>n(id)??fallback;
+ return {income:val('income',500),assets:val('assets',0),saving:val('savingAssumption',10)/100,retire:val('retireAssumption',65),pension:val('pensionAssumption',180),living:val('livingAssumption',180),rate:val('returnAssumption',3)/100,cost:val('currentCostAssumption',0),changedCost:val('changedCostAssumption',0),exerciseCost:val('exerciseCostAssumption',0),loss:val('incomeLossAssumption',0)/100,changedLoss:val('changedLossAssumption',0)/100};
 }
-
-function savingRateForAge(age){
-  if(age>=65) return SAVING_RATE.pension;   // 年金生活：貯蓄率5%
-  if(age>=60) return SAVING_RATE.u65;       // 定年再雇用：10%
-  if(age>=50) return SAVING_RATE.u60;       // 50代：13%
-  if(age>=40) return SAVING_RATE.u50;       // 40代：13%
-  if(age>=30) return SAVING_RATE.u40;       // 30代：18%
-  return SAVING_RATE.u30;                   // 20代：20%
-}
-
-// ═══════════════════════════════════════════════════
-// 8. 資産シミュレーション（現在〜80歳）
-// ═══════════════════════════════════════════════════
-const INVEST_RATE=0.03; // 独自の試算仮定。保証利回りではない。
-
-// 資産推移を1本分試算する共通ロジック（zeroRisk=trueなら疾患リスクゼロの理想値）
+function getIncomeCurve(gender,currentAge,userIncome){const a=economicInputs();return age=>age<a.retire?(userIncome??a.income):a.pension;}
+function savingRateForAge(){return economicInputs().saving;}
+const INVEST_RATE=0.03; // 初期の表示値のみ。実計算は編集可能なreturnAssumptionを使用。
 function projectAsset(riskState,gender,startAge,userIncome,userAssets,zeroRisk){
-  const incomeFn=getIncomeCurve(gender,startAge,userIncome);
-  const mMult=multiDiseaseMultiplier(riskState.risks);
-  const ptLossRate=zeroRisk?0:Math.min(100,Math.max(0,n("incomeLossAssumption")||0))/100;
-
-  let asset=userAssets;
-  const arr=[];
-  let cumulativePT=0;
-  let cumulativeMed=0;
-
-  for(let age=startAge;age<=80;age++){
-    arr.push(Math.round(asset));
-    if(age===80)break; // The ending balance is at age 80; do not accrue an extra year.
-    const inc=incomeFn(age);
-    const sr=savingRateForAge(age);
-
-    if(zeroRisk){
-      const saving = age>=65 ? inc - RETIREMENT_SPENDING[gender] : inc*sr;
-      asset=asset*(1+INVEST_RATE)+saving;
-      continue;
-    }
-
-    // 医療費（スコアに応じて連続的に算出）
-    const yrsElapsed=age-startAge;
-
-    const gMed=interpCost(riskState.risks.glucose,yrsElapsed,PHASE_COST.diabetes)*mMult;
-    const bMed=interpCost(riskState.risks.bp,yrsElapsed,[PHASE_COST.hyp[0],PHASE_COST.hyp[1],PHASE_COST.cvd[2]])*mMult;
-    const lMed=interpCost(riskState.risks.lipid,yrsElapsed,[PHASE_COST.hyp[0],PHASE_COST.hyp[1],PHASE_COST.cvd[2]])*0.7;
-    const vMed=interpCost(riskState.risks.liver,yrsElapsed,PHASE_COST.nafld)*mMult;
-    const kMed=interpCost(riskState.risks.kidney,yrsElapsed,PHASE_COST.ckd)*mMult;
-
-    const annualMed=(gMed+bMed+lMed+vMed+kMed)*Math.min(100,Math.max(0,n("medicalShare")??30))/100;
-    cumulativeMed+=annualMed;
-
-    // プレゼンティーイズム損失（65歳未満のみ）
-    const ptLoss=age<65?inc*ptLossRate:0;
-    cumulativePT+=ptLoss;
-
-    const saving = age>=65
-      ? (inc - RETIREMENT_SPENDING[gender]) - annualMed
-      : (inc-ptLoss)*sr - annualMed;
-    asset=asset*(1+INVEST_RATE)+saving;
-  }
-
-  return{arr,cumulativePT:Math.round(cumulativePT),cumulativeMed:Math.round(cumulativeMed),ptLossRate,mMult};
+ const a=economicInputs();a.income=userIncome??a.income;a.assets=userAssets;
+ return BPReviewed.project(a,startAge,zeroRisk?'baseline':riskState.scenarioChanged?'changed':'current');
 }
 
 function simulate(state){
@@ -475,171 +292,34 @@ function simulate(state){
   const red80=redP.arr[redP.arr.length-1];
   const diff80=blue80-red80;
 
-  // 投資複利機会損失（差分が運用されなかった場合）
-  const years=80-startAge;
-  const compoundLoss=redP.cumulativePT*Math.pow(1+INVEST_RATE,years/2)-redP.cumulativePT;
-
-  return{
-    ages,blueArr:blueP.arr,redArr:redP.arr,
-    blue80,red80,diff80,
-    cumulativePT:redP.cumulativePT,
-    cumulativeMed:redP.cumulativeMed,
-    compoundLoss:Math.max(0,Math.round(compoundLoss)),
-    ptLossRate:redP.ptLossRate,medScore:state.medScore,mMult:redP.mMult
-  };
+  const compoundLoss=diff80-redP.cumulativeMed-redP.cumulativePT;
+  return{ages,blueArr:blueP.arr,redArr:redP.arr,blue80,red80,diff80,
+    cumulativePT:redP.cumulativePT,cumulativeMed:redP.cumulativeMed,
+    compoundLoss,ptLossRate:redP.ptLossRate,medScore:state.medScore,mMult:1};
 }
 
 // ═══════════════════════════════════════════════════
-// 5b. 健康寿命モデル（日本人コホート最優先・全係数に出典）
-//   出力① 予測残り健康寿命（健康維持 vs 現状放置 ＝ 失う健康年数）
-//   出力② 改善アクション別の延伸年数
-//   原則: 集団平均・相対リスクベースの試算。点推定でなくレンジ表示（過剰精度を装わない）。
-//   基準(delta=0)= 非喫煙・SBP<120・正常血糖・BMI21〜27・活発。いずれも修正可能因子。
-// ═══════════════════════════════════════════════════
-// 健康寿命ベースライン（厚労省 2022, 日常生活に制限のない期間） 出典: e-ヘルスネット
-const HALE_BIRTH={male:72.57,female:75.45};
-// 各因子 → 健康年数の増減（年, ≤0）
-function ls_dSmoke(s){
-  if(s.smoking==='never'||!s.smoking) return 0;
-  if(s.smoking==='past') return -1.7;                 // 禁煙者: 40歳平均余命 -1.7y (NIPPON DATA80, J Epidemiol 2007)
-  const c=(s.cigsPerDay==null?20:s.cigsPerDay);
-  const frac=Math.min(1,c/20);
-  const heavy=c>40?Math.min(1,(c-40)/40)*1.5:0;
-  return -(1.5+2.0*frac+heavy);                       // 20本/日で -3.5y (NIPPON DATA80), 重喫煙で最大 ~ -5y
-}
-function ls_dBP(s){
-  if(s.sbp==null||s.sbp<120) return 0;
-  const b=s.gender==='male'?-2.2:-2.9;                // 高血圧(≥140)で 男-2.2/女-2.9y (NIPPON DATA80, 24年追跡)
-  const scale=(s.sbp-120)/20;                         // 140で1.0
-  const factor=scale<=1?scale:1+(s.sbp-140)/20*0.6;   // ≥140は加速 (PSC Lancet 2002 log-linear)
-  return b*Math.min(2.4,Math.max(0,factor));
-}
-function ls_dGlucose(s){
-  const full=s.gender==='male'?-7.2:-10.3;            // 確立糖尿病の死亡年齢差 (日本糖尿病学会 2011-2020調査)
-  let sev=0;
-  if(s.hba1c!=null){
-    if(s.hba1c>=6.5) sev=Math.max(sev,Math.min(1.2,1+(s.hba1c-6.5)/3));
-    else if(s.hba1c>=5.6) sev=Math.max(sev,(s.hba1c-5.6)/0.9*0.35);   // 境界域は最大0.35
-  }
-  if(s.glucose!=null){
-    if(s.glucose>=126) sev=Math.max(sev,1);
-    else if(s.glucose>=100) sev=Math.max(sev,(s.glucose-100)/26*0.35);
-  }
-  return full*Math.min(1.2,sev);
-}
-function ls_dBMI(s){
-  if(s.bmi==null) return 0;
-  let excess=0;
-  if(s.bmi>27) excess=(s.bmi-27)/5; else if(s.bmi<20) excess=(20-s.bmi)/5;  // nadir 21〜27 (国立がん 35万人プール解析)
-  let yrs=-1.6*excess;                                // BMI+5でHR死亡+31% → 健康年数 ~ -1.6y/5 (保守的換算, J Epidemiol 2011)
-  if(s.waist!=null&&((s.gender==='male'&&s.waist>=85)||(s.gender==='female'&&s.waist>=90))) yrs-=0.6;
-  return Math.max(-4,yrs);
-}
-function ls_dActivity(s){
-  const hrs=s.exerciseHours||0;
-  const frac=1-Math.exp(-hrs/1.5);
-  return -4.0*(1-frac);                               // 不活発 -4y 〜 活発 0 (Age & Ageing 2018: 健康な期間+6.3yを保守化 + 用量反応メタ解析)
-}
-function ls_dLipid(s){
-  if(s.ldl==null||s.ldl<140) return 0;
-  return -Math.min(1.5,(s.ldl-140)/40*0.8);           // 高LDLは主にCVD経由で計上（NIPPON DATA80 は総コレを含む）
-}
-// 複合は加算でなく飽和：高血圧+肥満+喫煙+糖尿病で健康寿命 男-9.7/女-10.1y (NIPPON DATA90, 20年追跡) をアンカーに
-function ls_saturate(rawLoss,gender){
-  const Lmax=gender==='male'?12.5:13.5;
-  return Lmax*(1-Math.exp(-Math.max(0,rawLoss)/Lmax));
-}
-function computeLifespan(s){
-  const g=s.gender;
-  const base=Math.max(4,HALE_BIRTH[g]-s.age);         // 現年齢からの残り健康年数(集団平均・日常生活に制限のない期間基準)
-  const deltas={
-    smoke:ls_dSmoke(s), bp:ls_dBP(s), glucose:ls_dGlucose(s),
-    bmi:ls_dBMI(s), activity:ls_dActivity(s), lipid:ls_dLipid(s)
-  };
-  const rawLoss=-(deltas.smoke+deltas.bp+deltas.glucose+deltas.bmi+deltas.activity+deltas.lipid);
-  const loss=ls_saturate(rawLoss,g);                  // 失う健康年数(飽和後)
-  const maintainRemain=base;
-  const neglectRemain=Math.max(2,base-loss);
-  function lossWithout(key){                           // その因子だけ健康側に戻したときの残損失
-    let r=0; for(const k in deltas){ if(k!==key) r+=deltas[k]; }
-    return ls_saturate(-r,g);
-  }
-  const A=[];
-  if(s.smoking==='current'||s.smoking==='past') A.push({key:'smoke',label:s.smoking==='current'?'禁煙する':'禁煙を続ける',years:+(loss-lossWithout('smoke')).toFixed(1),src:'NIPPON DATA80 (J Epidemiol 2007)'});
-  if((s.exerciseHours||0)<3) A.push({key:'activity',label:'運動習慣をつける（週3回目安）',years:+(loss-lossWithout('activity')).toFixed(1),src:'Age & Ageing 2018 ほか'});
-  if(s.bmi!=null&&s.bmi>27) A.push({key:'bmi',label:'適正体重に近づける',years:+(loss-lossWithout('bmi')).toFixed(1),src:'国立がん研究センター プール解析 (J Epidemiol 2011)'});
-  if(s.sbp!=null&&s.sbp>=130) A.push({key:'bp',label:'血圧を下げる',years:+(loss-lossWithout('bp')).toFixed(1),src:'NIPPON DATA80 (24年追跡)'});
-  if((s.hba1c!=null&&s.hba1c>=5.6)||(s.glucose!=null&&s.glucose>=100)) A.push({key:'glucose',label:'血糖を改善する',years:+(loss-lossWithout('glucose')).toFixed(1),src:'日本糖尿病学会 2011-2020調査'});
-  A.sort((a,b)=>b.years-a.years);
-  const band=Math.max(1.0,loss*0.25);                 // レンジ(±)：集団平均ベースの不確実性を明示
-  return {
-    base:+base.toFixed(1), deltas, rawLoss:+rawLoss.toFixed(1),
-    loss:+loss.toFixed(1), lossLo:+Math.max(0,loss-band).toFixed(1), lossHi:+(loss+band).toFixed(1),
-    maintainRemain:+maintainRemain.toFixed(1), neglectRemain:+neglectRemain.toFixed(1),
-    maintainAge:Math.round(s.age+maintainRemain), neglectAge:Math.round(s.age+neglectRemain),
-    actions:A
-  };
-}
+// 5b. Li 2020の研究集団の観察値。個人の寿命、年齢別健康余命、単独行動の効果を算出しない。
+function computeLifespan(s){return BPReviewed.studyYears(s.gender);}
 
 // ── モード（健康資産 / 健康寿命）状態・描画・配線 ──
 let _lsMode='unselected';
 function renderLifespan(s,improvedState){
-  document.body.dataset.mode=_lsMode;
-  const life=computeLifespan(s);
-  const set=(id,v)=>{const e=document.getElementById(id); if(e)e.textContent=v;};
-  set('lifeLostBig', `−${life.loss}年`);
-  const days=Math.round(life.loss*365);
-  const topAction=life.actions[0]?.label||'今の生活習慣を続ける';
-  const visionTitle=document.getElementById('lifeVisionTitle');
-  const visionSub=document.getElementById('lifeVisionSub');
-  if(visionTitle)visionTitle.textContent='生活習慣による試算の違いを確認します。';
-  if(visionSub)visionSub.textContent='年数は独自の参考モデルによる値です。実際の健康状態や受診の判断は、健診の判定・医療機関の案内を確認してください。';
-  set('lifeDays', life.loss>=1?days.toLocaleString():'0');
-  window._lifeTarget=life.loss;
-  set('lifeMaintainAge', life.maintainAge);
-  set('lifeNeglectAge', life.neglectAge);
-  // 健康年数バー（維持=100%基準、放置=残り年数比で短縮表示）
-  const gp=Math.round(life.maintainRemain>0?Math.max(6,(life.neglectRemain/life.maintainRemain)*100):100);
-  const lbG=document.getElementById('lbGood'), lbB=document.getElementById('lbBad');
-  if(lbG)lbG.style.width='100%';
-  if(lbB)lbB.style.width=gp+'%';
-  set('lbGoodAge', life.maintainAge+'歳');
-  set('lbBadAge', life.neglectAge+'歳');
-  set('lbGap', `比較基準との年数差：約${life.loss}年（参考値）`);
-  const la=document.getElementById('lifeActions');
-  if(la){
-    if(life.actions.length){
-      la.innerHTML='<div class="la-h">改善条件ごとの参考年数差（効果の予測ではありません）</div>'
-        + life.actions.map(a=>`<div class="la-row"><span class="la-l">${a.label}</span><span class="la-y">+${a.years}年</span></div>`).join('')
-        + `<div class="la-row la-total"><span class="la-l">すべての改善条件を設定した場合</span><span class="la-y">最大 +約${life.loss}年</span></div>`;
-    } else {
-      la.innerHTML='<div class="la-h">現在の入力条件では、追加の変更項目はありません。</div>';
-    }
-  }
-  // 改善トグルで選んだ条件を、健康寿命の主結果にも即時反映する
-  const live=document.getElementById('lifeLiveChange');
-  if(live){
-    if(improvedState){
-      const improvedLife=computeLifespan(improvedState);
-      const gained=Math.max(0,improvedLife.neglectRemain-life.neglectRemain);
-      live.hidden=false;
-      set('lifeLiveValue',`+${gained.toFixed(1)}年`);
-      set('lifeLiveSub','現在の条件と、選んだ改善条件との差です。個人にその年数の効果があることを保証するものではありません。');
-    } else {
-      live.hidden=true;
-    }
-  }
-  const src=document.getElementById('lifeSrc');
-  if(src){
-    const band=Math.max(1,Math.round(life.loss*0.25));
-    src.innerHTML='独自の参考計算。個人の予測精度や統計的な誤差範囲は検証されていません。<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/" target="_blank" rel="noopener">生活習慣と疾患のない余命の関連を扱う研究例：Li et al., BMJ 2020</a>。この研究が本ツールの計算全体を検証したものではありません。';
-  }
-  const teaser=document.getElementById('lifeTeaser');
-  if(teaser){
-    teaser.innerHTML='「健康資産を比べる」を選ぶと、80歳時点の資産差額も確認できます。';
-  }
-  const h=document.getElementById('simulationResults');
-  if(h) h.textContent=(_lsMode==='lifespan'?'あなたの健康寿命シミュレーション結果':'あなたの健康資産シミュレーション結果');
+ document.body.dataset.mode=_lsMode;
+ const r=computeLifespan(s),set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+ set('lifeLostBig',r.loss+'年');set('lifeLostSub',`米国の研究集団で報告された差（95%信頼区間 ${r.ci}年）。あなた自身の延伸年数ではありません。`);
+ set('lifeMaintainAge',r.maintainRemain);set('lifeNeglectAge',r.neglectRemain);
+ set('lifeVisionTitle','50歳から、3疾患のない余命を比べた研究');
+ set('lifeVisionSub','糖尿病・心血管疾患・がんのない余命。食事・体重・身体活動・喫煙・飲酒の5条件をまとめて比較した観察研究です。飲酒を勧めるものではありません。');
+ set('lifeDays','研究');
+ document.getElementById('lbGood').style.width='100%';document.getElementById('lbBad').style.width=(r.neglectRemain/r.maintainRemain*100)+'%';
+ set('lbGoodAge',r.maintainRemain+'年');set('lbBadAge',r.neglectRemain+'年');
+ set('lbGap',`研究報告の群間差：${r.loss}年（丸め前の値に基づく論文報告値）`);
+ document.getElementById('lifeActions').textContent=`${s.gender==='female'?'女性':'男性'}の研究結果を表示しています。年齢・健診値・運動の入力から個人を研究群へ分類していません。日本の「日常生活に制限のない期間」とは定義が異なります。`;
+ const live=document.getElementById('lifeLiveChange');live.hidden=!improvedState;
+ set('lifeLiveValue','個人の年数差は算定できません');set('lifeLiveSub','選んだ生活習慣だけを変えた場合の延伸年数を、この研究から切り出すことはできません。');
+ document.getElementById('lifeSrc').innerHTML='<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7190036/" target="_blank" rel="noopener">Li et al., BMJ 2020, 表2</a>。米国の医療従事者のコホート。関連を示す結果で、因果効果や個人の予測ではありません。';
+ document.getElementById('lifeTeaser').textContent='資産モードでは、自分で設定した費用条件による資産推移を確認できます。';
 }
 function setMode(m){
   _lsMode=(m==='lifespan')?'lifespan':'asset';
@@ -659,10 +339,10 @@ function setMode(m){
   const consentLead=document.getElementById('consentLead');
   const consentLocal=document.getElementById('consentLocal');
   if(_lsMode==='lifespan'){
-    if(consentLead)consentLead.textContent='本シミュレーションは、入力いただいた健診データ・生活習慣をもとに、健康で自立して過ごせる期間への影響を試算するツールです。';
+    if(consentLead)consentLead.textContent='健診値は公的な判定値と照合します。健康年数は論文で報告された集団の観察値を表示し、個人の余命や延伸年数は計算しません。';
     if(consentLocal)consentLocal.innerHTML='入力した健診値・生活習慣は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）';
   } else {
-    if(consentLead)consentLead.textContent='本シミュレーションは、入力いただいた健診データ・資産情報をもとに、健康リスクと将来資産への影響を試算するツールです。';
+    if(consentLead)consentLead.textContent='健診値は公的な判定値と照合します。資産は自分で設定した費用・収入減・家計の仮定による比較です。健診値から将来の医療費は予測しません。';
     if(consentLocal)consentLocal.innerHTML='入力した健診値・資産情報は<strong>この端末内だけ</strong>で計算に使われます（生の数値は送信しません）';
   }
   const step1Title=document.getElementById('step1Title');
@@ -672,15 +352,15 @@ function setMode(m){
   const preRun=document.body.classList.contains('pre-run');
   const rb=document.getElementById('runBtn');
   if(rb)rb.textContent = preRun
-    ? (_lsMode==='lifespan'?'健康年数を試算する':'80歳までの資産を試算する')
+    ? (_lsMode==='lifespan'?'研究の健康年数を見る':'80歳までの資産を試算する')
     : 'もう一度シミュレーションする';
   // 実行前プレースホルダをモード連動＝"これから出る答え"を予告
   const pmT=document.querySelector('#prerunMsg .pm-t'), pmS=document.querySelector('#prerunMsg .pm-s');
-  if(pmT) pmT.textContent = _lsMode==='lifespan' ? '生活習慣の条件による健康年数の差' : '現在の条件と比較基準の、80歳時点の資産差額';
+  if(pmT) pmT.textContent = _lsMode==='lifespan' ? '研究集団で報告された健康年数の差' : '現在の条件と比較基準の、80歳時点の資産差額';
   if(pmS) pmS.textContent = '入力後に実行ボタンを押すと、ここに表示されます。';
   const pmNext=document.getElementById('pmNext');
   if(pmNext) pmNext.textContent = _lsMode==='lifespan'
-    ? '試算後は、生活習慣による年数差を比較できます。'
+    ? '研究の対象者・比較条件・年数を確認できます。'
     : '試算後は、運動などの条件を変えて比較できます。';
   try{ updateAll(); }catch(e){}
   // 実行済みならモード切替でもう一方の結果へ誘導＋山場を再演出
@@ -847,46 +527,17 @@ function protectedAssetsMan(s, sim, targetHours){
   return altP.arr[altP.arr.length-1] - sim.red80; // 万円
 }
 function renderExerciseROI(s,sim){
- const box=document.getElementById('roiBlock');if(!box)return;
- const v=computeExerciseValue(s,sim);
- box.querySelector('.roi-step-tag').textContent='運動の条件による比較';
- box.querySelector('.roi-title').textContent='30分×週3回の運動を続けた場合';
- box.querySelector('.roi-lead').textContent=v?'現在の運動習慣を続ける場合と、80歳時点の資産を比べています。':'この入力条件では、週90分の運動を加えた場合の資産差額はありません。';
- const session=box.querySelector('.roi-per-session');if(session)session.hidden=!v;
- const amount=document.getElementById('roiSessionValue');if(amount)amount.textContent=v?fmtYen(v.perSessionYen):'—';
- document.getElementById('roiProtect').textContent=v?fmt(v.diff):'追加の差額なし';
- box.querySelector('.rh-label').textContent='80歳まで続けた場合の資産差額';
- document.getElementById('roiProtectSub').textContent=v?`${v.yearsLeft}年間 × 年52週 × 週3回 = ${v.totalSessions.toLocaleString('ja-JP')}回で換算`:'運動量をすでに満たしている場合も、追加の差額は表示しません。';
- box.querySelector('.roi-note').textContent='※1回の運動でこの金額が増えるという意味ではありません。長期の試算差額を運動回数で割った値です。運動費用は含みません。治療中・痛みのある方は、主治医等の指示に従ってください。';
+ const box=document.getElementById('roiBlock');if(!box||!document.getElementById('roiSessionValue'))return;const v=computeExerciseValue(s,sim);
+ box.querySelector('.roi-step-tag').textContent='入力した費用差を、運動回数で換算';
+ box.querySelector('.roi-title').textContent='週3回を80歳まで続けると仮定した場合';
+ box.querySelector('.roi-lead').textContent='下の費用条件を設定して比較します。運動による医療費削減額を自動予測するものではありません。';
+ const session=box.querySelector('.roi-per-session');if(session)session.hidden=false;
+ document.getElementById('roiSessionValue').textContent=fmtYen(v.perSessionYen);
+ document.getElementById('roiProtect').textContent=(v.diff<0?'−':v.diff>0?'+':'')+fmt(Math.abs(v.diff));
+ box.querySelector('.rh-label').textContent='費用条件の変更による80歳時点の資産差額';
+ document.getElementById('roiProtectSub').textContent=`${v.yearsLeft}年間 × 年52週 × 週3回 = ${v.totalSessions.toLocaleString('ja-JP')}回`;
+ box.querySelector('.roi-note').textContent='運動1回で得られる利益ではありません。費用差と複利を含む長期の仮定を、回数で割った参考値です。運動費用は入力した年額を差し引きます。費用未設定の0円は、健康効果がないという意味ではありません。';
  box.style.display='';
-}
-
-// ═══════════════════════════════════════════════════
-// 9. 生涯医療費テーブル
-// ═══════════════════════════════════════════════════
-// 厚労省2010年推計を2022年国民医療費水準（×1.25）で補正
-const LIFETIME_BASE={male:2300*1.25, female:2500*1.25}; // 万円
-
-function lifetimeMedTable(gender,medScore){
-  const base=LIFETIME_BASE[gender];
-  const mult=medScore<40?narrowRamp(medScore,40,8,1.0,1.3)
-    :medScore<70?1.3+(1.7-1.3)*((medScore-40)/30)
-    :1.7;
-  const riskBase=base*mult;
-
-  // 年齢別配分（厚労省データ準拠）
-  // 〜65歳:51%, 65-80歳:30%, 80歳〜:19% （70歳未満51%→65歳未満として近似）
-  const phases=[
-    {label:'〜65歳',ratio:0.51},
-    {label:'65〜80歳',ratio:0.30},
-    {label:'80歳以降',ratio:0.19},
-  ];
-
-  return phases.map(p=>({
-    label:p.label,
-    healthy:Math.round(base*p.ratio),
-    risk:Math.round(riskBase*p.ratio)
-  }));
 }
 
 // ═══════════════════════════════════════════════════
@@ -937,20 +588,8 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     ctx.fillText((val>=10000?Math.round(val/10000)+'億':Math.round(val/100)*100+'万'),2,y+4);
   }
 
-  // 60歳マーカー（定年・再雇用開始）
-  const idx60=ages.indexOf(60);
-  if(idx60>=0){
-    const x60=xFn(idx60);
-    ctx.strokeStyle='#aabbcc';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-    ctx.beginPath();ctx.moveTo(x60,pad.t);ctx.lineTo(x60,H-pad.b);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='#7a8284';
-    ctx.font=`${_cl(Math.round(W/80),10,12)}px ${CF}`;
-    ctx.fillText('60歳',x60+2,pad.t+22);
-  }
-
   // 65歳マーカー（年金移行）
-  const idx65=ages.indexOf(65);
+  const retirement=economicInputs().retire;const idx65=ages.indexOf(retirement);
   if(idx65>=0){
     const x65=xFn(idx65);
     ctx.strokeStyle='#0fa8a3';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
@@ -958,7 +597,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
     ctx.setLineDash([]);
     ctx.fillStyle='#0fa8a3';
     ctx.font=`bold ${_cl(Math.round(W/80),10,12)}px ${CF}`;
-    ctx.fillText('65歳',x65+3,pad.t+12);
+    ctx.fillText(retirement+'歳・収入切替',Math.min(x65+3,W-120),pad.t+12);
   }
 
   // Fill area
@@ -1009,6 +648,7 @@ function drawChart(ages,blueArr,redArr,startAge,greenArr){
 // 11. メイン更新関数
 // ═══════════════════════════════════════════════════
 function fmt(v){
+  v=Math.round(v);
   if(v>=10000) return (v/10000).toFixed(1)+'億円';
   return v.toLocaleString()+'万円';
 }
@@ -1018,18 +658,10 @@ function fmtYen(v){return v>=10000?`約${(Math.round(v/1000)/10).toFixed(1)}万�
 
 // 「運動習慣を30分×週3回にする」場合のみを取り出し、30分の運動1回あたりの資産防衛額を試算
 function computeExerciseValue(s,sim){
-  if(s.exerciseHours>=1.5)return null;
-  const altState=computeRisk({exerciseHoursPerWeek:1.5});
-  const userIncome=n('income');
-  const userAssets=n('assets')||0;
-  const altP=projectAsset(altState,altState.gender,altState.age,userIncome,userAssets,false);
-  const val80=altP.arr[altP.arr.length-1];
-  const diff=val80-sim.red80;
-  if(diff<=0)return null;
-  const yearsLeft=80-s.age;
-  const totalSessions=Math.max(1,Math.round(yearsLeft*52*3)); // 週3回×52週で試算
-  const perSessionYen=(diff*10000)/totalSessions;
-  return{diff,totalSessions,yearsLeft,perSessionYen};
+ const altState={...s,scenarioChanged:true};
+ const alt=projectAsset(altState,s.gender,s.age,n('income'),n('assets')||0,false);
+ const diff=alt.arr.at(-1)-sim.red80,totalSessions=(80-s.age)*52*3;
+ return {diff,totalSessions,yearsLeft:80-s.age,perSessionYen:diff*10000/totalSessions};
 }
 
 const RISK_LABELS=[
@@ -1071,19 +703,19 @@ function renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,ha
     action='quit';
     title.textContent='禁煙を続ける場合を試算する';
     desc.textContent=isLifeMode
-      ? '禁煙を続ける条件で、現在との年数差を表示します。'
+      ? '禁煙を選んでも、個人の延伸年数は算定できません。'
       : '禁煙を続ける条件で、80歳時点の資産差額を表示します。';
   } else if(!alreadyActive){
     action='exercise';
     title.textContent='30分×週3回の運動を続ける場合を試算する';
     desc.textContent=isLifeMode
-      ? '運動を週90分続ける条件で、現在との年数差を表示します。'
+      ? '運動単独による個人の延伸年数は算定できません。'
       : '運動を週90分続ける条件で、80歳時点の資産差額を表示します。';
   } else if(canSimulateWeight && s.bmi>=25){
     action='weight';
     title.textContent='体重を3kg減らした条件で試算する';
     desc.textContent=isLifeMode
-      ? '体重を3kg減らした条件で、現在との年数差を表示します。'
+      ? '減量による個人の延伸年数は算定できません。'
       : '体重を3kg減らした条件で、80歳時点の資産差額を表示します。';
   }
 
@@ -1177,7 +809,7 @@ function updateAll(){
     ? '生活習慣の条件を変えると、健康年数の試算は？'
     : '生活習慣の条件を変えると、80歳時点の資産は？';
   if(improveSub)improveSub.textContent=isLifeMode
-    ? '禁煙・運動・減量から条件を選び、健康年数の差を確認します。'
+    ? '取り組みたい習慣を選び、この研究で言える範囲を確認します。'
     : '禁煙・運動・減量から条件を選び、80歳時点の資産差額を確認します。';
   renderImproveTry(s,{alreadyNonSmoker,alreadyActive,canSimulateWeight,hasImprovement,isLifeMode});
   // 健康寿命モードでは、改善後の年数をメイン結果にも同時表示する
@@ -1233,7 +865,7 @@ function updateAll(){
   } else {
     a80big.classList.add('good');
     a80label.textContent='入力した条件での、80歳時点の資産差額';
-    a80big.textContent='ほぼ差額なし';
+    a80big.textContent=(sim.diff80>0?'−':sim.diff80<0?'+':'')+fmt(Math.abs(sim.diff80));
     a80sub.textContent='このモデルで差が小さくても、健康上の問題がないとは限りません';
     window._a80target=0;
   }
@@ -1277,6 +909,7 @@ function updateAll(){
   drawChart(sim.ages,sim.blueArr,sim.redArr,s.age,greenArr);
 
   if(typeof renderExperience==='function')renderExperience(s,sim,altState,overrides);
+  if(typeof window.renderReviewedModel==='function')window.renderReviewedModel(s,sim,altState);
 
   // Loss summary
   document.getElementById('lossPT').textContent=`-${fmt(sim.cumulativePT)}`;
@@ -1296,13 +929,13 @@ function updateAll(){
     scPre.textContent='現在の条件と比較基準の、80歳時点の差額';
     scNum.className='sc-hl-num bad';
     scNum.textContent=`−${fmt(sim.diff80)}`;
-    let sub=`健康維持なら <b class="good">${fmt(sim.blue80)}</b>`;
-    if(exVal) sub+=` ／ 30分の運動 1回で <b class="teal">${fmtYen(exVal.perSessionYen)}</b> を守れる計算です`;
-    else if(s.exerciseHours>=1.5) sub+=` ／ すでに30分×週3回の運動習慣が将来の資産を守っています`;
+    let sub=`追加費用ゼロの比較線 <b class="good">${fmt(sim.blue80)}</b>`;
+    if(exVal) sub+=` ／ 30分の運動 1回で <b class="teal">${fmtYen(exVal.perSessionYen)}</b> の回数換算（費用仮定）`;
+    else if(s.exerciseHours>=1.5) sub+=` ／ 運動による金銭効果を予測するモデルではありません`;
     else sub+=` ／ 運動条件を変えた試算も確認できます`;
     scSub.innerHTML=sub;
   } else {
-    scPre.textContent='今の状態なら、80歳の資産への影響は';
+    scPre.textContent='入力した費用条件での、80歳時点の差額';
     scNum.className='sc-hl-num good';
     scNum.textContent='ほとんど差なし';
     scSub.innerHTML='このモデルで差が小さくても、健康上の問題がないとは限りません。生活習慣による違いは、条件を変えて確認してください。';

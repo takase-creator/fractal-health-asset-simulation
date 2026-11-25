@@ -11,17 +11,17 @@ if(typeof module!=='undefined'&&module.exports){module.exports={describeScenario
  const $=id=>document.getElementById(id);
  const warning=document.createElement('p');warning.id='simulationInputError';warning.hidden=true;warning.setAttribute('role','alert');warning.className='simulation-input-error';$('runBtn').before(warning);
  const box=document.createElement('div');box.className='result-reading-order mode-asset-only';box.id='resultReadingOrder';
- box.innerHTML='<p class="result-summary-note">独自モデルによる参考試算です。比較対象・計算条件を確かめてから、生活習慣の条件を変えてみてください。</p><details id="comparisonDetails"><summary>比較対象を確認する</summary><div id="comparisonValues" class="comparison-values"></div><p>比較基準は、モデルの追加医療費・収入減をゼロとした仮定です。健康な人の実際の将来資産や、生活習慣を改善した結果を保証する基準ではありません。</p></details><details id="resultAssumptions"><summary>計算条件と、含めていないものを確認する</summary><dl id="resultAssumptionValues" class="assumption-values"></dl><p>疾病の進行・医療費・生活費・複数疾患の補正は独自の仮定です。高額療養費、健保の付加給付、税、通院交通費、待ち時間、運動費用は自動反映していません。</p><button type="button" id="editAssumptions">試算条件を変更する</button></details>';
+ box.innerHTML='<p class="result-summary-note">独自モデルによる参考試算です。比較対象・計算条件を確かめてから、生活習慣の条件を変えてみてください。</p><details id="comparisonDetails"><summary>比較対象を確認する</summary><div id="comparisonValues" class="comparison-values"></div><p>比較基準は、モデルの追加医療費・収入減をゼロとした仮定です。健康な人の実際の将来資産や、生活習慣を改善した結果を保証する基準ではありません。</p></details><details id="resultAssumptions"><summary>計算条件と、含めていないものを確認する</summary><dl id="resultAssumptionValues" class="assumption-values"></dl><p>費用・収入減・生活費は利用者が確認・変更できる仮定です。高額療養費、健保の付加給付、税、通院交通費、待ち時間、入力した運動費用以外は自動反映していません。</p><button type="button" id="editAssumptions">試算条件を変更する</button></details>';
  $('age80box').after(box);
  const oldNote=box.nextElementSibling;if(oldNote?.classList.contains('model-note'))oldNote.hidden=true;
  // Keep detailed model disclosures at the end of the page.
  document.querySelector('.disclaimer').after(box);
  const loss=document.querySelector('.loss-summary');if(loss){box.append(loss);loss.querySelector('summary').textContent='詳しい損失内訳を見る';}
- $('editAssumptions').addEventListener('click',()=>{const toggle=$('step2')?.querySelector('.step-accordion-toggle');if(toggle?.getAttribute('aria-expanded')==='false')toggle.click();$('economicAssumptions').open=true;requestAnimationFrame(()=>{$('economicAssumptions').scrollIntoView({behavior:'smooth',block:'center'});$('medicalShare').focus({preventScroll:true});});});
+ $('editAssumptions').addEventListener('click',()=>{const toggle=$('step2')?.querySelector('.step-accordion-toggle');if(toggle?.getAttribute('aria-expanded')==='false')toggle.click();$('economicAssumptions').open=true;requestAnimationFrame(()=>{$('economicAssumptions').scrollIntoView({behavior:'smooth',block:'center'});$('currentCostAssumption').focus({preventScroll:true});});});
  const title=$('riskTitle');const tag=document.createElement('span');tag.className='basis-tag score';tag.textContent='独自スコア';title.prepend(tag);
  const trend=document.querySelector('.trend-box');if(trend){const b=document.createElement('p');b.className='basis-heading';b.innerHTML='<span class="basis-tag study">研究データ</span>研究対象の集団で報告された割合・比較指標';trend.prepend(b);}
  const model=document.createElement('span');model.className='basis-tag model';model.textContent='独自の資産モデル';$('age80box').prepend(model);
- const lifeTag=model.cloneNode(true);lifeTag.textContent='独自の健康年数モデル';$('lifespanResult').prepend(lifeTag);
+ const lifeTag=model.cloneNode(true);lifeTag.textContent='研究集団の観察値';$('lifespanResult').prepend(lifeTag);
  const guide=document.createElement('section');guide.className='basis-guide';guide.setAttribute('aria-label','3種類の数値の読み方');guide.innerHTML='<h3>3種類の数値を分けて読みます</h3><dl><div><dt>研究データ</dt><dd>研究に参加した集団の発症割合やHR。個人の確率・改善効果とは異なります。</dd></div><div><dt>独自スコア</dt><dd>入力値や習慣を整理する0〜100の指標。%や倍率へは変換しません。</dd></div><div><dt>独自の試算モデル</dt><dd>入力条件と仮定に基づくシナリオ比較。個人の寿命・資産の予測精度は未検証です。</dd></div></dl>';
  const references=$('discDetail');
  if(references){if(trend)references.append(trend);references.append(guide);}
@@ -49,7 +49,7 @@ if(typeof module!=='undefined'&&module.exports){module.exports={describeScenario
      const value=document.createElement('strong');value.className='change-outcome-value';
      const note=document.createElement('span');note.className='change-outcome-note';
      if(document.body.dataset.mode==='lifespan'){
-       const before=computeLifespan(state),after=computeLifespan(alt);label.textContent='現在の条件との年数差';value.textContent=`+${Math.max(0,after.neglectRemain-before.neglectRemain).toFixed(1)}年`;note.textContent='独自モデルによる参考試算';
+       const before=computeLifespan(state),after=computeLifespan(alt);label.textContent='現在の条件との年数差';value.textContent='個人の年数差は算定できません';note.textContent='複数習慣による研究集団の比較';
      }else{const after=projectImproved(alt);const d=after.val80-sim.red80;label.textContent='現在の条件との資産差額';value.textContent=`${d<0?'−':'+'}${fmt(Math.abs(d))}`;note.textContent='80歳時点・独自モデルによる参考試算';}
      text.append(label,value,note);
      holder.append(text);

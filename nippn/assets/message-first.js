@@ -62,7 +62,7 @@
  if(typeof original==='function')window.renderMedicalReview=function(state){original(state);copyForState(state);};
  const originalUpdate=window.updateAll;
  window.updateAll=function(...args){const result=originalUpdate.apply(this,args);copyForState(null);return result;};
- const modelNote=document.createElement('p');modelNote.className='restored-model-note';modelNote.textContent='以下は、計算条件を置いた参考シナリオです。未検証の独自換算を含み、個人の寿命・発症・実際の将来資産や、運動の金銭効果を予測するものではありません。';$('simulationResults').after(modelNote);
+ const modelNote=document.createElement('p');modelNote.className='restored-model-note';modelNote.textContent='以下は、計算条件を置いた参考シナリオです。未検証の独自換算による医療費・個人の延伸年数は計算しません。資産は入力した費用の仮定、健康年数は研究集団の観察値として表示します。';$('simulationResults').after(modelNote);
  copyForState(null);
  if(['#step2','#step3'].includes(location.hash))begin();
  updateAll();

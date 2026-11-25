@@ -244,12 +244,12 @@
         <button type="button" class="mode-card" data-mode="asset" id="modeAsset" aria-pressed="false">
           <span class="mode-ico">💰</span>
           <span class="mode-t">健康資産を比べる</span>
-          <span class="mode-d">現在の生活習慣と比較基準で、80歳時点の資産差額を確認します。</span>
+          <span class="mode-d">入力した費用・家計の仮定から、80歳時点の資産を比較します。</span>
         </button>
         <button type="button" class="mode-card" data-mode="lifespan" id="modeLife">
           <span class="mode-ico">🌱</span>
-          <span class="mode-t">健康寿命を比べる</span>
-          <span class="mode-d">生活習慣の条件を変えた場合の、健康年数の差を確認します。</span>
+          <span class="mode-t">研究の健康年数を比べる</span>
+          <span class="mode-d">生活習慣の異なる研究集団の年数を確認します。個人の予測ではありません。</span>
         </button>
       </div>
     </div>
@@ -397,15 +397,12 @@
         </div>
       </div>
       <div class="asset-hint">
-        ※年収が未入力の場合は年齢・性別の日本平均値（国税庁2024年）を自動適用します。<br>
+        ※年収が未入力の場合は、説明用の仮定500万円を使用します（統計の平均ではありません）。<br>
         ※総資産は貯蓄＋投資の合計額を入力してください。
       </div>
     </div>
 
-    <details class="mode-asset-only model-note" id="economicAssumptions"><summary>資産試算の仮定を確認・変更する</summary><div class="fg2">
-      <div class="field"><label for="medicalShare">モデル医療費に対する本人負担の仮定（%）</label><input id="medicalShare" type="number" min="0" max="100" value="30"><span class="subnote">初期値30%。年齢・所得・高額療養費・健保の付加給付は自動反映しません。</span></div>
-      <div class="field"><label for="incomeLossAssumption">健康による収入減の仮定（%）</label><input id="incomeLossAssumption" type="number" min="0" max="100" value="0"><span class="subnote">初期値0%。仕事の能率低下が、そのまま給与減になるとは限りません。</span></div>
-    </div><p>医療費の進行・複数疾患の補正は独自の仮定です。個別の診療費を推定するモデルとして検証されていません。想定値の変更に対する差を確認する用途でご利用ください。</p></details>
+    <details class="mode-asset-only model-note" id="economicAssumptions" open><summary>資産グラフの費用条件を設定する</summary><p><strong>健診値から医療費は算出しません。</strong>追加費用・収入減は、ご自身の見積りや比較したい仮定を入れてください。未入力は0として描画しますが、費用ゼロ・健康という判定ではありません。変更後の費用は生活習慣を選ぶだけでは自動で減りません。</p><div class="fg2"><div class="field"><label for="currentCostAssumption">現在条件の年間追加費用（万円）</label><input id="currentCostAssumption" type="number" min="0" max="1000" step="0.1" value="0"></div><div class="field"><label for="changedCostAssumption">変更後の年間追加費用（万円）</label><input id="changedCostAssumption" type="number" min="0" max="1000" step="0.1" value="0"></div><div class="field"><label for="exerciseCostAssumption">変更後の年間運動費用（万円）</label><input id="exerciseCostAssumption" type="number" min="0" max="1000" step="0.1" value="0"></div><div class="field"><label for="incomeLossAssumption">現在条件の年間収入減（%）</label><input id="incomeLossAssumption" type="number" min="0" max="100" step="1" value="0"></div><div class="field"><label for="changedLossAssumption">変更後の年間収入減（%）</label><input id="changedLossAssumption" type="number" min="0" max="100" step="1" value="0"></div><div class="field"><label for="savingAssumption">年収のうち資産に回す割合（%）</label><input id="savingAssumption" type="number" min="0" max="100" step="1" value="10"></div><div class="field"><label for="retireAssumption">退職・年金への切替年齢</label><input id="retireAssumption" type="number" min="0" max="80" step="1" value="65"></div><div class="field"><label for="pensionAssumption">退職後の年間手取り収入（万円）</label><input id="pensionAssumption" type="number" min="0" max="10000" step="1" value="180"></div><div class="field"><label for="livingAssumption">退職後の年間生活費（万円）</label><input id="livingAssumption" type="number" min="0" max="10000" step="1" value="180"></div><div class="field"><label for="returnAssumption">年間運用利回り（%）</label><input id="returnAssumption" type="number" min="0" max="10" step="0.1" value="3"></div></div><input id="medicalShare" type="hidden" value="100"><p>追加費用は医療費などの<strong>本人負担額</strong>。通常の生活費との重複を除いて入力します。初期の年収500万円・退職後収入180万円・生活費180万円・貯蓄10%・利回り3%は統計の平均ではなく、変更できる説明用の仮定です。税・物価・給付・借入利息は自動計算しません。</p><button type="button" id="financialExample">費用の仮例を入れて試す</button><p id="financialExampleNote" hidden>費用の仮例：現在20万円/年 → 変更後10万円/年、運動費3万円/年。医療効果や実績に基づく金額ではありません。</p></details>
     <div class="demo-bar">
       <button type="button" class="db-reset" id="resetFormBtn">↺ リセット（最初から）</button>
       <button type="button" id="demoFillBtn" style="display:none">▶ デモ用サンプルを入力</button>
@@ -433,13 +430,13 @@
     <div class="graph-wrap mode-asset-only">
       <div class="graph-title">健康資産の推移（現在〜80歳）</div>
       <div class="graph-sub">青：追加負担なしの比較基準　赤：現在の条件を続ける想定</div>
-      <canvas id="chart" role="img" aria-label="現在から80歳までの健康資産推移を比較する参考グラフ。金額と計算条件はグラフ下の比較対象で確認できます。"></canvas>
+      <canvas id="chart" role="img" aria-label="現在から80年（50歳から）の健康資産推移を比較する参考グラフ。金額と計算条件はグラフ下の比較対象で確認できます。"></canvas>
       <div class="g-legend">
         <div><span class="g-dot" style="background:#638fa7"></span>比較基準（追加負担なし）</div>
         <div><span class="g-dot" style="background:#d46f8e"></span>現在の条件</div>
         <div id="legendImproved" style="display:none"><span class="g-dot" style="background:#0a807c"></span>生活習慣を改善した場合</div>
-        <div><span class="g-dot" style="background:#c6d6d3;width:14px;height:2px;border-radius:0;margin-top:4px;"></span>60歳（定年・再雇用）</div>
-        <div><span class="g-dot" style="background:#0fa8a3;width:14px;height:3px;border-radius:0;margin-top:3px;"></span>65歳（年金移行）</div>
+        <div><span class="g-dot" style="background:#c6d6d3;width:14px;height:2px;border-radius:0;margin-top:4px;"></span>退職前は入力年収を一定と仮定</div>
+        <div><span class="g-dot" style="background:#0fa8a3;width:14px;height:3px;border-radius:0;margin-top:3px;"></span>入力した退職年齢で収入を切替</div>
       </div>
     </div>
 
@@ -472,38 +469,38 @@
 
     <div class="life-result mode-life-only" id="lifespanResult">
       <div class="life-main">
-        <div class="life-main-label">現在の条件と比較基準の健康年数差</div>
+        <div class="life-main-label">研究集団で報告された、疾患のない余命の差</div>
       <div class="life-main-num" id="lifeLostBig">--</div>
-      <div class="life-main-sub" id="lifeLostSub">独自の仮定による年数差です。個人の寿命の予測ではありません。</div>
+      <div class="life-main-sub" id="lifeLostSub">50歳時点の研究集団の比較です。個人の寿命・延伸年数の予測ではありません。</div>
     </div>
     <div class="life-vision">
       <div class="life-vision-copy">
         <div class="life-vision-kicker">健康年数の比較</div>
         <div class="life-vision-title" id="lifeVisionTitle">生活習慣の条件を変えて比較できます。</div>
         <div class="life-vision-sub" id="lifeVisionSub">表示する年数は独自モデルの参考値です。個人の寿命を予測するものではありません。</div>
-        <div class="life-days"><strong id="lifeDays">--</strong><span>日分の「元気に自立して過ごす時間」の目安</span></div>
+        <div class="life-days"><strong id="lifeDays">--</strong><span>集団の観察値（個人の予測ではありません）</span></div>
       </div>
     </div>
     <div class="life-compare">
         <div class="life-mini">
-          <span class="life-mini-lbl">比較基準：約</span>
+          <span class="life-mini-lbl">低リスク条件4〜5項目群</span>
           <span class="life-mini-val good" id="lifeMaintainAge">--</span>
-          <span class="life-mini-u">歳（参考値）</span>
+          <span class="life-mini-u">年（50歳から）</span>
         </div>
         <div class="life-mini">
-          <span class="life-mini-lbl">現在の条件：約</span>
+          <span class="life-mini-lbl">低リスク条件0項目群</span>
           <span class="life-mini-val bad" id="lifeNeglectAge">--</span>
-          <span class="life-mini-u">歳まで</span>
+          <span class="life-mini-u">年（50歳から）</span>
         </div>
       </div>
       <div class="life-bar" id="lifeBar">
-        <div class="lb-cap-row"><span>現在</span><span>モデル上の年齢比較</span></div>
+        <div class="lb-cap-row"><span>研究集団</span><span>50歳からの疾患のない余命</span></div>
         <div class="lb-row">
-          <span class="lb-cap good">健康維持</span>
+          <span class="lb-cap good">4〜5項目群</span>
           <div class="lb-track"><div class="lb-fill good" id="lbGood"></div><span class="lb-age" id="lbGoodAge">--歳</span></div>
         </div>
         <div class="lb-row">
-          <span class="lb-cap bad">現在の条件</span>
+          <span class="lb-cap bad">0項目群</span>
           <div class="lb-track"><div class="lb-fill bad" id="lbBad"></div><span class="lb-age" id="lbBadAge">--歳</span></div>
         </div>
         <div class="lb-gap" id="lbGap">比較基準と現在の条件による年数差です</div>
@@ -623,12 +620,12 @@
         <p class="roi-lead">現在の運動習慣を続ける場合と、80歳時点の資産を比べます。</p>
 
         <div class="roi-headline-num">
-          <div class="rh-label">80歳まで続けた場合の資産差額</div>
+          <div class="rh-label">80年（50歳から）続けた場合の資産差額</div>
           <div class="rh-val" id="roiProtect">--</div>
           <div class="rh-sub" id="roiProtectSub">現在の条件との差額（参考試算）</div>
         </div>
 
-        <p class="roi-note">※現在の年齢から80歳まで、継続的な運動習慣を実践した場合の試算値です。金額は入力値からの試算であり、効果を保証するものではありません。まずは二次健診の受診を。</p>
+        <p class="roi-note">※現在の年齢から80年（50歳から）、継続的な運動習慣を実践した場合の試算値です。金額は入力値からの試算であり、効果を保証するものではありません。まずは二次健診の受診を。</p>
       </div>
 
     <section class="panel aftercare-section" id="nextPlan" aria-labelledby="nextPlanTitle">
@@ -837,19 +834,22 @@
 
 
 
-<script src="assets/min/simulator-core.js?v=aab00d2c64"></script>
+<script src="assets/reviewed-model.js"></script>
+<script src="assets/medical-evidence-model.js"></script>
+<script src="assets/min/simulator-core.js?v=55264c901a"></script>
 <script src="assets/health-ocr-runtime.js?v=9c3037ffe0"></script>
 <script src="assets/health-ocr-parser.js?v=ec6709db8a"></script>
 <script src="assets/min/health-ocr.js?v=4544a13fab"></script>
-<script src="assets/min/research-evidence.js?v=d2b71a2920"></script>
+<script src="assets/min/research-evidence.js?v=4cf919855e"></script>
 <script src="assets/min/nippn-seminar.js?v=d7763c4104"></script>
-<script src="assets/min/simulation-experience.js?v=5252c56384"></script>
+<script src="assets/min/simulation-experience.js?v=74fada1234"></script>
 <script>["medicalShare","incomeLossAssumption"].forEach(id=>document.getElementById(id).addEventListener("input",()=>updateAll()));</script>
 <script src="assets/min/seminar-survey.js?v=80b5052c5a"></script>
 <script src="assets/min/step-accordion.js?v=539d104676"></script>
 <script src="assets/min/body-palette-ui.js?v=5db3503786"></script>
-<script src="assets/message-first.js?v=f246e62e3d"></script>
+<script src="assets/message-first.js?v=fc4a176628"></script>
 <script src="assets/intent-experience.js?v=40bd768882"></script>
-<script src="assets/min/evidence-catalog.js?v=dc1de7eb0b"></script>
+<script src="assets/reviewed-ui.js"></script>
+<script src="assets/min/evidence-catalog.js?v=2918d39349"></script>
 </body>
 </html>

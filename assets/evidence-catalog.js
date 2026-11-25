@@ -2,7 +2,7 @@
 (()=>{'use strict';
  const $=id=>document.getElementById(id),studies=window.BPResearch?.studies;if(!studies||$('evidenceCatalog'))return;
  const el=(tag,txt,cls)=>{const e=document.createElement(tag);if(txt)e.textContent=txt;if(cls)e.className=cls;return e;};
- function link(txt,url){const a=el('a',txt);a.href=url;if(url.startsWith('https:')){a.target='_blank';a.rel='noopener';}return a;}
+ function link(txt,url){const a=el('a',txt);a.href=url;if(url.startsWith('https:')){a.target='_blank';a.rel='noopener';}else if(url.startsWith('#')){a.target='_self';a.addEventListener('click',event=>{const target=document.getElementById(url.slice(1));if(!target)return;event.preventDefault();target.scrollIntoView({block:'start',behavior:'auto'});target.tabIndex=-1;target.focus({preventScroll:true});});}return a;}
  const official=[
  ['hale','厚生労働省「健康寿命の令和4年値について」','https://www.mhlw.go.jp/content/10904750/001363069.pdf','男性72.57年・女性75.45年は全国の集団指標。この値から現年齢を引く本ツールの処理は、年齢別の平均余命計算とは異なります。'],
  ['activity','厚生労働省「健康づくりのための身体活動・運動ガイド2023」','https://www.mhlw.go.jp/content/001195866.pdf','成人の身体活動1日60分以上、運動週60分以上、筋トレ週2〜3日など。30分×週3回は画面の比較例で、全員への一律処方ではありません。'],

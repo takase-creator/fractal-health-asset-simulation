@@ -31,7 +31,7 @@
  // Hide consultations as requested; optional service information remains closed.
  document.querySelectorAll('[id="consultOverlay"],[id="consultModal"],[id="stickyCta"]').forEach(el=>el.hidden=true);
  const desc={glucose:'血糖・HbA1cと、体格・生活習慣を確認します。',bp:'血圧と、心臓・脳の血管への負担に関係する項目です。',lipid:'LDL・HDL・中性脂肪の入力を確認します。',liver:'AST・ALT・γ-GTPを確認。原因の診断はできません。',kidney:'腎機能の診断はできません。eGFR・尿検査等を医療機関で確認します。',musculo:'筋肉・関節の不調や運動習慣を整理します。診断ではありません。'};
- function annotate(){ $('riskRows').querySelectorAll('.risk-row').forEach((row,i)=>{if(row.querySelector('.risk-explain'))return;const p=document.createElement('p');p.className='risk-explain';p.textContent=desc[RISK_LABELS[i][1]];row.append(p);const refs={glucose:['kawahara2015','dpp2002'],bp:['edwards2023'],lipid:['kraus2002'],liver:['hallsworth2011'],kidney:['greenwood2015'],musculo:['pahor2014']};if(window.BPResearch)row.append(BPResearch.createDetails(refs[RISK_LABELS[i][1]]));}); }
+ function annotate(){ $('riskRows').querySelectorAll('.risk-row').forEach((row,i)=>{if(row.querySelector('.risk-explain'))return;const p=document.createElement('p');p.className='risk-explain';p.textContent=desc[RISK_LABELS[i][1]];row.append(p);const refs={glucose:['kawahara2015','dpp2002','smith2016'],bp:['edwards2023','garcia2023'],lipid:['kraus2002'],liver:['hallsworth2011','stine2023'],kidney:['greenwood2015','heiwe2022'],musculo:['pahor2014','momma2022']};if(window.BPResearch)row.append(BPResearch.createDetails(refs[RISK_LABELS[i][1]]));}); }
  new MutationObserver(annotate).observe($('riskRows'),{childList:true});annotate();
  // Keep additional support unobtrusive, never open the contact form from the roadmap.
  $('nextPlanTrack')?.querySelectorAll('[data-next-action="support"]').forEach(el=>el.hidden=true);
